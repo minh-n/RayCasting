@@ -1,17 +1,21 @@
-Voici la ligne de commande utilisée pour exécuter le programme : 
-
-gcc -lm  -Wall -ansi -std=c99 -o  TP *.c && ./TP "option" "nom_du_fichier_d_entree" "nom_du_fichier_de_sortie"
-
-
-
-
-Ce TP a été le premier projet que je n'ai pas fait en groupe. 
-Il m'a permis de faire face et de surmonter de nombreuses erreurs de code, ainsi que d'apprendre à m'organiser.
-
-Au début du projet, j'ai eu beaucoup de mal à faire une fonction pour lire l'image sans avoir d'erreurs. Ma première grande difficulté fut de trouver pourquoi mon image n'était pas enregistrée dans la structure : cela était dû à une inversion des valeurs hauteur et largeur de l'image, ce qui a mené à des boucles for erronées. 
-
-J'ai ensuite eu du mal pour la suppression des commentaires : grâce à l'aide de mes camarades, j'ai pu terminer ma fonction en modifiant celle de départ.
-
-
-La suite du projet s'est déroulée sans trop de problèmes. Sur la dernière partie (question 6), j'ai eu des difficultés à comprendre la question et à déterminer le résultat à obtenir.
+# camera position (x = 100, y = 100, z = 0)
+100 100 0
+# scren position
+# top left corner
+90 110 30
+# top right corner
+110 110 30
+# botom left cornersdfsd
+90 90 30
+# screen horizontal resolution
+400
+# background color
+80, 80, 100
+# light source position (200, 300, 0) and color (245, 200, 200)
+200, 300, 0, 245, 200, 200
+# three spheres
+# center = (90, 90, 60) ; radius = 7 ; color = (250, 0, 0) ; reflexion = 0.3
+sphere: 90, 90, 60, 7, 250, 0, 0, 0.3
+sphere: 100, 110, 60, 7, 0, 250, 0, 0.3
+sphere: 110, 110, 60, 7, 0, 0, 250, 0.3
 

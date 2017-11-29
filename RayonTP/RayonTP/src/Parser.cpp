@@ -10,6 +10,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -32,6 +33,18 @@ int Parser::lecture() {
     if(fichier)
     {
     	cout << "ok";
+
+    	char c = fichier.get();
+    	if(c == '#')
+    	{
+    		fichier.ignore(numeric_limits<int>::max(), '\n');
+    		cout << "comm detected !!!!!!!!!!!!\n";
+    	}
+    	else
+    	{
+    		cout << "pas de comm";
+    	}
+
 
 
 

@@ -8,7 +8,23 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
+#include "Source.h"
+#include "Camera.h"
+#include "Ecran.h"
+#include "Objet.h"
+#include <vector>
+
 class Scene {
+
+private:
+	Source source;
+	Camera camera;
+	Ecran ecran;
+	std::vector<Objet> nosObjets;
+
+
+
+
 public:
 	Scene();
 	virtual ~Scene();

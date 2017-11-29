@@ -9,6 +9,8 @@
 #define SOURCE_H_
 
 class Source {
+private :
+
 public:
 	Source();
 	virtual ~Source();

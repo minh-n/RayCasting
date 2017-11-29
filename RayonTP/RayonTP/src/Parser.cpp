@@ -30,27 +30,25 @@ int Parser::lecture() {
 
     ifstream fichier("readme.txt", ios::in);
 
+
     if(fichier)
     {
-    	cout << "ok";
-
-    	char c = fichier.get();
-    	if(c == '#')
+    	cout << "Debut de la lecture du fichier !\n\n";
+    	while(!(fichier.eof())) //boucle jusqu'à la fin du fichier
     	{
-    		fichier.ignore(numeric_limits<int>::max(), '\n');
-    		cout << "comm detected !!!!!!!!!!!!\n";
+        	char c = fichier.get(); //lecture d'un caractere
+        	if(c == '#') //ignorer les commentaires
+        	{
+        		fichier.ignore(numeric_limits<int>::max(), '\n');
+        		cout << "comm detected !!!!!!!!!!!!\n";
+        	}
+        	else
+        	{
+        		cout << c;
+        	}
     	}
-    	else
-    	{
-    		cout << "pas de comm";
-    	}
-
-
-
-
     	fichier.close();
     }
-
 
     else
     {

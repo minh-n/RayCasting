@@ -7,9 +7,11 @@
 
 #ifndef SOURCE_H_
 #define SOURCE_H_
+#include "Position.h"
 
 class Source {
 private :
+	Position pos;
 
 public:
 	Source();

@@ -8,19 +8,41 @@
 
 #include <iostream>
 #include "Parser.h"
+#include "Scene.h"
+#include "Vecteur.h"
+
 using namespace std;
 
-
-//test
 int main() {
 
+
+	Position posSource;
+	Position posCam;
+	int resolution = 400;
+
+
+	Source s(posSource);
+	Camera c(posCam);
+	Ecran e(resolution);
+	Scene scene(s, c, e);
+
+	Sphere s1, s2, s3;
 	Parser *p = new Parser();
 
-	int b = p->lecture();
+	int b = p->lecture(c, e, scene, s1, s2, s3);
+
+	cout << "Lecture finie" << b << endl; // prints !!!Hello World!!!
 
 	delete(p);
 
-	cout << "Lecture finie" << b << endl; // prints !!!Hello World!!!
+
+
+
+
+
+
+
+
 
 	return 0;
 }

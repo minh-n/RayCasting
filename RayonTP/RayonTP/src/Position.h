@@ -17,7 +17,8 @@ private:
 	int z;
 
 public:
-	Position(int x, int y, int z) : x(x), y(y), z(z){};
+	Position();
+	Position(int x, int y, int z);
 	virtual ~Position();
 };
 

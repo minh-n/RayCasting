@@ -26,25 +26,32 @@ Parser::~Parser() {
 
 int Parser::lecture() {
 
-
+    int positionFichier = 0;
 
     ifstream fichier("readme.txt", ios::in);
 
-
+    cout << "Parser lancement\n";
     if(fichier)
     {
     	cout << "Debut de la lecture du fichier !\n\n";
-    	while(!(fichier.eof())) //boucle jusqu'à la fin du fichier
+        string ligne;
+
+    	while(getline(fichier, ligne)) //lecture d'une ligne
     	{
-        	char c = fichier.get(); //lecture d'un caractere
-        	if(c == '#') //ignorer les commentaires
+           
+        	if(ligne.at(0) == '#') //ignorer les commentaires
         	{
-        		fichier.ignore(numeric_limits<int>::max(), '\n');
-        		cout << "comm detected !!!!!!!!!!!!\n";
+        		//fichier.ignore(numeric_limits<int>::max(), '\n');
+        		continue;
         	}
+        
         	else
         	{
-        		cout << c;
+        		positionFichier++;
+                
+                vector<string> newParse = parsing(ligne, ' ');
+                
+        		cout << newParse[0] << "\n";
         	}
     	}
     	fichier.close();
@@ -52,9 +59,40 @@ int Parser::lecture() {
 
     else
     {
-    	cerr <<  "Impossible d'ouvrir le fichier" << endl;
+    	cerr << "Impossible d'ouvrir le fichier" << endl;
     }
-
     return 0;
 
 }
+
+
+vector<string> Parser::parsing(const string &s, char delim)
+{
+	vector<string> stockage;
+
+	string buff;
+
+	for(auto n:s)
+	{
+		if(n != delim) buff+=n; else
+			if(n == delim && buff != "")
+			{
+				stockage.push_back(buff); buff = "";
+			}
+	}
+	if(buff != "")
+	{
+		stockage.push_back(buff);
+	}
+
+	return stockage;
+}
+
+
+
+
+
+
+
+
+

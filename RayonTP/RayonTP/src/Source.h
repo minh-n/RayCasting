@@ -14,7 +14,7 @@ private :
 	Position pos;
 
 public:
-	Source();
+	Source(Position p);
 	virtual ~Source();
 };
 

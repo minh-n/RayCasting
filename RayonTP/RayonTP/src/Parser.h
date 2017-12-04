@@ -7,12 +7,17 @@
 
 #ifndef PARSER_H_
 #define PARSER_H_
+#include <string>
+#include <vector>
 
 class Parser {
+
 public:
 	Parser();
 	virtual ~Parser();
 	int lecture();
+
+	std::vector<std::string> parsing(const std::string &s, char delim);
 
 };
 

@@ -7,8 +7,7 @@
 
 #include "Source.h"
 
-Source::Source() {
-	// TODO Auto-generated constructor stub
+Source::Source(Position p) : pos(p) {
 
 }
 

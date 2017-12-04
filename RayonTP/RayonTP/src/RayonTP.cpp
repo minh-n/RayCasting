@@ -20,7 +20,7 @@ int main() {
 
 	delete(p);
 
-	cout << "lecuttrere" << b << endl; // prints !!!Hello World!!!
+	cout << "Lecture finie" << b << endl; // prints !!!Hello World!!!
 
 	return 0;
 }

@@ -26,7 +26,7 @@ private:
 
 
 public:
-	Scene();
+	Scene(Source s, Camera c, Ecran e);
 	virtual ~Scene();
 };
 

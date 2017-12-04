@@ -7,8 +7,8 @@
 
 #include "Scene.h"
 
-Scene::Scene() {
-	// TODO Auto-generated constructor stub
+Scene::Scene(Source s, Camera c, Ecran e) : source(s), camera(c), ecran(e) {
+
 
 }
 

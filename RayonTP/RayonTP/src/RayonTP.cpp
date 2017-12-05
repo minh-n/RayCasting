@@ -31,7 +31,7 @@ int main() {
 
 	int b = p->lecture(c, e, scene, s1, s2, s3);
 
-	cout << "Lecture finie" << b << endl; // prints !!!Hello World!!!
+	cout << "Lecture finie ! Resultat : " << b  << " (0 si pas de bug)"<< endl; // prints !!!Hello World!!!
 
 	delete(p);
 

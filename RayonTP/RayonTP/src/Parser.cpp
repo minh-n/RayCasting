@@ -126,13 +126,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			}
 			else
 			{
-				Position *p;
+				Position p;
 				/**
 				 * TODO : mettre atoi exterieur
 				 */
-				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+				p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 				Camera *c;
-				c = new Camera(*p);
+				c = new Camera(p);
 
 				scene.setCamera(*c);
 
@@ -151,14 +151,14 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			}
 			else
 			{
-				Position *p;
+				Position p;
 				/**
 				 * TODO : mettre atoi exterieur
 				 */
-				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+				p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-				e.setTlc(*p);
+				e.setTlc(p);
 				scene.setEcran(e);
 
 				cout << "topLeftScreen : ";
@@ -175,14 +175,14 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					Position *p;
+					Position p;
 					/**
 					 * TODO : mettre atoi exterieur
 					 */
-					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-					e.setTrc(*p);
+					e.setTrc(p);
 					scene.setEcran(e);
 
 					cout << "topRightScreen : ";
@@ -199,13 +199,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					Position *p;
+					Position p;
 					/**
 					 * TODO : mettre atoi exterieur
 					 */
-					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					e.setBlc(*p);
+					e.setBlc(p);
 					scene.setEcran(e);
 
 					cout << "bottomLeftScreen : ";
@@ -240,10 +240,10 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					Couleur *c;
-					c = new Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Couleur c;
+					c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					scene.setBgColor(*c);
+					scene.setBgColor(c);
 
 					cout << "background color : ";
 					cout << scene.getBgColor().getR() << " " << scene.getBgColor().getG() << " " << scene.getBgColor().getB() << "\n\n";
@@ -270,14 +270,14 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 				source.setPos(*p);
 
-				source.setCouleur(111, 99, 666);
+				source.setCouleur(*c);
 
 				scene.setSource(source);
 
-				cout << " Source position : ";
+				cout << "Light position : ";
 				cout << scene.getSource().getPos().getX() << " " << scene.getSource().getPos().getY() << " " << scene.getSource().getPos().getZ() << "\n\n";
 
-				cout << " Source couleur : ";
+				cout << "Light couleur : ";
 				cout << scene.getSource().getCouleur().getR() << " " << scene.getSource().getCouleur().getG() << " " << scene.getSource().getCouleur().getB() << "\n\n";
 			}
 			break;
@@ -302,14 +302,14 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 			double rad = (atof(parsedString[4].c_str()));
 
-			Sphere *s = new Sphere();
+			Sphere s = Sphere();
 
-			s->setPos(*p);
-			s->setCouleur(*c);
-			s->setReflection(ref);
-			s->setRadius(rad);
+			s.setPos(*p);
+			s.setCouleur(*c);
+			s.setReflection(ref);
+			s.setRadius(rad);
 
-			scene.addObjet(*s);
+			scene.addObjet(s);
 
 			cout << "sphere1 position : ";
 			cout << scene.getNosObjets().at(0).getPos().getX() << " " << scene.getNosObjets().at(0).getPos().getY() << " " << scene.getNosObjets().at(0).getPos().getZ();
@@ -318,8 +318,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 			cout << scene.getNosObjets().at(0).getCouleur().getR() << " " << scene.getNosObjets().at(0).getCouleur().getG() << " " << scene.getNosObjets().at(0).getCouleur().getB();
 
-			Objet ob = scene.getNosObjets().at(0);
-			Sphere& s2 = dynamic_cast<Sphere& >(scene.getNosObjets().at(0));
+//			Sphere& s2 = dynamic_cast<Sphere& >(scene.getNosObjets().at(0));
 
 			//Ce que je veux afficher
 //			cout << "\n\t\treflec = " << s2->getReflection() << ", radius = ";

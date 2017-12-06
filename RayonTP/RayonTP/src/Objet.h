@@ -27,9 +27,7 @@ public:
 
 	virtual ~Objet();
 
-
-	virtual double getReflection() const;
-	virtual double getRadius() const;
+	//virtual void bail() const = 0;
 
 	const Position& getPos() const {
 		return pos;

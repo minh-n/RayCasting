@@ -18,6 +18,7 @@ public:
 	Sphere();
 	virtual ~Sphere();
 
+
 	double getRadius() const {
 		return radius;
 	}

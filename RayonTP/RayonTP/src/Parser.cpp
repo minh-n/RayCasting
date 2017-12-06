@@ -304,6 +304,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 			Sphere *s = new Sphere();
 			s->setPos(*p);
+			s->setCouleur(*c);
 			s->setReflection(ref);
 			s->setRadius(rad);
 
@@ -311,10 +312,14 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 
 			cout << "sphere1 position : ";
-						cout << parsedString[1] << " " << parsedString[2] << " " << parsedString [3];
-						cout << ", sphere2 color : ";
-						cout << parsedString[5] << " " << parsedString[6] << " " << parsedString [7] <<
-								"\n\t\tref = " << parsedString[8] << ", radius = " << parsedString[4] << "\n\n";
+			cout << scene.getNosObjets().at(0).getPos().getX() << " " << scene.getNosObjets().at(0).getPos().getY() << " " << scene.getNosObjets().at(0).getPos().getZ();
+
+			cout << ", sphere1 color : ";
+
+			cout << scene.getNosObjets().at(0).getCouleur().getR() << " " << scene.getNosObjets().at(0).getCouleur().getG() << " " << scene.getNosObjets().at(0).getCouleur().getB();
+
+			cout << "\n\t\tref = " << parsedString[8] << ", radius = ";
+			cout << parsedString[4] << "\n\n";
 
 			break;
 		}

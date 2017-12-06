@@ -18,6 +18,7 @@ class Objet {
 private :
 
 	Position pos;
+	Couleur couleur;
 	int reflection;
 
 public:
@@ -41,6 +42,14 @@ public:
 
 	void setReflection(int reflection) {
 		this->reflection = reflection;
+	}
+
+	const Couleur& getCouleur() const {
+		return couleur;
+	}
+
+	void setCouleur(const Couleur& couleur) {
+		this->couleur = couleur;
 	}
 };
 

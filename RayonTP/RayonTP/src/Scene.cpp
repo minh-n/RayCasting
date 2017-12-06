@@ -7,7 +7,6 @@
 
 #include "Scene.h"
 
-
 /**
  * OBJET
  */
@@ -78,6 +77,8 @@ Camera::~Camera() {
 
 Ecran::Ecran() {
 	resolution = 0;
+
+
 	// TODO Auto-generated constructor stub
 }
 
@@ -126,14 +127,10 @@ Source::~Source() {
  * SCENE
  */
 
-Scene::Scene(Source s, Camera c, Ecran e) {
+Scene::Scene() {
 
-	source = s;
-	camera = c;
-	ecran = e;
 
 }
-
 //ptet faire avec des &s &c &e
 
 

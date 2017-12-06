@@ -20,6 +20,30 @@ public:
 	Position(const Position &source);
 
 	virtual ~Position();
+
+	int getX() const {
+		return x;
+	}
+
+	void setX(int x) {
+		this->x = x;
+	}
+
+	int getY() const {
+		return y;
+	}
+
+	void setY(int y) {
+		this->y = y;
+	}
+
+	int getZ() const {
+		return z;
+	}
+
+	void setZ(int z) {
+		this->z = z;
+	}
 };
 
 
@@ -36,5 +60,29 @@ public:
 	Couleur(const Couleur &source);
 
 	virtual ~Couleur();
+
+	int getB() const {
+		return b;
+	}
+
+	void setB(int b) {
+		this->b = b;
+	}
+
+	int getG() const {
+		return g;
+	}
+
+	void setG(int g) {
+		this->g = g;
+	}
+
+	int getR() const {
+		return r;
+	}
+
+	void setR(int r) {
+		this->r = r;
+	}
 };
 #endif /* VECTEUR_H_ */

@@ -15,20 +15,21 @@
 using namespace std;
 
 Parser::Parser() {
-	// TODO Auto-generated constructor stub
-
 }
 
 Parser::~Parser() {
-	// TODO Auto-generated destructor stub
 }
 
 
-int Parser::lecture(Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s2, Sphere s3) {
+
+/**
+ * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
+ */
+int Parser::lecture(Ecran &ecran, Scene &scene) {
 
     int positionFichier = 0;
 
-    ifstream fichier("readme.txt", ios::in);
+    ifstream fichier("readme.txt", ios::in); //c_str() pour passer fiojk
 
     cout << "Lancement parser.......................\n";
     if(fichier)
@@ -38,10 +39,12 @@ int Parser::lecture(Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s
 
     	while(getline(fichier, ligne)) //lecture d'une ligne a partir du stream fichier
     	{
-           
-        	if(ligne.at(0) == '#') //ignorer les commentaires
+           if(ligne ==  "") //ignorer les lignes vides (saut de ligne)
+           {
+        	   continue;
+           }
+           else if(ligne.at(0) == '#') //ignorer les commentaires
         	{
-        		//fichier.ignore(numeric_limits<int>::max(), '\n');
         		continue;
         	}
         
@@ -50,7 +53,11 @@ int Parser::lecture(Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s
         		positionFichier++;
                 
                 vector<string> newParse = parsing(ligne, ' ');
-                ajoutDansScene(positionFichier, newParse, camera, ecran, scene, s1, s2, s3);
+                if(!(ajoutDansScene(positionFichier, newParse, ecran, scene)))
+                {
+                	cerr << "Type de fichier incompatible." << endl;
+                	return -1;
+                }
         	}
     	}
     	fichier.close();
@@ -59,6 +66,7 @@ int Parser::lecture(Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s
     else
     {
     	cerr << "Impossible d'ouvrir le fichier." << endl;
+    	return -1;
     }
     return 0; //0 si pas de bug
 
@@ -71,13 +79,22 @@ vector<string> Parser::parsing(const string &s, char delim)
 
 	string buff("");
 
-	for(auto n:s)
+	for(char n:s)
 	{
-		if(n != delim) buff+=n; else
-			if(n == delim && buff != "")
+		if(n != delim)
+		{
+			buff+=n;
+		}
+
+		else
+		{
+			if(buff != "")
 			{
-				stockage.push_back(buff); buff = "";
+				stockage.push_back(buff);
+				buff = "";
 			}
+		}
+
 	}
 	if(buff != "")
 	{
@@ -89,68 +106,150 @@ vector<string> Parser::parsing(const string &s, char delim)
 
 
 
-void Parser::ajoutDansScene(int positionFichier, vector<string> &parsedString, Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s2, Sphere s3)
+bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Ecran &e, Scene &scene)
 {
-
-
+	if(positionFichier < 1)
+	{
+		cerr << "Erreur position fichier" << endl;
+		return false;
+	}
 	switch (positionFichier) {
+
 		case 1: //1 : camera
 
-			cout << "camera : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] << "\n\n";
+			if(parsedString.size() != 3)
+			{
+		    	cerr << "Erreur donnee : camera." << endl;
+		    	return false;
+			}
+			else
+			{
+				Position *p;
+				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+				Camera *c;
+				c = new Camera(*p);
 
+				scene.setCamera(*c);
+
+				cout << "camera : ";
+				cout << scene.getCamera().getPos().getX() << " " << scene.getCamera().getPos().getY() << " " << scene.getCamera().getPos().getZ() << "\n\n";
+			}
 			break;
 
 		case 2:	//2 : tlc
 
-			cout << "topLeftScreen : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] << "\n";
+
+			if(parsedString.size() != 3)
+			{
+		    	cerr << "Erreur donnee : TLC." << endl;
+		    	return false;
+			}
+			else
+			{
+				Position *p;
+				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+
+				e.setTlc(*p);
+				scene.setEcran(e);
+
+				cout << "topLeftScreen : ";
+				cout << scene.getEcran().getTlc().getX() << " " << scene.getEcran().getTlc().getY() << " " << scene.getEcran().getTlc().getZ() << "\n\n";
+			}
 
 			break;
 
 		case 3:	//3 : trc
+			if(parsedString.size() != 3)
+				{
+			    	cerr << "Erreur donnee : TRC." << endl;
+			    	return false;
+				}
+				else
+				{
+					Position *p;
+					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-			cout << "topRightScreen : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] << "\n";
+
+					e.setTrc(*p);
+					scene.setEcran(e);
+
+					cout << "topRightScreen : ";
+					cout << scene.getEcran().getTrc().getX() << " " << scene.getEcran().getTrc().getY() << " " << scene.getEcran().getTrc().getZ() << "\n\n";
+				}
 			break;
 
 		case 4:	//4 : blc
 
-			cout << "bottomLeftScreen : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] << "\n";
+			if(parsedString.size() != 3)
+				{
+			    	cerr << "Erreur donnee : BLC." << endl;
+			    	return false;
+				}
+				else
+				{
+					Position *p;
+					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
+
+					e.setBlc(*p);
+					scene.setEcran(e);
+
+					cout << "bottomLeftScreen : ";
+					cout << scene.getEcran().getBlc().getX() << " " << scene.getEcran().getBlc().getY() << " " << scene.getEcran().getBlc().getZ() << "\n\n";
+				}
 			break;
 
 		case 5:	//5 : resol
 
-			cout << "resolution : " << parsedString[0] << "\n\n";
+			if(parsedString.size() != 1)
+			{
+		    	cerr << "Erreur donnee : resolution." << endl;
+		    	return false;
+			}
+			else
+			{
+				e.setResolution(atoi(parsedString[0].c_str()));
 
+				scene.setEcran(e);
+
+				cout << "resolution : ";
+				cout << scene.getEcran().getResolution() << "\n\n";
+			}
 			break;
 
 		case 6: //6 : bg color
 
-			cout << "background color : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] << "\n\n";
+			if(parsedString.size() != 3)
+				{
+			    	cerr << "Erreur donnee : background color." << endl;
+			    	return false;
+				}
+				else
+				{
+					Couleur *c;
+					c = new Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
+					scene.setBgColor(*c);
+
+					cout << "background color : ";
+					cout << scene.getBgColor().getR() << " " << scene.getBgColor().getG() << " " << scene.getBgColor().getB() << "\n\n";
+				}
 			break;
-
 		case 7: //7 : light position & light color
 
-			cout << "light source position : ";
-			cout << parsedString[0] << " " << parsedString[1] << " " << parsedString [2] ;
-			cout << ", light source color : ";
-			cout << parsedString[3] << " " << parsedString[4] << " " << parsedString [5] << "\n\n";
+			/**
+			 * TODO
+			 */
 
 			break;
 
 		case 8: //8 : sphere 1
 
-			cout << "sphere1 position : ";
-			cout << parsedString[1] << " " << parsedString[2] << " " << parsedString [3];
-			cout << ", sphere1 color : ";
-			cout << parsedString[5] << " " << parsedString[6] << " " << parsedString [7] <<
-					"\n\t\tref = " << parsedString[8] << ", radius = " << parsedString[4] << "\n\n";
-
+			/**
+			 * TODO
+			 *
+			 */
 			break;
 
 		case 9:	//9 : sphere 2
@@ -173,9 +272,8 @@ void Parser::ajoutDansScene(int positionFichier, vector<string> &parsedString, C
 
 			break;
 
-
-
 		default:
+	    	cerr << "Fichier incompatible." << endl;
 			break;
 	}
 
@@ -184,7 +282,7 @@ void Parser::ajoutDansScene(int positionFichier, vector<string> &parsedString, C
 
 
 
-
+	return true;
 
 }
 

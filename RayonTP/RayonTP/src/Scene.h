@@ -30,6 +30,21 @@ public:
 
 	virtual ~Objet();
 
+	const Position& getPos() const {
+		return pos;
+	}
+
+	void setPos(const Position& pos) {
+		this->pos = pos;
+	}
+
+	int getReflection() const {
+		return reflection;
+	}
+
+	void setReflection(int reflection) {
+		this->reflection = reflection;
+	}
 };
 
 
@@ -48,6 +63,14 @@ public:
 	Camera();
 	Camera(Position p);
 	virtual ~Camera();
+
+	const Position& getPos() const {
+		return pos;
+	}
+
+	void setPos(const Position& pos) {
+		this->pos = pos;
+	}
 };
 
 
@@ -132,11 +155,12 @@ private:
 	Source source;
 	Camera camera;
 	Ecran ecran;
+	Couleur bgColor;
 
 	std::vector<Objet> nosObjets;
 
 public:
-	Scene(Source s, Camera c, Ecran e);
+	Scene();
 	virtual ~Scene();
 
 	const Camera& getCamera() const {
@@ -169,6 +193,14 @@ public:
 
 	void setSource(const Source& source) {
 		this->source = source;
+	}
+
+	const Couleur& getBgColor() const {
+		return bgColor;
+	}
+
+	void setBgColor(const Couleur& bgColor) {
+		this->bgColor = bgColor;
 	}
 };
 

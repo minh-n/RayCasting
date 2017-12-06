@@ -18,9 +18,9 @@ class Parser {
 public:
 	Parser();
 	virtual ~Parser();
-	int lecture(Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s2, Sphere s3);
+	int lecture(Ecran &ecran, Scene &scene);
 
-	void ajoutDansScene(int positionFichier, std::vector<std::string> &parsedString, Camera camera, Ecran ecran, Scene scene, Sphere s1, Sphere s2, Sphere s3);
+	bool ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Ecran &ecran, Scene &scene);
 	std::vector<std::string> parsing(const std::string &s, char delim);
 
 };

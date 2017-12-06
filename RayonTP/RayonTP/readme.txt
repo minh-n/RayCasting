@@ -1,7 +1,10 @@
 # camera position (x = 100, y = 100, z = 0)
 100 100 0
+
 # scren position
+
 # top left corner
+
 90 110 30
 # top right corner
 110 110 30
@@ -18,3 +21,7 @@
 sphere: 90 90 60 7 250 0 0 0.3
 sphere: 100 110 60 7 0 250 0 0.3
 sphere: 110 110 60 7 0 0 250 0.3
+
+
+
+

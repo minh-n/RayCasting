@@ -16,20 +16,14 @@ using namespace std;
 int main() {
 
 
-	Position posSource;
-	Position posCam;
-	int resolution = 400;
 
-
-	Source s(posSource);
-	Camera c(posCam);
-	Ecran e(resolution);
-	Scene scene(s, c, e);
+	Ecran *ecran = new Ecran();
+	Scene *scene = new Scene();
 
 	Sphere s1, s2, s3;
 	Parser *p = new Parser();
 
-	int b = p->lecture(c, e, scene, s1, s2, s3);
+	int b = p->lecture(*ecran, *scene);
 
 	cout << "Lecture finie ! Resultat : " << b  << " (0 si pas de bug)"<< endl; // prints !!!Hello World!!!
 

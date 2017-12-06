@@ -19,7 +19,6 @@ private :
 
 	Position pos;
 	Couleur couleur;
-	int reflection;
 
 public:
 
@@ -28,20 +27,16 @@ public:
 
 	virtual ~Objet();
 
+
+	virtual double getReflection() const;
+	virtual double getRadius() const;
+
 	const Position& getPos() const {
 		return pos;
 	}
 
 	void setPos(const Position& pos) {
 		this->pos = pos;
-	}
-
-	int getReflection() const {
-		return reflection;
-	}
-
-	void setReflection(int reflection) {
-		this->reflection = reflection;
 	}
 
 	const Couleur& getCouleur() const {

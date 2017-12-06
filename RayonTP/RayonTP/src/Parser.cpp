@@ -303,13 +303,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			double rad = (atof(parsedString[4].c_str()));
 
 			Sphere *s = new Sphere();
+
 			s->setPos(*p);
 			s->setCouleur(*c);
 			s->setReflection(ref);
 			s->setRadius(rad);
 
 			scene.addObjet(*s);
-
 
 			cout << "sphere1 position : ";
 			cout << scene.getNosObjets().at(0).getPos().getX() << " " << scene.getNosObjets().at(0).getPos().getY() << " " << scene.getNosObjets().at(0).getPos().getZ();
@@ -318,8 +318,12 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 			cout << scene.getNosObjets().at(0).getCouleur().getR() << " " << scene.getNosObjets().at(0).getCouleur().getG() << " " << scene.getNosObjets().at(0).getCouleur().getB();
 
-			cout << "\n\t\tref = " << parsedString[8] << ", radius = ";
-			cout << parsedString[4] << "\n\n";
+			Objet ob = scene.getNosObjets().at(0);
+			Sphere& s2 = dynamic_cast<Sphere& >(scene.getNosObjets().at(0));
+
+			//Ce que je veux afficher
+//			cout << "\n\t\treflec = " << s2->getReflection() << ", radius = ";
+//			cout << s2->getRadius() << "\n\n";
 
 			break;
 		}

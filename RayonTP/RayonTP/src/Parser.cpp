@@ -6,6 +6,8 @@
  */
 
 #include "Parser.h"
+#include "Scene.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -25,7 +27,7 @@ Parser::~Parser() {
 /**
  * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
  */
-int Parser::lecture(Ecran &ecran, Scene &scene) {
+int Parser::lecture(Source &source, Ecran &ecran, Scene &scene) {
 
     int positionFichier = 0;
 
@@ -53,7 +55,7 @@ int Parser::lecture(Ecran &ecran, Scene &scene) {
         		positionFichier++;
                 
                 vector<string> newParse = parsing(ligne, ' ');
-                if(!(ajoutDansScene(positionFichier, newParse, ecran, scene)))
+                if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
                 {
                 	cerr << "Type de fichier incompatible." << endl;
                 	return -1;
@@ -106,7 +108,7 @@ vector<string> Parser::parsing(const string &s, char delim)
 
 
 
-bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Ecran &e, Scene &scene)
+bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Source &source, Ecran &e, Scene &scene)
 {
 	if(positionFichier < 1)
 	{
@@ -125,6 +127,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			else
 			{
 				Position *p;
+				/**
+				 * TODO : mettre atoi exterieur
+				 */
 				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 				Camera *c;
 				c = new Camera(*p);
@@ -147,6 +152,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			else
 			{
 				Position *p;
+				/**
+				 * TODO : mettre atoi exterieur
+				 */
 				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
@@ -168,6 +176,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				else
 				{
 					Position *p;
+					/**
+					 * TODO : mettre atoi exterieur
+					 */
 					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
@@ -189,8 +200,10 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				else
 				{
 					Position *p;
+					/**
+					 * TODO : mettre atoi exterieur
+					 */
 					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
 
 					e.setBlc(*p);
 					scene.setEcran(e);
@@ -236,21 +249,75 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					cout << scene.getBgColor().getR() << " " << scene.getBgColor().getG() << " " << scene.getBgColor().getB() << "\n\n";
 				}
 			break;
+
 		case 7: //7 : light position & light color
 
-			/**
-			 * TODO
-			 */
+			if(parsedString.size() != 6)
+			{
 
+				cerr << "Erreur donnee : Light position & Light color." << endl;
+				return false;
+
+			}
+
+			else
+			{
+				Position *p;
+				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+				Couleur *c;
+				c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
+
+				source.setPos(*p);
+
+				source.setCouleur(111, 99, 666);
+
+				scene.setSource(source);
+
+				cout << " Source position : ";
+				cout << scene.getSource().getPos().getX() << " " << scene.getSource().getPos().getY() << " " << scene.getSource().getPos().getZ() << "\n\n";
+
+				cout << " Source couleur : ";
+				cout << scene.getSource().getCouleur().getR() << " " << scene.getSource().getCouleur().getG() << " " << scene.getSource().getCouleur().getB() << "\n\n";
+			}
 			break;
 
 		case 8: //8 : sphere 1
 
-			/**
-			 * TODO
-			 *
-			 */
+		{
+			if(parsedString.size() != 9)
+			{
+
+				cerr << "Erreur donnee : Light position & Light color." << endl;
+				return false;
+
+			}
+
+			Position *p;
+			p = new Position(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+			Couleur *c;
+			c = new Couleur(atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()));
+
+			double ref = (atof(parsedString[8].c_str()));
+
+			double rad = (atof(parsedString[4].c_str()));
+
+			Sphere *s = new Sphere();
+			s->setPos(*p);
+			s->setReflection(ref);
+			s->setRadius(rad);
+
+			scene.addObjet(*s);
+
+
+			cout << "sphere1 position : ";
+						cout << parsedString[1] << " " << parsedString[2] << " " << parsedString [3];
+						cout << ", sphere2 color : ";
+						cout << parsedString[5] << " " << parsedString[6] << " " << parsedString [7] <<
+								"\n\t\tref = " << parsedString[8] << ", radius = " << parsedString[4] << "\n\n";
+
 			break;
+		}
 
 		case 9:	//9 : sphere 2
 
@@ -273,8 +340,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			break;
 
 		default:
+
 	    	cerr << "Fichier incompatible." << endl;
-			break;
 	}
 
 

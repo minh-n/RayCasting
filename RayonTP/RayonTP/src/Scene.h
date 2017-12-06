@@ -10,42 +10,8 @@
 
 #include <vector>
 #include "Vecteur.h"
+#include "Objet.h"
 #include "Sphere.h"
-
-/**
- * OBJET
- */
-
-class Objet {
-
-private :
-
-	Position pos;
-	int reflection;
-
-public:
-
-	Objet();
-	Objet(Position p, int ref);
-
-	virtual ~Objet();
-
-	const Position& getPos() const {
-		return pos;
-	}
-
-	void setPos(const Position& pos) {
-		this->pos = pos;
-	}
-
-	int getReflection() const {
-		return reflection;
-	}
-
-	void setReflection(int reflection) {
-		this->reflection = reflection;
-	}
-};
 
 
 
@@ -134,13 +100,36 @@ public:
  */
 
 class Source {
-private :
+private:
 	Position pos;
+	Couleur couleur;
 
 public:
 	Source();
 	Source(Position p);
 	virtual ~Source();
+
+	const Couleur& getCouleur() const {
+		return couleur;
+	}
+
+	void setCouleur(const Couleur& couleur) {
+		this->couleur = couleur;
+	}
+
+	void setCouleur(int r, int g, int b) {
+		this->couleur.setR(r);
+		this->couleur.setG(g);
+		this->couleur.setB(b);
+	}
+
+	const Position& getPos() const {
+		return pos;
+	}
+
+	void setPos(const Position& pos) {
+		this->pos = pos;
+	}
 };
 
 
@@ -162,6 +151,14 @@ private:
 public:
 	Scene();
 	virtual ~Scene();
+
+
+	void addObjet(Objet o)
+	{
+		nosObjets.push_back(o);
+	}
+
+
 
 	const Camera& getCamera() const {
 		return camera;

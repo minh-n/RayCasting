@@ -9,7 +9,8 @@
 
 Sphere::Sphere() {
 	// TODO Auto-generated constructor stub
-
+	radius = 0;
+	reflection = 0;
 }
 
 Sphere::~Sphere() {

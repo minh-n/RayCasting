@@ -12,6 +12,7 @@
 #include "Sphere.h"
 #include "Vecteur.h"
 
+
 using namespace std;
 
 int main() {
@@ -25,9 +26,13 @@ int main() {
 
 	int b = p->lecture(*source, *ecran, *scene);
 
-	cout << "Lecture finie ! Resultat : " << b  << " (0 si pas de bug)"<< endl; // prints !!!Hello World!!!
+	cout << "Lecture finie !" << endl;
 
-	delete(p);
+	delete(p); //fin de la lecture du fichier.
+
+	cout << "\n\ntest affichage. Sphere 0 : \n";
+
+	scene->getNosObjets().at(0)->afficher();
 
 	return 0;
 }

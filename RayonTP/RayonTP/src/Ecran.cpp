@@ -14,8 +14,6 @@
 
 Ecran::Ecran() {
 	resolution = 0;
-
-
 	// TODO Auto-generated constructor stub
 }
 

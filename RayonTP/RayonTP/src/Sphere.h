@@ -38,7 +38,7 @@ public:
 		this->reflection = reflection;
 	}
 
-	void afficherSphere() const
+	void afficher() const
 	{
 		std::cout << "Sphere position : ";
 
@@ -56,7 +56,6 @@ public:
 		std::cout << "\n\t\t reflec = " <<  getReflection()
 					<< ", radius = " << getRadius() << "\n\n";
 	}
-
 };
 
 #endif /* SPHERE_H_ */

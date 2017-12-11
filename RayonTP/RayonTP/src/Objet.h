@@ -31,6 +31,8 @@ public:
 
 	virtual ~Objet();
 
+	virtual void afficher() const = 0;
+
 	const Position& getPosition() const {
 		return position;
 	}

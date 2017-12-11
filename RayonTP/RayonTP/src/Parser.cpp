@@ -193,7 +193,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 				if(parsedString.size() != 3)
 				{
-			    	cerr << "Erreur donnee : TLC." << endl;
+			    	cerr << "Erreur donnee : TopLeftCenter." << endl;
 			    	return false;
 				}
 				else
@@ -218,7 +218,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			case 3:	//3 : trc
 				if(parsedString.size() != 3)
 					{
-				    	cerr << "Erreur donnee : TRC." << endl;
+				    	cerr << "Erreur donnee : TopRightCenter." << endl;
 				    	return false;
 					}
 					else
@@ -244,7 +244,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 				if(parsedString.size() != 3)
 					{
-				    	cerr << "Erreur donnee : BLC." << endl;
+				    	cerr << "Erreur donnee : BottomLeftCenter." << endl;
 				    	return false;
 					}
 					else
@@ -260,7 +260,19 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 						cout << "bottomLeftScreen : ";
 						scene.getEcran().getBlc().afficherPos();
+						cout << "\n";
+
+						/**
+						 * Creation du quatrieme point (BottomRightCorner).
+						 */
+
+						e.creationBrc();
+						scene.setEcran(e);
+
+						cout << "bottomRightScreen : ";
+						scene.getEcran().getBrc().afficherPos();
 						cout << "\n\n";
+
 					}
 				break;
 

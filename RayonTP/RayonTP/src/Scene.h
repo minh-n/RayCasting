@@ -10,9 +10,9 @@
 
 #include <vector>
 #include <boost/variant.hpp>
-#include "Vecteur.h"
 #include "Objet.h"
 #include "Sphere.h"
+#include "Ecran.h"
 
 
 
@@ -41,58 +41,6 @@ public:
 };
 
 
-
-/**
- * ECRAN
- */
-
-class Ecran {
-
-private:
-
-	Position tlc;
-	Position trc;
-	Position blc;
-	int resolution;
-
-public:
-	Ecran(int res);
-	Ecran();
-
-	virtual ~Ecran();
-
-	const Position& getBlc() const {
-		return blc;
-	}
-
-	void setBlc(const Position& blc) {
-		this->blc = blc;
-	}
-
-	int getResolution() const {
-		return resolution;
-	}
-
-	void setResolution(int resolution) {
-		this->resolution = resolution;
-	}
-
-	const Position& getTlc() const {
-		return tlc;
-	}
-
-	void setTlc(const Position& tlc) {
-		this->tlc = tlc;
-	}
-
-	const Position& getTrc() const {
-		return trc;
-	}
-
-	void setTrc(const Position& trc) {
-		this->trc = trc;
-	}
-};
 
 
 

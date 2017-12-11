@@ -7,6 +7,7 @@
 
 #ifndef VECTEUR_H_
 #define VECTEUR_H_
+#include <iostream>
 
 class Position {
 private:
@@ -43,6 +44,11 @@ public:
 
 	void setZ(int z) {
 		this->z = z;
+	}
+
+
+	void afficherPos() const{
+		std::cout << " " << x << " " << y << " " << z;
 	}
 };
 
@@ -83,6 +89,11 @@ public:
 
 	void setR(int r) {
 		this->r = r;
+	}
+
+
+	void afficherCouleur() const{
+		std::cout << " " << r << " " << g << " " << b;
 	}
 };
 #endif /* VECTEUR_H_ */

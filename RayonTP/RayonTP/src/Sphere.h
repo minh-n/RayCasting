@@ -8,6 +8,7 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 #include "Objet.h"
+#include <iostream>
 
 class Sphere : public Objet{
 
@@ -16,6 +17,8 @@ private :
 	double radius;
 public:
 	Sphere();
+	Sphere(Position pos, Couleur coul, double ref, double rad) : Objet(pos, coul), reflection(ref), radius(rad){};
+
 	virtual ~Sphere();
 
 
@@ -34,6 +37,26 @@ public:
 	void setReflection(double reflection) {
 		this->reflection = reflection;
 	}
+
+	void afficherSphere() const
+	{
+		std::cout << "Sphere position : ";
+
+		std::cout << Objet::getPosition().getX()
+				  << " " <<  Objet::getPosition().getY() << " "
+				  <<  Objet::getPosition().getZ();
+
+		std::cout << ", Sphere couleur : ";
+
+		std::cout <<  Objet::getCouleur().getR() << " "
+						<<   Objet::getCouleur().getG() << " "
+						<<   Objet::getCouleur().getB();
+
+
+		std::cout << "\n\t\t reflec = " <<  getReflection()
+					<< ", radius = " << getRadius() << "\n\n";
+	}
+
 };
 
 #endif /* SPHERE_H_ */

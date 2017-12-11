@@ -7,7 +7,7 @@
 
 #include "Parser.h"
 #include "Scene.h"
-
+#include <boost/variant/get.hpp>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -55,6 +55,7 @@ int Parser::lecture(Source &source, Ecran &ecran, Scene &scene) {
         		positionFichier++;
                 
                 vector<string> newParse = parsing(ligne, ' ');
+
                 if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
                 {
                 	cerr << "Type de fichier incompatible." << endl;
@@ -110,248 +111,239 @@ vector<string> Parser::parsing(const string &s, char delim)
 
 bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Source &source, Ecran &e, Scene &scene)
 {
+	int nbObjet = 0;
+
 	if(positionFichier < 1)
 	{
 		cerr << "Erreur position fichier" << endl;
 		return false;
 	}
-	switch (positionFichier) {
 
-		case 1: //1 : camera
-
-			if(parsedString.size() != 3)
-			{
-		    	cerr << "Erreur donnee : camera." << endl;
-		    	return false;
-			}
-			else
-			{
-				Position p;
-				/**
-				 * TODO : mettre atoi exterieur
-				 */
-				p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-				Camera *c;
-				c = new Camera(p);
-
-				scene.setCamera(*c);
-
-				cout << "camera : ";
-				cout << scene.getCamera().getPos().getX() << " " << scene.getCamera().getPos().getY() << " " << scene.getCamera().getPos().getZ() << "\n\n";
-			}
-			break;
-
-		case 2:	//2 : tlc
-
-
-			if(parsedString.size() != 3)
-			{
-		    	cerr << "Erreur donnee : TLC." << endl;
-		    	return false;
-			}
-			else
-			{
-				Position p;
-				/**
-				 * TODO : mettre atoi exterieur
-				 */
-				p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
-
-				e.setTlc(p);
-				scene.setEcran(e);
-
-				cout << "topLeftScreen : ";
-				cout << scene.getEcran().getTlc().getX() << " " << scene.getEcran().getTlc().getY() << " " << scene.getEcran().getTlc().getZ() << "\n\n";
-			}
-
-			break;
-
-		case 3:	//3 : trc
-			if(parsedString.size() != 3)
-				{
-			    	cerr << "Erreur donnee : TRC." << endl;
-			    	return false;
-				}
-				else
-				{
-					Position p;
-					/**
-					 * TODO : mettre atoi exterieur
-					 */
-					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
-
-					e.setTrc(p);
-					scene.setEcran(e);
-
-					cout << "topRightScreen : ";
-					cout << scene.getEcran().getTrc().getX() << " " << scene.getEcran().getTrc().getY() << " " << scene.getEcran().getTrc().getZ() << "\n\n";
-				}
-			break;
-
-		case 4:	//4 : blc
-
-			if(parsedString.size() != 3)
-				{
-			    	cerr << "Erreur donnee : BLC." << endl;
-			    	return false;
-				}
-				else
-				{
-					Position p;
-					/**
-					 * TODO : mettre atoi exterieur
-					 */
-					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
-					e.setBlc(p);
-					scene.setEcran(e);
-
-					cout << "bottomLeftScreen : ";
-					cout << scene.getEcran().getBlc().getX() << " " << scene.getEcran().getBlc().getY() << " " << scene.getEcran().getBlc().getZ() << "\n\n";
-				}
-			break;
-
-		case 5:	//5 : resol
-
-			if(parsedString.size() != 1)
-			{
-		    	cerr << "Erreur donnee : resolution." << endl;
-		    	return false;
-			}
-			else
-			{
-				e.setResolution(atoi(parsedString[0].c_str()));
-
-				scene.setEcran(e);
-
-				cout << "resolution : ";
-				cout << scene.getEcran().getResolution() << "\n\n";
-			}
-			break;
-
-		case 6: //6 : bg color
-
-			if(parsedString.size() != 3)
-				{
-			    	cerr << "Erreur donnee : background color." << endl;
-			    	return false;
-				}
-				else
-				{
-					Couleur c;
-					c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
-					scene.setBgColor(c);
-
-					cout << "background color : ";
-					cout << scene.getBgColor().getR() << " " << scene.getBgColor().getG() << " " << scene.getBgColor().getB() << "\n\n";
-				}
-			break;
-
-		case 7: //7 : light position & light color
-
-			if(parsedString.size() != 6)
-			{
-
-				cerr << "Erreur donnee : Light position & Light color." << endl;
-				return false;
-
-			}
-
-			else
-			{
-				Position *p;
-				p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
-				Couleur *c;
-				c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
-
-				source.setPos(*p);
-
-				source.setCouleur(*c);
-
-				scene.setSource(source);
-
-				cout << "Light position : ";
-				cout << scene.getSource().getPos().getX() << " " << scene.getSource().getPos().getY() << " " << scene.getSource().getPos().getZ() << "\n\n";
-
-				cout << "Light couleur : ";
-				cout << scene.getSource().getCouleur().getR() << " " << scene.getSource().getCouleur().getG() << " " << scene.getSource().getCouleur().getB() << "\n\n";
-			}
-			break;
-
-		case 8: //8 : sphere 1
-
+	if (positionFichier >= 8)
+	{
+		nbObjet = positionFichier - 8;
+		if(parsedString.size() != 9)
 		{
-			if(parsedString.size() != 9)
-			{
 
-				cerr << "Erreur donnee : Light position & Light color." << endl;
-				return false;
+			cerr << "Erreur donnee : Sphere." << endl;
+			return false;
 
-			}
-
-			Position *p;
-			p = new Position(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
-			Couleur *c;
-			c = new Couleur(atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()));
-
-			double ref = (atof(parsedString[8].c_str()));
-
-			double rad = (atof(parsedString[4].c_str()));
-
-			Sphere s = Sphere();
-
-			s.setPos(*p);
-			s.setCouleur(*c);
-			s.setReflection(ref);
-			s.setRadius(rad);
-
-			scene.addObjet(s);
-
-			cout << "sphere1 position : ";
-			cout << scene.getNosObjets().at(0).getPos().getX() << " " << scene.getNosObjets().at(0).getPos().getY() << " " << scene.getNosObjets().at(0).getPos().getZ();
-
-			cout << ", sphere1 color : ";
-
-			cout << scene.getNosObjets().at(0).getCouleur().getR() << " " << scene.getNosObjets().at(0).getCouleur().getG() << " " << scene.getNosObjets().at(0).getCouleur().getB();
-
-//			Sphere& s2 = dynamic_cast<Sphere& >(scene.getNosObjets().at(0));
-
-			//Ce que je veux afficher
-//			cout << "\n\t\treflec = " << s2->getReflection() << ", radius = ";
-//			cout << s2->getRadius() << "\n\n";
-
-			break;
 		}
 
-		case 9:	//9 : sphere 2
+		Position *p;
+		p = new Position(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
 
-			cout << "sphere2 position : ";
-			cout << parsedString[1] << " " << parsedString[2] << " " << parsedString [3];
-			cout << ", sphere2 color : ";
-			cout << parsedString[5] << " " << parsedString[6] << " " << parsedString [7] <<
-					"\n\t\tref = " << parsedString[8] << ", radius = " << parsedString[4] << "\n\n";
-//shankar
-			break;
+		Couleur *c;
+		c = new Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
 
-		case 10: //10 : sphere 3
+		double ref = (atof(parsedString[8].c_str()));
+		double rad = (atof(parsedString[4].c_str()));
 
-			cout << "sphere3 position : ";
-			cout << parsedString[1] << " " << parsedString[2] << " " << parsedString [3];
-			cout << ", sphere3 color : ";
-			cout << parsedString[5] << " " << parsedString[6] << " " << parsedString [7] <<
-					"\n\t\tref = " << parsedString[8] << ", radius = " << parsedString[4] << "\n\n";
 
-			break;
+		if(!(parsedString[0]).compare("sphere:"))
+		{
 
-		default:
+			Sphere s = Sphere(*p, *c, ref, rad);
+			scene.addObjet(s);
 
-	    	cerr << "Fichier incompatible." << endl;
+			cout << "Sphere " << nbObjet << " : \n";
+			get<Sphere>(scene.getNosObjets().at(nbObjet)).afficherSphere();
+
+		}
+		else
+		{
+			cout << "Type de l'objet (" << parsedString[0] << ") non reconnu.";
+		}
+
 	}
+	else
+	{
 
+
+
+		switch (positionFichier) {
+
+			case 1: //1 : camera
+
+				if(parsedString.size() != 3)
+				{
+			    	cerr << "Erreur donnee : camera." << endl;
+			    	return false;
+				}
+				else
+				{
+					Position p;
+					/**
+					 * TODO : mettre atoi exterieur
+					 */
+					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Camera *c;
+					c = new Camera(p);
+
+					scene.setCamera(*c);
+
+					cout << "camera : ";
+					scene.getCamera().getPos().afficherPos();
+					cout << "\n\n";
+				}
+				break;
+
+			case 2:	//2 : tlc
+
+
+				if(parsedString.size() != 3)
+				{
+			    	cerr << "Erreur donnee : TLC." << endl;
+			    	return false;
+				}
+				else
+				{
+					Position p;
+					/**
+					 * TODO : mettre atoi exterieur
+					 */
+					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+
+					e.setTlc(p);
+					scene.setEcran(e);
+
+					cout << "topLeftScreen : ";
+					scene.getEcran().getTlc().afficherPos();
+					cout << "\n";
+				}
+
+				break;
+
+			case 3:	//3 : trc
+				if(parsedString.size() != 3)
+					{
+				    	cerr << "Erreur donnee : TRC." << endl;
+				    	return false;
+					}
+					else
+					{
+						Position p;
+						/**
+						 * TODO : mettre atoi exterieur
+						 */
+						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+
+						e.setTrc(p);
+						scene.setEcran(e);
+
+						cout << "topRightScreen : ";
+						scene.getEcran().getTrc().afficherPos();
+						cout << "\n";
+
+					}
+				break;
+
+			case 4:	//4 : blc
+
+				if(parsedString.size() != 3)
+					{
+				    	cerr << "Erreur donnee : BLC." << endl;
+				    	return false;
+					}
+					else
+					{
+						Position p;
+						/**
+						 * TODO : mettre atoi exterieur
+						 */
+						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+						e.setBlc(p);
+						scene.setEcran(e);
+
+						cout << "bottomLeftScreen : ";
+						scene.getEcran().getBlc().afficherPos();
+						cout << "\n\n";
+					}
+				break;
+
+			case 5:	//5 : resol
+
+				if(parsedString.size() != 1)
+				{
+			    	cerr << "Erreur donnee : resolution." << endl;
+			    	return false;
+				}
+				else
+				{
+					e.setResolution(atoi(parsedString[0].c_str()));
+
+					scene.setEcran(e);
+
+					cout << "resolution : ";
+					cout << scene.getEcran().getResolution() << "\n\n";
+				}
+				break;
+
+			case 6: //6 : bg color
+
+				if(parsedString.size() != 3)
+					{
+				    	cerr << "Erreur donnee : background color." << endl;
+				    	return false;
+					}
+					else
+					{
+						Couleur c;
+						c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+						scene.setBgColor(c);
+
+						cout << "background color : ";
+						scene.getBgColor().afficherCouleur();
+						cout << "\n";
+					}
+				break;
+
+			case 7: //7 : light position & light color
+
+				if(parsedString.size() != 6)
+				{
+
+					cerr << "Erreur donnee : Light position & Light color." << endl;
+					return false;
+
+				}
+
+				else
+				{
+					Position *p;
+					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+
+					Couleur *c;
+					c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
+
+					source.setPos(*p);
+
+					source.setCouleur(*c);
+
+					scene.setSource(source);
+
+					cout << "Light position : ";
+					scene.getSource().getPos().afficherPos();
+					cout << "\n\n";
+
+					cout << "Light couleur : ";
+					scene.getSource().getCouleur().afficherCouleur();
+
+					cout << "\n\n";
+
+				}
+
+				break;
+
+			default:
+
+		    	cerr << "Erreur parser : Fichier incompatible." << endl;
+		}
+	}
 
 
 

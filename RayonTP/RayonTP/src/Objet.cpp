@@ -16,9 +16,9 @@ Objet::Objet() {
 
 }
 
-Objet::Objet(Position p, int ref) {
+Objet::Objet(Position p) {
 	// TODO Auto-generated constructor stub
-	pos = p;
+	position = p;
 }
 
 Objet::~Objet() {

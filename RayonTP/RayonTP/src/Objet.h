@@ -17,24 +17,26 @@ class Objet {
 
 private :
 
-	Position pos;
+	Position position;
 	Couleur couleur;
 
 public:
 
 	Objet();
-	Objet(Position p, int ref);
+
+	Objet(Position pos, Couleur coul) : position(pos), couleur(coul){};
+
+
+	Objet(Position p);
 
 	virtual ~Objet();
 
-	//virtual void bail() const = 0;
-
-	const Position& getPos() const {
-		return pos;
+	const Position& getPosition() const {
+		return position;
 	}
 
-	void setPos(const Position& pos) {
-		this->pos = pos;
+	void setPosition(const Position& pos) {
+		this->position = pos;
 	}
 
 	const Couleur& getCouleur() const {

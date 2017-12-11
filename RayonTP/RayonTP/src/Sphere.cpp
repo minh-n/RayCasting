@@ -7,10 +7,10 @@
 
 #include "Sphere.h"
 
-Sphere::Sphere() {
-	// TODO Auto-generated constructor stub
-	radius = 0;
+Sphere::Sphere() : Objet(){
 	reflection = 0;
+	radius = 0;
+	// TODO Auto-generated constructor stub
 }
 
 Sphere::~Sphere() {

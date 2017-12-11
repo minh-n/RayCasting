@@ -9,6 +9,7 @@
 #define SCENE_H_
 
 #include <vector>
+#include <boost/variant.hpp>
 #include "Vecteur.h"
 #include "Objet.h"
 #include "Sphere.h"
@@ -146,19 +147,18 @@ private:
 	Ecran ecran;
 	Couleur bgColor;
 
-	std::vector<Objet> nosObjets;
+	typedef boost::variant<Objet, Sphere> typeObjets;
+
+	std::vector<typeObjets> nosObjets;
 
 public:
 	Scene();
 	virtual ~Scene();
 
-
-	void addObjet(Objet o)
+	void addObjet(typeObjets o)
 	{
 		nosObjets.push_back(o);
 	}
-
-
 
 	const Camera& getCamera() const {
 		return camera;
@@ -176,11 +176,11 @@ public:
 		this->ecran = ecran;
 	}
 
-	const std::vector<Objet>& getNosObjets() const {
+	const std::vector<typeObjets>& getNosObjets() const {
 		return nosObjets;
 	}
 
-	void setNosObjets(const std::vector<Objet>& nosObjets) {
+	void setNosObjets(const std::vector<typeObjets>& nosObjets) {
 		this->nosObjets = nosObjets;
 	}
 
@@ -198,6 +198,11 @@ public:
 
 	void setBgColor(const Couleur& bgColor) {
 		this->bgColor = bgColor;
+	}
+
+	std::string getTypeObjets() const {
+
+		return "";
 	}
 };
 

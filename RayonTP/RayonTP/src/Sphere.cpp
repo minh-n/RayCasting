@@ -16,4 +16,3 @@ Sphere::Sphere() : Objet(){
 Sphere::~Sphere() {
 	// TODO Auto-generated destructor stub
 }
-

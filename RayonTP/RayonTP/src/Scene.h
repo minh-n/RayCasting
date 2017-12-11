@@ -9,6 +9,8 @@
 #define SCENE_H_
 
 #include <vector>
+#include <fstream>
+
 #include "Objet.h"
 #include "Sphere.h"
 #include "Ecran.h"
@@ -151,6 +153,10 @@ public:
 
 		return "";
 	}
+
+	void creationFichier();
+
+
 };
 
 

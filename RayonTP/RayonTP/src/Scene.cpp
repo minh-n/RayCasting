@@ -6,10 +6,10 @@
  */
 
 #include "Scene.h"
+#include <iostream>
 
 
-
-
+using namespace std;
 
 
 
@@ -74,14 +74,22 @@ Source::~Source() {
  */
 
 Scene::Scene() {
-
-
 }
-//ptet faire avec des &s &c &e
-
 
 Scene::~Scene() {
 	// TODO Auto-generated destructor stub
 }
 
+void Scene::creationFichier()
+	{
+		 ofstream fichier;
+		 cout << "Creation du fichier..." << endl;
+		 fichier.open("sortie.ppm", std::ios::out | std::ios::trunc);
 
+	     if(fichier)
+	     {
+	        cout << "Ecriture dans le fichier..." << endl;
+	        fichier << "bnail";
+	     }
+	     fichier.close();
+	}

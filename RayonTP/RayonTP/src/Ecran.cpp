@@ -25,3 +25,23 @@ Ecran::Ecran(int res) {
 Ecran::~Ecran() {
 	// TODO Auto-generated destructor stub
 }
+
+
+
+
+
+
+/**
+ * PIXEL
+ */
+
+Pixel::Pixel() {
+}
+
+Pixel::Pixel(Position p, Couleur c) {
+	position = p;
+	couleur = c;
+}
+
+Pixel::~Pixel() {
+}

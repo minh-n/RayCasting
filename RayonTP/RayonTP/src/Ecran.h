@@ -8,10 +8,47 @@
 #ifndef ECRAN_H_
 #define ECRAN_H_
 #include "Vecteur.h"
+#include <vector>
+
+
+
+/**
+ * PIXEL
+ */
+class Pixel
+{
+private:
+	Position position;
+	Couleur couleur;
+public:
+        Pixel();
+
+        Pixel(Position p, Couleur c);
+
+        ~Pixel();
+
+	const Couleur& getCouleur() const {
+		return couleur;
+	}
+
+	void setCouleur(const Couleur& couleur) {
+		this->couleur = couleur;
+	}
+
+	const Position& getPosition() const {
+		return position;
+	}
+
+	void setPosition(const Position& position) {
+		this->position = position;
+	}
+};
+
 
 /**
  * ECRAN
  */
+
 
 class Ecran {
 
@@ -23,6 +60,9 @@ private:
 	Position brc;
 
 	int resolution;
+
+	std::vector<std::vector<Pixel>> pixels;
+
 
 public:
 	Ecran(int res);
@@ -70,7 +110,7 @@ public:
 		this->brc = brc;
 	}
 
-	void creationBrc()
+	void creationBrc() //calcul du quatrieme point a partir des trois autres
 	{
 		int x = trc.getX() - tlc.getX() + blc.getX();
 		int y = trc.getY() - tlc.getY() + blc.getY();
@@ -78,10 +118,13 @@ public:
 		brc.setX(x);
 		brc.setY(y);
 		brc.setZ(z);
-
-
-
 	}
 };
+
+
+
+
+
+
 
 #endif /* ECRAN_H_ */

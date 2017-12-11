@@ -26,7 +26,7 @@ Parser::~Parser() {
 /**
  * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
  */
-int Parser::lecture(Source &source, Ecran &ecran, Scene &scene) {
+int Parser::lecture(Source *source, Ecran *ecran, Scene *scene) {
 
     int positionFichier = 0;
 
@@ -55,7 +55,7 @@ int Parser::lecture(Source &source, Ecran &ecran, Scene &scene) {
                 
                 vector<string> newParse = parsing(ligne, ' ');
 
-                if(!(ajoutDansScene(positionFichier, newParse, source, ecran, &scene)))
+                if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
                 {
                 	cerr << "Type de fichier incompatible." << endl;
                 	return -1;
@@ -108,7 +108,7 @@ vector<string> Parser::parsing(const string &s, char delim)
 
 
 
-bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Source &source, Ecran &e, Scene *scene)
+bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &parsedString, Source *source, Ecran *e, Scene *scene)
 {
 	int nbObjet = 0;
 
@@ -124,7 +124,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 		if(parsedString.size() != 9)
 		{
-			cerr << "Erreur donnee : Sphere." << endl;
+			cerr << "Erreur donnee : Ajout objet." << endl;
 			return false;
 		}
 
@@ -194,8 +194,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-					e.setTlc(p);
-					scene->setEcran(e);
+					e->setTlc(p);
+					scene->setEcran(*e);
 
 					cout << "topLeftScreen : ";
 					scene->getEcran().getTlc().afficherPos();
@@ -219,8 +219,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-						e.setTrc(p);
-						scene->setEcran(e);
+						e->setTrc(p);
+						scene->setEcran(*e);
 
 						cout << "topRightScreen : ";
 						scene->getEcran().getTrc().afficherPos();
@@ -244,8 +244,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 						 */
 						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						e.setBlc(p);
-						scene->setEcran(e);
+						e->setBlc(p);
+						scene->setEcran(*e);
 
 						cout << "bottomLeftScreen : ";
 						scene->getEcran().getBlc().afficherPos();
@@ -255,8 +255,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 						 * Creation du quatrieme point (BottomRightCorner).
 						 */
 
-						e.creationBrc();
-						scene->setEcran(e);
+						e->creationBrc();
+						scene->setEcran(*e);
 
 						cout << "bottomRightScreen : ";
 						scene->getEcran().getBrc().afficherPos();
@@ -274,9 +274,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					e.setResolution(atoi(parsedString[0].c_str()));
+					e->setResolution(atoi(parsedString[0].c_str()));
 
-					scene->setEcran(e);
+					scene->setEcran(*e);
 
 					cout << "resolution : ";
 					cout << scene->getEcran().getResolution() << "\n\n";
@@ -307,10 +307,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 				if(parsedString.size() != 6)
 				{
-
 					cerr << "Erreur donnee : Light position & Light color." << endl;
 					return false;
-
 				}
 
 				else
@@ -321,11 +319,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					Couleur *c;
 					c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
 
-					source.setPos(*p);
+					source->setPos(*p);
 
-					source.setCouleur(*c);
+					source->setCouleur(*c);
 
-					scene->setSource(source);
+					scene->setSource(*source);
 
 					cout << "Light position : ";
 					scene->getSource().getPos().afficherPos();
@@ -337,17 +335,12 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					cout << "\n\n";
 
 				}
-
 				break;
-
 			default:
 
 		    	cerr << "Erreur parser : Fichier incompatible." << endl;
 		}
 	}
-
-
-
 
 
 	return true;

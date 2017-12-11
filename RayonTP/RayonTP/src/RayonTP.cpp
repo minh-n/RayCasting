@@ -24,16 +24,17 @@ int main() {
 	Sphere s1, s2, s3;
 	Parser *p = new Parser();
 
-	int b = p->lecture(*source, *ecran, *scene);
+	p->lecture(source, ecran, scene);
 
 	cout << "Lecture finie !" << endl;
 
 	delete(p); //fin de la lecture du fichier.
 
-	cout << "\n\ntest affichage. Sphere 0 : \n";
+	cout << "\n\ntest affichage. Sphere 0 : \n" << endl;
 
 	scene->getNosObjets().at(0)->afficher();
 
+	scene->creationFichier();
 	return 0;
 }
 

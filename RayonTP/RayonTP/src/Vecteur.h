@@ -46,10 +46,41 @@ public:
 		this->z = z;
 	}
 
-
 	void afficherPos() const{
 		std::cout << " " << x << " " << y << " " << z;
 	}
+
+	Position operator* (const double&) const;
+
+	Position operator* (const Position&) const;
+
+	Position operator- (const Position&) const;
+
+	Position operator+ (const Position&) const;
+
+	Position& operator-= (const Position&);
+
+	Position& operator+= (const Position&);
+
+	Position& operator= (const Position&);
+
+	bool operator== (const Position&)const;
+
+	double length() const;
+	double length2() const;
+	double dot(const Position&) const;
+
+	Position cross(const Position&) const;
+	Position& normalize();
+	Position project(const Position&) const;
+
+
+
+
+
+
+
+
 };
 
 

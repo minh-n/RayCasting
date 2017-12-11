@@ -44,18 +44,19 @@ public:
 
 		std::cout << Objet::getPosition().getX()
 				  << " " <<  Objet::getPosition().getY() << " "
-				  <<  Objet::getPosition().getZ();
+				  <<  Objet::getPosition().getZ() << std::endl;
 
-		std::cout << ", Sphere couleur : ";
+		std::cout << "Sphere couleur : ";
 
 		std::cout <<  Objet::getCouleur().getR() << " "
 						<<   Objet::getCouleur().getG() << " "
-						<<   Objet::getCouleur().getB();
+						<<   Objet::getCouleur().getB() << std::endl;
 
 
-		std::cout << "\n\t\t reflec = " <<  getReflection()
-					<< ", radius = " << getRadius() << "\n\n";
+		std::cout << "reflec = " <<  getReflection()
+					<< ", radius = " << getRadius() << "\n\n" << std::endl;
 	}
 };
+
 
 #endif /* SPHERE_H_ */

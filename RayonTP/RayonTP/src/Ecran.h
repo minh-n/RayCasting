@@ -9,7 +9,7 @@
 #define ECRAN_H_
 #include "Vecteur.h"
 #include <vector>
-
+#include <cmath>
 
 
 /**
@@ -59,7 +59,8 @@ private:
 	Position blc;
 	Position brc;
 
-	int resolution;
+	int resHorizontale;
+	int resVerticale;
 
 	std::vector<std::vector<Pixel>> pixels;
 
@@ -78,12 +79,12 @@ public:
 		this->blc = blc;
 	}
 
-	int getResolution() const {
-		return resolution;
+	int getResHorizontale() const {
+		return resHorizontale;
 	}
 
-	void setResolution(int resolution) {
-		this->resolution = resolution;
+	void setResHorizontale(int resHor) {
+		this->resHorizontale = resHor;
 	}
 
 	const Position& getTlc() const {
@@ -118,6 +119,46 @@ public:
 		brc.setX(x);
 		brc.setY(y);
 		brc.setZ(z);
+	}
+
+	void calculResVer()
+	{
+
+		int longueurHorizontale = sqrt(
+				((brc.getX() - blc.getX())^2)
+
+				+ ((brc.getY() - blc.getY())^2)
+
+				+ ((brc.getZ() - blc.getZ())^2)
+
+				);
+
+		int longueurVerticale = sqrt(
+				((tlc.getX() - blc.getX())^2)
+
+				+ ((tlc.getY() - blc.getY())^2)
+
+				+ ((tlc.getZ() - blc.getZ())^2)
+
+				);
+
+		resVerticale = (resHorizontale/longueurHorizontale)*longueurVerticale;
+	}
+
+	const std::vector<std::vector<Pixel> >& getPixels() const {
+		return pixels;
+	}
+
+	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
+		this->pixels = pixels;
+	}
+
+	int getResVerticale() const {
+		return resVerticale;
+	}
+
+	void setResVerticale(int resVerticale) {
+		this->resVerticale = resVerticale;
 	}
 };
 

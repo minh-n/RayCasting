@@ -37,5 +37,3 @@ int main() {
 	scene->creationFichier();
 	return 0;
 }
-
-

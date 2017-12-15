@@ -82,14 +82,26 @@ Scene::~Scene() {
 
 void Scene::creationFichier()
 	{
-		 ofstream fichier;
 		 cout << "Creation du fichier..." << endl;
+		 ofstream fichier;
+
 		 fichier.open("sortie.ppm", std::ios::out | std::ios::trunc);
 
 	     if(fichier)
 	     {
 	        cout << "Ecriture dans le fichier..." << endl;
-	        fichier << "bnail";
+	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
+	        		<< this->getEcran().getResVerticale() << "\n255\n";
+
+	        for(int i = 0; i < this->getEcran().getResHorizontale() ; i++)
+	        {
+      			for(int j = 0; j < this->getEcran().getResVerticale()  ; j++){
+      				fichier << "10" << " 20" << " 100";
+      				fichier << "\n";
+
+            	}
+
+	       	}
 	     }
 	     fichier.close();
 	}

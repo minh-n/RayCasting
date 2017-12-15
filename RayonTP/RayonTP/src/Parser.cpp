@@ -30,7 +30,7 @@ int Parser::lecture(Source *source, Ecran *ecran, Scene *scene) {
 
     int positionFichier = 0;
 
-    ifstream fichier("readme.txt", ios::in); //c_str() pour passer fiojk
+    ifstream fichier("readme.txt", ios::in);
 
     cout << "Lancement parser.......................\n";
     if(fichier)
@@ -274,12 +274,16 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					e->setResolution(atoi(parsedString[0].c_str()));
-
+					e->setResHorizontale(atoi(parsedString[0].c_str()));
+					e->calculResVer();
 					scene->setEcran(*e);
 
-					cout << "resolution : ";
-					cout << scene->getEcran().getResolution() << "\n\n";
+					cout << "resolution horizontale : ";
+					cout << scene->getEcran().getResHorizontale() << endl;
+
+					cout << "resolution verticale : ";
+					cout << scene->getEcran().getResVerticale() << "\n\n" << endl;
+
 				}
 				break;
 

@@ -61,9 +61,10 @@ private:
 
 	int resHorizontale;
 	int resVerticale;
-
-	std::vector<std::vector<Pixel>> pixels;
-
+/**
+ * TODO : tableau
+ */
+	//std::vector<std::vector<Pixel>> pixels;
 
 public:
 	Ecran(int res);
@@ -145,13 +146,13 @@ public:
 		resVerticale = (resHorizontale/longueurHorizontale)*longueurVerticale;
 	}
 
-	const std::vector<std::vector<Pixel> >& getPixels() const {
-		return pixels;
-	}
-
-	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
-		this->pixels = pixels;
-	}
+//	const std::vector<std::vector<Pixel> >& getPixels() const {
+//		return pixels;
+//	}
+//
+//	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
+//		this->pixels = pixels;
+//	}
 
 	int getResVerticale() const {
 		return resVerticale;

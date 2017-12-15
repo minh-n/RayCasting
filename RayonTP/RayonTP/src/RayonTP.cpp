@@ -14,7 +14,7 @@
 
 
 using namespace std;
-
+/*
 int main() {
 
 	Ecran *ecran = new Ecran();
@@ -37,3 +37,4 @@ int main() {
 	scene->creationFichier();
 	return 0;
 }
+*/

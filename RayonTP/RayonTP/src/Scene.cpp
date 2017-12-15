@@ -93,9 +93,10 @@ void Scene::creationFichier()
 	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
 	        		<< this->getEcran().getResVerticale() << "\n255\n";
 
-	        for(int i = 0; i < this->getEcran().getResHorizontale() ; i++)
+	        for(int i = 0; i < this->getEcran().getResHorizontale(); i++)
 	        {
-      			for(int j = 0; j < this->getEcran().getResVerticale()  ; j++){
+      			for(int j = 0; j < this->getEcran().getResVerticale(); j++){
+
       				fichier << "10" << " 20" << " 100";
       				fichier << "\n";
 

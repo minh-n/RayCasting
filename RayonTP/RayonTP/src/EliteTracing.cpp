@@ -50,7 +50,7 @@ void clamp255(Vec3& col) {
   col.z = (col.z > 255) ? 255 : (col.z < 0) ? 0 : col.z;
 }
 
-
+/*
 int main() {
 
   const int H = 500;
@@ -117,4 +117,4 @@ int main() {
           << (int)pix_col.z << '\n';
     }
   }
-}
+}*/

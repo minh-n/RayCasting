@@ -10,7 +10,7 @@
 #include "Vecteur.h"
 #include <vector>
 #include <cmath>
-
+#include <algorithm>    // std::swap
 
 /**
  * PIXEL
@@ -22,10 +22,26 @@ private:
 	Couleur couleur;
 public:
         Pixel();
+        Pixel(Pixel const& p)
+        {
+        	position = p.position;
+        	couleur = p.couleur;
+        }
 
         Pixel(Position p, Couleur c);
 
         ~Pixel();
+
+
+    Pixel& operator=(Pixel const& p)
+    {
+
+
+    	position = p.position;
+    	couleur = p.couleur;
+    	return *this;
+    }
+
 
 	const Couleur& getCouleur() const {
 		return couleur;
@@ -153,20 +169,77 @@ public:
 
 	void initPixels()
 	{
+
+
+
+
+		//http://www.cplusplus.com/forum/articles/7459/
+
+		std::vector<std::vector<double> > array2D;
+
+		  // Set up sizes. (HEIGHT x WIDTH)
+		  array2D.resize(resVerticale);
+		  for (int i = 0; i < resVerticale; ++i)
+		    array2D[i].resize(resHorizontale);
+
+		  // Put some values in
+		  array2D[1][2] = 6.0;
+		  array2D[3][1] = 5.5;
+
+
+		std::vector<std::vector<Pixel>> pixels;
+
+		pixels.resize(resVerticale);
+		for (int i = 0; i < resVerticale; ++i)
+			pixels[i].resize(resHorizontale);
+
+		Position p = Position(1,2,3);
+		Position p2 = Position(100,20,55);
+
+		Couleur c = Couleur(4,5,6);
+		Couleur c2 = Couleur(4,50,60);
+
+		 Pixel a = Pixel(p, c);
+		 Pixel b = Pixel(p2, c2);
+
+
+
+		pixels[1][2] = a;
+		pixels[300][100] = b;
+
+
+		std::cout << "size pixels table (seulement horizontale ?) : " << pixels.size() << "\nTEST AFFICHE PIXEL" <<
+
+			 std::endl;
+		pixels[1][2].getCouleur().afficherCouleur();
+		pixels[300][100].getPosition().afficherPos();
+		//affichage ok
+
+
+
+//		for (int j = 0; j < resVerticale; ++j)
+//		{
+//			for(int k = 0; j < resHorizontale; ++k)
+//			{
+//				if(pixels[j][k].getCouleur().getB() != 0)
+//				{
+//					pixels[j][k].getCouleur().afficherCouleur();
+//					pixels[j][k].getPosition().afficherPos();
+//				}
 //
-//		std::vector<std::vector<Pixel>> pixels;
-//		pixels (resHorizontale, std::vector<Pixel> vec (resVerticale, new Pixel()));
+//			}
+//		}
 
 
 	}
 
-	const std::vector<std::vector<Pixel> >& getPixels() const {
-		return pixels;
-	}
-
-	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
-		this->pixels = pixels;
-	}
+//	const std::vector<std::vector<Pixel> >& getPixels() const {
+//		return pixels;
+//	}
+//
+//	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
+//		this->pixels = pixels;
+//	}
 
 	int getResVerticale() const {
 		return resVerticale;

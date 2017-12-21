@@ -8,6 +8,7 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 #include "Objet.h"
+#include "Scene.h"
 #include <iostream>
 
 class Sphere : public Objet{
@@ -15,6 +16,7 @@ class Sphere : public Objet{
 private :
 	double reflection;
 	double radius;
+
 public:
 	Sphere();
 	Sphere(Position pos, Couleur coul, double ref, double rad) : Objet(pos, coul), reflection(ref), radius(rad){};

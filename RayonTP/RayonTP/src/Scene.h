@@ -109,6 +109,10 @@ public:
 		nosObjets.push_back(o);
 	}
 
+
+	void creationFichier();
+
+
 	const Camera& getCamera() const {
 		return camera;
 	}
@@ -154,7 +158,6 @@ public:
 		return "";
 	}
 
-	void creationFichier();
 
 
 };

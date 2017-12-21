@@ -41,52 +41,51 @@ Position::~Position() {
  * SURCHARGE OPERATEURS
  */
 
-Position Position::operator* (const double& xn) const {
-	return Position(xn*x, xn*y, xn*z);
+Position Position::operator* (const double& i) const {
+	return Position(i*x, i*y, i*z);
 }
 
-Position Position::operator* (const Position& v) const {
-	return Position(v.x*x, v.y*y, v.z*z);
+Position Position::operator* (const Position& p) const {
+	return Position(p.x*x, p.y*y, p.z*z);
 }
 
-Position Position::operator- (const Position& v) const {
-	return Position(x - v.x, y - v.y, z - v.z);
+Position Position::operator- (const Position& p) const {
+	return Position(x - p.x, y - p.y, z - p.z);
 }
 
-Position Position::operator+ (const Position& v) const {
-	return Position(x + v.x, y + v.y, z + v.z);
+Position Position::operator+ (const Position& p) const {
+	return Position(x + p.x, y + p.y, z + p.z);
 }
 
-Position& Position::operator-= (const Position& v){
-	x -= v.x;
-	y -= v.y;
-	z -= v.z;
+Position& Position::operator-= (const Position& p){
+	x -= p.x;
+	y -= p.y;
+	z -= p.z;
 	return *this;
 }
 
-Position& Position::operator+= (const Position& v){
-	x += v.x;
-	y += v.y;
-	z += v.z;
+Position& Position::operator+= (const Position& p){
+	x += p.x;
+	y += p.y;
+	z += p.z;
 	return *this;
 }
 
-Position& Position::operator = (const Position& v){
-	x = v.x;
-	y = v.y;
-	z = v.z;
+Position& Position::operator = (const Position& p){
+	x = p.x;
+	y = p.y;
+	z = p.z;
 	return *this;
 }
 
-
-double Position::dot(const Position& v) const {
-	return v.x*x + v.y * y + v.z * z;
+double Position::dot(const Position& p) const {
+	return p.x*x + p.y * y + p.z * z;
 }
 
-Position Position::cross(const Position& v) const{
-	double xn = y*v.z - z*v.y;
-	double yn = z*v.x - x*v.z;
-	double zn = x*v.y - y*v.x;
+Position Position::cross(const Position& p) const{
+	double xn = y*p.z - z*p.y;
+	double yn = z*p.x - x*p.z;
+	double zn = x*p.y - y*p.x;
 	return Position(xn, yn, zn);
 }
 

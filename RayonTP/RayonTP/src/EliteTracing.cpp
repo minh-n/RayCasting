@@ -1,5 +1,6 @@
 #include <fstream>
 #include <cmath>
+#include <iostream>
 
 struct Vec3 {
   double x,y,z;
@@ -49,6 +50,7 @@ void clamp255(Vec3& col) {
   col.z = (col.z > 255) ? 255 : (col.z < 0) ? 0 : col.z;
 }
 
+
 int main() {
 
   const int H = 500;
@@ -79,6 +81,7 @@ int main() {
 
       const Ray ray(Vec3(x,y,0),Vec3(0,0,1));
       if (sphere.intersect(ray, t)) {
+    	  std::cout << "####t = " << t << std::endl;
         const Vec3 pi = ray.o + ray.d*t;
         const Vec3 L = light.c - pi;
         const Vec3 N = sphere.getNormal(pi);

@@ -106,3 +106,8 @@ void Scene::creationFichier()
 	     }
 	     fichier.close();
 	}
+
+
+
+
+

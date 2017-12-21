@@ -199,8 +199,8 @@ public:
 		Couleur c = Couleur(4,5,6);
 		Couleur c2 = Couleur(4,50,60);
 
-		 Pixel a = Pixel(p, c);
-		 Pixel b = Pixel(p2, c2);
+		Pixel a = Pixel(p, c);
+		Pixel b = Pixel(p2, c2);
 
 
 

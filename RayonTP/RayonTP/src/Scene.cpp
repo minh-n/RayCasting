@@ -93,11 +93,19 @@ void Scene::creationFichier()
 	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
 	        		<< this->getEcran().getResVerticale() << "\n255\n";
 
-	        for(int i = 0; i < this->getEcran().getResHorizontale(); i++)
-	        {
-      			for(int j = 0; j < this->getEcran().getResVerticale(); j++){
+			std::vector<std::vector<Pixel>> pix;
+			pix = this->getEcran().getPixels();
 
-      				fichier << "10" << " 20" << " 100";
+			//inverser Verticale et horizontale peut etre ?
+
+	        for(int i = 0; i < this->getEcran().getResVerticale(); i++)
+	        {
+      			for(int j = 0; j < this->getEcran().getResHorizontale(); j++){
+
+      				fichier << pix[i][j].getCouleur().getR() << " "
+      				<< pix[i][j].getCouleur().getG() << " "
+      				<< pix[i][j].getCouleur().getB();
+
       				fichier << "\n";
 
             	}
@@ -107,7 +115,21 @@ void Scene::creationFichier()
 	     fichier.close();
 	}
 
+void Scene::rayonTouche(Ecran* e)
+{
 
+	std::vector<std::vector<Pixel>> pix;
+	pix = e->getPixels();
+	cout << "###########\nEcran e PIXEL 1 POSITION : " << endl;
+	pix[1][2].getPosition().afficherPos();
+
+
+	cout << "PIXEL 2 COULEUR 2 : " << endl;
+		pix[300][100].getCouleur().afficherCouleur();
+
+	cout << "\n\n\n" << endl;
+
+}
 
 
 

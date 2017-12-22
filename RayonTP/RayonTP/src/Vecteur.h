@@ -73,14 +73,6 @@ public:
 	Position cross(const Position&) const;
 	Position& normalize();
 	Position project(const Position&) const;
-
-
-
-
-
-
-
-
 };
 
 

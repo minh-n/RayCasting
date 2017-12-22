@@ -35,6 +35,8 @@ int main() {
 	scene->getNosObjets().at(0)->afficher();
 
 	scene->creationFichier();
+
+	scene->rayonTouche(ecran);
 	return 0;
 }
 

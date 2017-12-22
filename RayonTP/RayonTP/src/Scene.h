@@ -96,8 +96,6 @@ private:
 	Ecran ecran;
 	Couleur bgColor;
 
-	//typedef boost::variant<Objet, Sphere> typeObjets;
-
 	std::vector<Objet*> nosObjets;
 
 public:
@@ -108,6 +106,8 @@ public:
 	{
 		nosObjets.push_back(o);
 	}
+
+	void rayonTouche(Ecran* e);
 
 
 	void creationFichier();

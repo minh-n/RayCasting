@@ -107,11 +107,11 @@ public:
 		nosObjets.push_back(o);
 	}
 
-	void rayonTouche(Ecran* e);
-
+	void rayonTouche();
 
 	void creationFichier();
 
+	void afficher() const;
 
 	const Camera& getCamera() const {
 		return camera;
@@ -121,7 +121,7 @@ public:
 		this->camera = camera;
 	}
 
-	const Ecran& getEcran() const {
+	const Ecran& getEcran() const{
 		return ecran;
 	}
 
@@ -133,7 +133,7 @@ public:
 		return nosObjets;
 	}
 
-	void setNosObjets(const std::vector<Objet* >& nosObjets) {
+	void setNosObjets(const std::vector<Objet*>& nosObjets) {
 		this->nosObjets = nosObjets;
 	}
 

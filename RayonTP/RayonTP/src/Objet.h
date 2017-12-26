@@ -15,7 +15,7 @@
 
 class Objet {
 
-private :
+protected :
 
 	Position position;
 	Couleur couleur;
@@ -48,6 +48,8 @@ public:
 	void setCouleur(const Couleur& couleur) {
 		this->couleur = couleur;
 	}
+
+	virtual Position* intersection(const Position& pos1, const Position& pos2) const = 0;
 };
 
 

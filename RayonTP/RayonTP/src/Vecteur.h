@@ -11,43 +11,43 @@
 
 class Position {
 private:
-	int x;
-	int y;
-	int z;
+	double x;
+	double y;
+	double z;
 
 public:
 	Position();
-	Position(int x, int y, int z);
+	Position(double x, double y, double z);
 	Position(const Position &source);
 
 	virtual ~Position();
 
-	int getX() const {
+	double getX() const {
 		return x;
 	}
 
-	void setX(int x) {
+	void setX(double x) {
 		this->x = x;
 	}
 
-	int getY() const {
+	double getY() const {
 		return y;
 	}
 
-	void setY(int y) {
+	void setY(double y) {
 		this->y = y;
 	}
 
-	int getZ() const {
+	double getZ() const {
 		return z;
 	}
 
-	void setZ(int z) {
+	void setZ(double z) {
 		this->z = z;
 	}
 
 	void afficherPos() const{
-		std::cout << " " << x << " " << y << " " << z;
+		std::cout << " " << x << " " << y << " " << z << std::endl;;
 	}
 
 	Position operator* (const double&) const;
@@ -74,7 +74,6 @@ public:
 	Position& normalize();
 	Position project(const Position&) const;
 };
-
 
 
 class Couleur {

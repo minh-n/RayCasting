@@ -19,7 +19,7 @@ Position::Position(){
 	// TODO Auto-generated constructor stub
 
 }
-Position::Position(int x, int y, int z) : x(x), y(y), z(z) {
+Position::Position(double x, double y, double z) : x(x), y(y), z(z) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -35,7 +35,6 @@ Position::Position(const Position &source){
 Position::~Position() {
 	// TODO Auto-generated destructor stub
 }
-
 
 /**
  * SURCHARGE OPERATEURS

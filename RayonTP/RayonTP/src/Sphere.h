@@ -44,20 +44,24 @@ public:
 	{
 		std::cout << "Sphere position : ";
 
-		std::cout << Objet::getPosition().getX()
-				  << " " <<  Objet::getPosition().getY() << " "
-				  <<  Objet::getPosition().getZ() << std::endl;
+		std::cout << position.getX()
+				  << " " <<  position.getY() << " "
+				  <<  position.getZ() << std::endl;
 
 		std::cout << "Sphere couleur : ";
 
-		std::cout <<  Objet::getCouleur().getR() << " "
-						<<   Objet::getCouleur().getG() << " "
-						<<   Objet::getCouleur().getB() << std::endl;
+		std::cout <<  couleur.getR() << " "
+						<<   couleur.getG() << " "
+						<<   couleur.getB() << std::endl;
 
 
-		std::cout << "reflec = " <<  getReflection()
-					<< ", radius = " << getRadius() << "\n\n" << std::endl;
+		std::cout << "reflec = " <<  reflection
+					<< ", radius = " << radius << "\n\n" << std::endl;
 	}
+
+	Position* intersection(const Position& pos1, const Position& pos2) const;
+
+
 };
 
 

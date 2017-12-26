@@ -80,6 +80,14 @@ Scene::~Scene() {
 	// TODO Auto-generated destructor stub
 }
 
+void Scene::afficher() const{
+	for(unsigned int i = 0; i < nosObjets.size()-1; i++)
+	{
+		nosObjets[i]->afficher();
+	}
+}
+
+
 void Scene::creationFichier()
 	{
 		 cout << "Creation du fichier..." << endl;
@@ -107,28 +115,66 @@ void Scene::creationFichier()
       				<< pix[i][j].getCouleur().getB();
 
       				fichier << "\n";
-
             	}
-
 	       	}
 	     }
 	     fichier.close();
 	}
 
-void Scene::rayonTouche(Ecran* e)
+void Scene::rayonTouche()
 {
+	Position* pos = NULL;
+	Position* temp = NULL;
 
-	std::vector<std::vector<Pixel>> pix;
-	pix = e->getPixels();
-	cout << "###########\nEcran e PIXEL 1 POSITION : " << endl;
-	pix[1][2].getPosition().afficherPos();
+	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
+	{
+		for(int j = 0; j < this->getEcran().getResHorizontale(); j++)
+		{
+			Position posCam = camera.getPos();
+			Position posPixel = ecran.getPixels()[i][j].getPosition();
 
+//			cout << "Pos pixel: " << posPixel.getX() << ";" << posPixel.getY() << ";" << posPixel.getZ() << ";" << endl;
 
-	cout << "PIXEL 2 COULEUR 2 : " << endl;
-		pix[300][100].getCouleur().afficherCouleur();
+			for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+			{
+ 				pos = (*it)->intersection(posCam, posPixel);
 
-	cout << "\n\n\n" << endl;
+				if(pos != NULL)
+				{
+					if(temp != NULL)
+					{
+						double d1 = sqrt(pow(camera.getPos().getX() - pos->getX(), 2)
+											+ pow(camera.getPos().getY() - pos->getY(), 2)
+											+ pow(camera.getPos().getZ() - pos->getZ(), 2));
 
+						double d2 = sqrt(pow(camera.getPos().getX() - temp->getX(), 2)
+											+ pow(camera.getPos().getY() - temp->getY(), 2)
+											+ pow(camera.getPos().getZ() - temp->getZ(), 2));
+
+						if(d1 < d2)
+						{
+							Couleur c = (*it)->getCouleur();
+							ecran.pixels[i][j].setCouleur(c);
+						}
+
+					}
+					else
+					{
+						Couleur c = (*it)->getCouleur();
+						ecran.pixels[i][j].setCouleur(c);
+					}
+
+					temp = pos;
+				}
+			}
+
+			pos = NULL;
+			temp = NULL;
+	    }
+	}
+
+	delete(pos);
+	delete(temp);
 }
 
 

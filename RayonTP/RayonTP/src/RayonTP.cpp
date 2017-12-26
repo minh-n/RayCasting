@@ -15,28 +15,55 @@
 
 using namespace std;
 
-int main() {
-
+void testIntersection(){
 	Ecran *ecran = new Ecran();
 	Scene *scene = new Scene();
 	Source *source = new Source();
 
-	Sphere s1, s2, s3;
 	Parser *p = new Parser();
 
 	p->lecture(source, ecran, scene);
-
 	cout << "Lecture finie !" << endl;
+	delete(p);
 
-	delete(p); //fin de la lecture du fichier.
+	cout << "\n\ntest affichage.\n" << endl;
+	scene->afficher();
 
-	cout << "\n\ntest affichage. Sphere 0 : \n" << endl;
-
-	scene->getNosObjets().at(0)->afficher();
+	cout << "Debut intersec.\n" << endl;
+	scene->rayonTouche();
 
 	scene->creationFichier();
 
-	scene->rayonTouche(ecran);
+	delete(ecran);
+	delete(source);
+	delete(scene);
+}
+
+int main() {
+
+//	Ecran *ecran = new Ecran();
+//	Scene *scene = new Scene();
+//	Source *source = new Source();
+//
+//	Parser *p = new Parser();
+//
+//	p->lecture(source, ecran, scene);
+//
+//	cout << "Lecture finie !" << endl;
+//
+//	delete(p); //fin de la lecture du fichier.
+//
+//	cout << "\n\ntest affichage. Sphere 0 : \n" << endl;
+//
+//	scene->afficher();
+//	scene->creationFichier();
+//
+//	delete(ecran);
+//	delete(source);
+//	delete(scene);
+
+	testIntersection();
+
 	return 0;
 }
 

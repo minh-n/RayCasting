@@ -68,6 +68,8 @@ public:
 
 class Ecran {
 
+friend class Scene;
+
 private:
 
 	Position tlc;
@@ -86,9 +88,7 @@ private:
 
 
 public:
-	Ecran(int res);
 	Ecran();
-
 	virtual ~Ecran();
 
 	const Position& getBlc() const {
@@ -145,22 +145,23 @@ public:
 	{
 
 		int longueurHorizontale = sqrt(
-				((brc.getX() - blc.getX())^2)
-				+ ((brc.getY() - blc.getY())^2)
-				+ ((brc.getZ() - blc.getZ())^2));
+				pow((brc.getX() - blc.getX()), 2)
+				+ pow((brc.getY() - blc.getY()), 2)
+				+ pow((brc.getZ() - blc.getZ()), 2));
 
 		int longueurVerticale = sqrt(
-				((tlc.getX() - blc.getX())^2)
-				+ ((tlc.getY() - blc.getY())^2)
-				+ ((tlc.getZ() - blc.getZ())^2));
+				pow((tlc.getX() - blc.getX()), 2)
+				+ pow((tlc.getY() - blc.getY()), 2)
+				+ pow((tlc.getZ() - blc.getZ()),2));
 
 		resVerticale = (resHorizontale/longueurHorizontale)*longueurVerticale;
 		
 		initPixels(); //initialisation du tableau de pixels
-
 	}
 
 	void initPixels();
+
+	void initCouleur(Couleur c);
 
 	int getResVerticale() const {
 		return resVerticale;

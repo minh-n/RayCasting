@@ -301,6 +301,12 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 						scene->setBgColor(c);
 
+						e->setResHorizontale(scene->getEcran().getResHorizontale());
+						e->calculResVer();
+						e->initCouleur(c);
+						scene->setEcran(*e);
+
+
 						cout << "background color : ";
 						scene->getBgColor().afficherCouleur();
 						cout << "\n";

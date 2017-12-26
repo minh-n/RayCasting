@@ -10,7 +10,7 @@
 #include "Vecteur.h"
 #include <vector>
 #include <cmath>
-#include <algorithm>    // std::swap
+#include <algorithm>   
 
 /**
  * PIXEL
@@ -22,6 +22,7 @@ private:
 	Couleur couleur;
 public:
         Pixel();
+
         Pixel(Pixel const& p)
         {
         	position = p.position;
@@ -32,16 +33,12 @@ public:
 
         ~Pixel();
 
-
     Pixel& operator=(Pixel const& p)
     {
-
-
     	position = p.position;
     	couleur = p.couleur;
     	return *this;
     }
-
 
 	const Couleur& getCouleur() const {
 		return couleur;
@@ -60,11 +57,9 @@ public:
 	}
 };
 
-
 /**
  * ECRAN
  */
-
 
 class Ecran {
 
@@ -82,8 +77,6 @@ private:
  */
 
 	std::vector<std::vector<Pixel>> pixels;
-
-
 
 public:
 	Ecran(int res);
@@ -133,12 +126,14 @@ public:
 
 	void creationBrc() //calcul du quatrieme point a partir des trois autres
 	{
+
 		int x = trc.getX() - tlc.getX() + blc.getX();
 		int y = trc.getY() - tlc.getY() + blc.getY();
 		int z = trc.getZ() - tlc.getZ() + blc.getZ();
 		brc.setX(x);
 		brc.setY(y);
 		brc.setZ(z);
+
 	}
 
 	void calculResVer() //calcul resolution verticale
@@ -159,7 +154,7 @@ public:
 		initPixels(); //initialisation du tableau de pixels
 
 	}
-
+ 
 	void initPixels();
 
 	int getResVerticale() const {
@@ -178,11 +173,5 @@ public:
 		this->pixels = pixels;
 	}
 };
-
-
-
-
-
-
 
 #endif /* ECRAN_H_ */

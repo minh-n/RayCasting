@@ -109,9 +109,7 @@ public:
 
 	void rayonTouche(Ecran* e);
 
-
 	void creationFichier();
-
 
 	const Camera& getCamera() const {
 		return camera;

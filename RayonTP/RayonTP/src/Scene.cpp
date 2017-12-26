@@ -8,11 +8,7 @@
 #include "Scene.h"
 #include <iostream>
 
-
 using namespace std;
-
-
-
 
 /**
  * CAMERA
@@ -97,7 +93,6 @@ void Scene::creationFichier()
 			pix = this->getEcran().getPixels();
 
 			//inverser Verticale et horizontale peut etre ?
-
 	        for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 	        {
       			for(int j = 0; j < this->getEcran().getResHorizontale(); j++){
@@ -107,9 +102,7 @@ void Scene::creationFichier()
       				<< pix[i][j].getCouleur().getB();
 
       				fichier << "\n";
-
             	}
-
 	       	}
 	     }
 	     fichier.close();
@@ -118,8 +111,13 @@ void Scene::creationFichier()
 void Scene::rayonTouche(Ecran* e)
 {
 
+	//vecteur 2D contenant tous les pixels 
 	std::vector<std::vector<Pixel>> pix;
 	pix = e->getPixels();
+
+
+
+	//affichage test
 	cout << "###########\nEcran e PIXEL 1 POSITION : " << endl;
 	pix[1][2].getPosition().afficherPos();
 
@@ -128,6 +126,20 @@ void Scene::rayonTouche(Ecran* e)
 		pix[300][100].getCouleur().afficherCouleur();
 
 	cout << "\n\n\n" << endl;
+
+
+
+
+	//tracage des pixels
+
+
+
+
+
+
+
+	
+
 
 }
 

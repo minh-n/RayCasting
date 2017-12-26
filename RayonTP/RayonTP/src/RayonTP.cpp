@@ -3,7 +3,7 @@
 // Author      : Adrien & Minh
 // Version     :
 // Copyright   : 
-// Description : Hello World in C++, Ansi-style
+// Description : Ray-tracing
 //============================================================================
 
 #include <iostream>
@@ -11,7 +11,6 @@
 #include "Scene.h"
 #include "Sphere.h"
 #include "Vecteur.h"
-
 
 using namespace std;
 
@@ -32,7 +31,7 @@ int main() {
 
 	cout << "\n\ntest affichage. Sphere 0 : \n" << endl;
 
-	scene->getNosObjets().at(0)->afficher();
+	scene->getNosObjets().at(0)->afficher(); //test affichage de la sphere 1
 
 	scene->creationFichier();
 

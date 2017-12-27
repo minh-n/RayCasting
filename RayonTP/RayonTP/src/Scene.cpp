@@ -168,9 +168,11 @@ void Scene::setupEcran()
 //								Couleur c = Couleur(0, 0, 0);
 //								ecran.pixels[i][j].setCouleur(c);
 //							}
-							cout << "Pixel[" << i << "][" << j << "]\n" << endl;
+							//cout << "Pixel[" << i << "][" << j << "]\n" << endl;
 							tmp = *it;
-							Couleur* c = recursive(tmp, posCam, *pos, c, 0);
+
+							Couleur* c = new Couleur((*it)->getCouleur());
+							c = recursive(tmp, posCam, *pos, c, 0);
 							ecran.pixels[i][j].setCouleur(*c);
 						}
 
@@ -192,9 +194,11 @@ void Scene::setupEcran()
 //							Couleur c = Couleur(0, 0, 0);
 //							ecran.pixels[i][j].setCouleur(c);
 //						}
-						cout << "Pixel[" << i << "][" << j << "]\n" << endl;
+						//cout << "Pixel[" << i << "][" << j << "]\n" << endl;
 						tmp = *it;
-						Couleur* c = recursive(tmp, posCam, *pos, c, 0);
+
+						Couleur* c = new Couleur((*it)->getCouleur());
+						c = recursive(tmp, posCam, *pos, c, 0);
 						ecran.pixels[i][j].setCouleur(*c);
 					}
 
@@ -272,7 +276,7 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 
 	if(iteration < 3)
 	{
-		cout << "Ici : i " << iteration << endl;
+		//cout << "Ici : i " << iteration << endl;
 		Position reflechi = objet->calculRayonReflechi(surface, sourceRayon);
 
 		for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)

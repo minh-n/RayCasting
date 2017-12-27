@@ -126,6 +126,7 @@ void Scene::setupEcran()
 	Objet* tmp = NULL;
 	Position* pos = NULL;
 	Position* temp = NULL;
+	Couleur* c = new Couleur(0, 0, 0);
 
 	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 	{
@@ -168,10 +169,12 @@ void Scene::setupEcran()
 //								Couleur c = Couleur(0, 0, 0);
 //								ecran.pixels[i][j].setCouleur(c);
 //							}
-							cout << "Pixel[" << i << "][" << j << "]\n" << endl;
+							cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 							tmp = *it;
-							Couleur* c = recursive(tmp, posCam, *pos, c, 0);
+							c = recursive(tmp, posCam, *pos, c, 0);
 							ecran.pixels[i][j].setCouleur(*c);
+
+							temp = pos;
 						}
 
 					}
@@ -192,13 +195,15 @@ void Scene::setupEcran()
 //							Couleur c = Couleur(0, 0, 0);
 //							ecran.pixels[i][j].setCouleur(c);
 //						}
-						cout << "Pixel[" << i << "][" << j << "]\n" << endl;
+						cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 						tmp = *it;
-						Couleur* c = recursive(tmp, posCam, *pos, c, 0);
+						c = recursive(tmp, posCam, *pos, c, 0);
 						ecran.pixels[i][j].setCouleur(*c);
+
+						temp = pos;
 					}
 
-					temp = pos;
+
 				}
 			}
 
@@ -207,9 +212,89 @@ void Scene::setupEcran()
 	    }
 	}
 
-	delete(pos);
-	delete(temp);
+	delete c;
 }
+
+void Scene::setupEcranSansReflexion()
+{
+	Position* pos = NULL;
+	Position* temp = NULL;
+
+	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
+	{
+		for(int j = 0; j < this->getEcran().getResHorizontale(); j++)
+		{
+			Position posCam = camera.getPos();
+			Position posPixel = ecran.getPixels()[i][j].getPosition();
+
+//			cout << "Pos pixel: " << posPixel.getX() << ";" << posPixel.getY() << ";" << posPixel.getZ() << ";" << endl;
+
+			for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+			{
+ 				pos = (*it)->intersection(posCam, posPixel);
+
+				if(pos != NULL)
+				{
+					if(temp != NULL)
+					{
+						double d1 = sqrt(pow(camera.getPos().getX() - pos->getX(), 2)
+											+ pow(camera.getPos().getY() - pos->getY(), 2)
+											+ pow(camera.getPos().getZ() - pos->getZ(), 2));
+
+						double d2 = sqrt(pow(camera.getPos().getX() - temp->getX(), 2)
+											+ pow(camera.getPos().getY() - temp->getY(), 2)
+											+ pow(camera.getPos().getZ() - temp->getZ(), 2));
+
+						if(d1 < d2)
+						{
+							//sans reflexion
+							if(eclairageDirect(*pos))
+							{
+								double cos = (*it)->calculCos(*pos, source.getPos());
+								Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
+										cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
+										cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
+								ecran.pixels[i][j].setCouleur(c);
+							}
+							else
+							{
+								Couleur c = Couleur(0, 0, 0);
+								ecran.pixels[i][j].setCouleur(c);
+							}
+
+							temp = pos;
+						}
+
+					}
+					else
+					{
+
+						//Sans reflexion
+						if(eclairageDirect(*pos))
+						{
+							double cos = (*it)->calculCos(*pos, source.getPos());
+							Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
+									cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
+									cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
+							ecran.pixels[i][j].setCouleur(c);
+						}
+						else
+						{
+							Couleur c = Couleur(0, 0, 0);
+							ecran.pixels[i][j].setCouleur(c);
+						}
+
+						temp = pos;
+					}
+				}
+			}
+
+			pos = NULL;
+			temp = NULL;
+	    }
+	}
+}
+
 
 
 bool Scene::eclairageDirect(const Position& pos)
@@ -272,7 +357,6 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 
 	if(iteration < 3)
 	{
-		cout << "Ici : i " << iteration << endl;
 		Position reflechi = objet->calculRayonReflechi(surface, sourceRayon);
 
 		for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
@@ -320,12 +404,14 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 			c->setR(c->getB() + tmp->getB());
 			if(c->getB() > 255) c->setB(255);
 
-			c->afficherCouleur();
+
 			iteration++;
 
 			c = recursive(objetActuel, surface, *posSourceSecondaire, c, iteration);
 		}
 	}
+
+	c->afficherCouleur();
 
 	return c;
 }

@@ -115,7 +115,7 @@ public:
 
 
 	void afficherCouleur() const{
-		std::cout << " " << r << " " << g << " " << b;
+		std::cout << " " << r << " " << g << " " << b << std::endl;
 	}
 
 	Couleur operator+ (const Couleur&) const;

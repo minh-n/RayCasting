@@ -113,6 +113,11 @@ public:
 		this->r = r;
 	}
 
+	void setCouleur(const Couleur& couleur) {
+		r = couleur.r;
+		g = couleur.g;
+		b= couleur.b;
+	}
 
 	void afficherCouleur() const{
 		std::cout << " " << r << " " << g << " " << b << std::endl;

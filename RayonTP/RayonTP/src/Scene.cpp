@@ -155,20 +155,6 @@ void Scene::setupEcran()
 
 						if(d1 < d2)
 						{
-							//sans reflexion
-//							if(eclairageDirect(*pos))
-//							{
-//								double cos = (*it)->calculCos(*pos, source.getPos());
-//								Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
-//										cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
-//										cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
-//								ecran.pixels[i][j].setCouleur(c);
-//							}
-//							else
-//							{
-//								Couleur c = Couleur(0, 0, 0);
-//								ecran.pixels[i][j].setCouleur(c);
-//							}
 							cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 							tmp = *it;
 							c = recursive(tmp, posCam, *pos, c, 0);
@@ -180,21 +166,6 @@ void Scene::setupEcran()
 					}
 					else
 					{
-
-						//Sans reflexion
-//						if(eclairageDirect(*pos))
-//						{
-//							double cos = (*it)->calculCos(*pos, source.getPos());
-//							Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
-//									cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
-//									cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
-//							ecran.pixels[i][j].setCouleur(c);
-//						}
-//						else
-//						{
-//							Couleur c = Couleur(0, 0, 0);
-//							ecran.pixels[i][j].setCouleur(c);
-//						}
 						cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 						tmp = *it;
 						c = recursive(tmp, posCam, *pos, c, 0);
@@ -202,8 +173,6 @@ void Scene::setupEcran()
 
 						temp = pos;
 					}
-
-
 				}
 			}
 
@@ -349,11 +318,12 @@ Couleur* Scene::eclairageAvecReflexion(const Objet& objet, const Objet& sourceSe
 
 Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const Position& surface, Couleur* c, int iteration)
 {
-	Objet* objetActuel = NULL;
+	Objet* objetSource = NULL;
 	Couleur* tmp = NULL;
 	Position* incident = NULL;
 	Position* temp = NULL;
-	Position* posSourceSecondaire = NULL;
+
+	double epsilon = 0.05;
 
 	if(iteration < 3)
 	{
@@ -367,47 +337,64 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 			{
 				if(temp != NULL)
 				{
-					double d1 = sqrt(pow(camera.getPos().getX() - incident->getX(), 2)
-							+ pow(camera.getPos().getY() - incident->getY(), 2)
-							+ pow(camera.getPos().getZ() - incident->getZ(), 2));
+					double distance = sqrt(pow(surface.getX() - incident->getX(), 2)
+							+ pow(surface.getY() - incident->getY(), 2)
+							+ pow(surface.getZ() - incident->getZ(), 2));
 
-					double d2 = sqrt(pow(camera.getPos().getX() - temp->getX(), 2)
-							+ pow(camera.getPos().getY() - temp->getY(), 2)
-							+ pow(camera.getPos().getZ() - temp->getZ(), 2));
-
-					if(d1 < d2)
+					if(distance > epsilon)
 					{
-						tmp = eclairageAvecReflexion(*objet, **it, surface);
-						objetActuel = *it;
-						posSourceSecondaire = incident;
-					}
+						double d1 = sqrt(pow(camera.getPos().getX() - incident->getX(), 2)
+								+ pow(camera.getPos().getY() - incident->getY(), 2)
+								+ pow(camera.getPos().getZ() - incident->getZ(), 2));
 
+						double d2 = sqrt(pow(camera.getPos().getX() - temp->getX(), 2)
+								+ pow(camera.getPos().getY() - temp->getY(), 2)
+								+ pow(camera.getPos().getZ() - temp->getZ(), 2));
+
+						if(d1 < d2)
+						{
+							objetSource = *it;
+							temp = incident;
+						}
+					}
 				}
 				else
 				{
-					tmp = eclairageAvecReflexion(*objet, **it, surface);
-					objetActuel = *it;
+					double distance = sqrt(pow(surface.getX() - incident->getX(), 2)
+							+ pow(surface.getY() - incident->getY(), 2)
+							+ pow(surface.getZ() - incident->getZ(), 2));
 
-					posSourceSecondaire = incident;
+					if(distance > epsilon)
+					{
+						objetSource = *it;
+						temp = incident;
+					}
 				}
-
-				temp = incident;
 			}
 		}
 
-		if(tmp != NULL)
+		if(objetSource != NULL)
 		{
-			c->setR(c->getR() + tmp->getR());
-			if(c->getR() > 255) c->setR(255);
-			c->setG(c->getG() + tmp->getG());
-			if(c->getG() > 255) c->setG(255);
-			c->setR(c->getB() + tmp->getB());
-			if(c->getB() > 255) c->setB(255);
-
-
 			iteration++;
-
-			c = recursive(objetActuel, surface, *posSourceSecondaire, c, iteration);
+			tmp = eclairageAvecReflexion(*objet, *objetSource, surface);
+			c->setCouleur(*recursive(objetSource, surface, *temp, c, iteration) + *tmp);
+		}
+		else
+		{
+			if(eclairageDirect(*temp))
+			{
+				double cos = objet->calculCos(surface, source.getPos());
+				Couleur cSource = Couleur(cos*((objet->getCouleur().getR())*source.getCouleur().getR())/255,
+						cos*((objet->getCouleur().getG())*source.getCouleur().getG())/255,
+						cos*((objet->getCouleur().getB())*source.getCouleur().getB())/255);
+				c->setCouleur(cSource);
+			}
+			else
+			{
+				c->setB(0);
+				c->setG(0);
+				c->setR(0);
+			}
 		}
 	}
 

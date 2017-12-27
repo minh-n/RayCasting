@@ -107,9 +107,15 @@ public:
 		nosObjets.push_back(o);
 	}
 
-	void rayonTouche();
+	void setupEcran();
+
+	bool eclairageDirect(const Position& pos);
+
+	Couleur* eclairageAvecReflexion(const Objet& objet, const Objet& sourceSecondaire, const Position& pos);
 
 	void creationFichier();
+
+	Couleur* recursive(const Objet* objet, const Position& sourceRayon, const Position& surface, Couleur* c, int iteration);
 
 	void afficher() const;
 

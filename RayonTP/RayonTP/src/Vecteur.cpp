@@ -89,7 +89,17 @@ Position Position::cross(const Position& p) const{
 }
 
 
+Couleur Couleur::operator+ (const Couleur& c) const
+{
+	int red = r + c.r;
+	if(red > 255){red = 255;}
+	int green = g + c.g;
+	if(green > 255){green = 255;}
+	int blue = b + c.b;
+	if(blue > 255){blue = 255;}
 
+	return Couleur(red, green, blue);
+}
 
 
 

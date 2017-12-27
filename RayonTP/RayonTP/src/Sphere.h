@@ -14,12 +14,12 @@
 class Sphere : public Objet{
 
 private :
-	double reflection;
+
 	double radius;
 
 public:
-	Sphere();
-	Sphere(Position pos, Couleur coul, double ref, double rad) : Objet(pos, coul), reflection(ref), radius(rad){};
+	Sphere() : Objet(), radius(0){};
+	Sphere(Position pos, Couleur coul, double ref, double rad) : Objet(pos, coul, ref), radius(rad){};
 
 	virtual ~Sphere();
 
@@ -30,14 +30,6 @@ public:
 
 	void setRadius(double radius) {
 		this->radius = radius;
-	}
-
-	double getReflection() const {
-		return reflection;
-	}
-
-	void setReflection(double reflection) {
-		this->reflection = reflection;
 	}
 
 	void afficher() const

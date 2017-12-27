@@ -117,5 +117,11 @@ public:
 	void afficherCouleur() const{
 		std::cout << " " << r << " " << g << " " << b;
 	}
+
+	Couleur operator+ (const Couleur&) const;
 };
+
+
+
+
 #endif /* VECTEUR_H_ */

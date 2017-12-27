@@ -30,7 +30,7 @@ void testIntersection(){
 	scene->afficher();
 
 	cout << "Debut intersec.\n" << endl;
-	scene->rayonTouche();
+	scene->setupEcran();
 
 	scene->creationFichier();
 

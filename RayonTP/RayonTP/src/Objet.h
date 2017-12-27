@@ -8,6 +8,7 @@
 #ifndef OBJET_H_
 #define OBJET_H_
 #include "Vecteur.h"
+#include <cmath>
 
 /**
  * OBJET
@@ -16,18 +17,15 @@
 class Objet {
 
 protected :
-
 	Position position;
 	Couleur couleur;
+	double reflection;
 
 public:
 
-	Objet();
+	Objet() : reflection(0){};
 
-	Objet(Position pos, Couleur coul) : position(pos), couleur(coul){};
-
-
-	Objet(Position p);
+	Objet(Position pos, Couleur coul, double ref) : position(pos), couleur(coul), reflection(ref){};
 
 	virtual ~Objet();
 
@@ -49,7 +47,19 @@ public:
 		this->couleur = couleur;
 	}
 
+	double getReflection() const {
+		return reflection;
+	}
+
+	void setReflection(double reflection) {
+		this->reflection = reflection;
+	}
+
 	virtual Position* intersection(const Position& pos1, const Position& pos2) const = 0;
+
+	double calculCos(const Position& surface, const Position& sourceLumineuse) const;
+
+	Position calculRayonReflechi(const Position& surface, const Position& sourceRayon) const;
 };
 
 

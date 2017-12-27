@@ -7,12 +7,6 @@
 
 #include "Sphere.h"
 
-Sphere::Sphere() : Objet(){
-	reflection = 0;
-	radius = 0;
-	// TODO Auto-generated constructor stub
-}
-
 Sphere::~Sphere() {
 	// TODO Auto-generated destructor stub
 }
@@ -38,8 +32,8 @@ Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
 	double r = this->radius;
 
 	double a = (xB-xA)*(xB-xA) + (yB-yA)*(yB-yA) + (zB-zA)*(zB-zA);
-	double b = 2*((xB-xA)*(xA-xC) + (yB-yA)*(yA-yC) + (zB-zA)*(zA-zC) );
-	double c = (xA-xC)*(xA-xC) + (yA-yC)*(yA-yC) + (zA-zC)*(zA-zC) - (r * r);
+	double b = 2*((xB-xA)*(xA-xC) + (yB-yA)*(yA-yC) + (zB-zA)*(zA-zC));
+	double c = (xA-xC)*(xA-xC) + (yA-yC)*(yA-yC) + (zA-zC)*(zA-zC) - (r*r);
 
 	double delta = b*b - 4*a*c;
 

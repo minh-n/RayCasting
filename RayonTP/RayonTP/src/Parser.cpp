@@ -128,12 +128,31 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			return false;
 		}
 
+
+
+		int x = atoi(parsedString[1].c_str());
+		int y = atoi(parsedString[2].c_str());
+		int z = atoi(parsedString[3].c_str());
+
 		Position *p;
-		p = new Position(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+		p = new Position(x,y,z);
 
+		int r = atoi(parsedString[5].c_str());
+		int g = atoi(parsedString[6].c_str());
+		int b = atoi(parsedString[7].c_str());
+	
 		Couleur *c;
-		c = new Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
 
+		if(r > 255 | g > 255 | b > 255)
+		{
+			cerr << "Erreur donnee : couleur objet." << endl;
+			return false;		
+		}
+		else
+		{
+			c = new Couleur(r,g,b);
+		}
+		
 		double ref = (atof(parsedString[8].c_str()));
 		double rad = (atof(parsedString[4].c_str()));
 

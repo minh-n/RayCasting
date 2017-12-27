@@ -157,8 +157,6 @@ void Scene::setupEcran()
 						{
 							cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 							tmp = *it;
-							c = recursive(tmp, posCam, *pos, c, 0);
-							ecran.pixels[i][j].setCouleur(*c);
 
 							temp = pos;
 						}
@@ -168,14 +166,19 @@ void Scene::setupEcran()
 					{
 						cout << "\nPixel[" << i << "][" << j << "] :" << endl;
 						tmp = *it;
-						c = recursive(tmp, posCam, *pos, c, 0);
-						ecran.pixels[i][j].setCouleur(*c);
 
 						temp = pos;
 					}
 				}
 			}
 
+			if(tmp != NULL)
+			{
+				c = recursive(tmp, posCam, *temp, c, 0);
+				ecran.pixels[i][j].setCouleur(*c);
+			}
+
+			tmp = NULL;
 			pos = NULL;
 			temp = NULL;
 	    }
@@ -186,6 +189,7 @@ void Scene::setupEcran()
 
 void Scene::setupEcranSansReflexion()
 {
+	Objet* tmp = NULL;
 	Position* pos = NULL;
 	Position* temp = NULL;
 
@@ -216,48 +220,38 @@ void Scene::setupEcranSansReflexion()
 
 						if(d1 < d2)
 						{
-							//sans reflexion
-							if(eclairageDirect(*pos))
-							{
-								double cos = (*it)->calculCos(*pos, source.getPos());
-								Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
-										cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
-										cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
-								ecran.pixels[i][j].setCouleur(c);
-							}
-							else
-							{
-								Couleur c = Couleur(0, 0, 0);
-								ecran.pixels[i][j].setCouleur(c);
-							}
-
+							tmp = *it;
 							temp = pos;
 						}
 
 					}
 					else
 					{
-
-						//Sans reflexion
-						if(eclairageDirect(*pos))
-						{
-							double cos = (*it)->calculCos(*pos, source.getPos());
-							Couleur c = Couleur(cos*(((*it)->getCouleur().getR())*source.getCouleur().getR())/255,
-									cos*(((*it)->getCouleur().getG())*source.getCouleur().getG())/255,
-									cos*(((*it)->getCouleur().getB())*source.getCouleur().getB())/255);
-							ecran.pixels[i][j].setCouleur(c);
-						}
-						else
-						{
-							Couleur c = Couleur(0, 0, 0);
-							ecran.pixels[i][j].setCouleur(c);
-						}
-
+						tmp = *it;
 						temp = pos;
 					}
 				}
 			}
 
+			//sans reflexion
+			if(tmp != NULL)
+			{
+				if(eclairageDirect(*temp))
+				{
+					double cos = tmp->calculCos(*temp, source.getPos());
+					Couleur c = Couleur(cos*((tmp->getCouleur().getR())*source.getCouleur().getR())/255,
+							cos*((tmp->getCouleur().getG())*source.getCouleur().getG())/255,
+							cos*((tmp->getCouleur().getB())*source.getCouleur().getB())/255);
+					ecran.pixels[i][j].setCouleur(c);
+				}
+				else
+				{
+					Couleur c = Couleur(0, 0, 0);
+					ecran.pixels[i][j].setCouleur(c);
+				}
+			}
+
+			tmp = NULL;
 			pos = NULL;
 			temp = NULL;
 	    }
@@ -381,8 +375,9 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 		}
 		else
 		{
-			if(eclairageDirect(*temp))
+			if(eclairageDirect(surface))
 			{
+				cout << "Bingo!!!" << endl;
 				double cos = objet->calculCos(surface, source.getPos());
 				Couleur cSource = Couleur(cos*((objet->getCouleur().getR())*source.getCouleur().getR())/255,
 						cos*((objet->getCouleur().getG())*source.getCouleur().getG())/255,
@@ -391,10 +386,30 @@ Couleur* Scene::recursive(const Objet* objet, const Position& sourceRayon, const
 			}
 			else
 			{
+				cout << "Rate !" << endl;
 				c->setB(0);
 				c->setG(0);
 				c->setR(0);
 			}
+		}
+	}
+	else
+	{
+		if(eclairageDirect(surface))
+		{
+			cout << "Bingo!!!" << endl;
+			double cos = objet->calculCos(surface, source.getPos());
+			Couleur cSource = Couleur(cos*((objet->getCouleur().getR())*source.getCouleur().getR())/255,
+					cos*((objet->getCouleur().getG())*source.getCouleur().getG())/255,
+					cos*((objet->getCouleur().getB())*source.getCouleur().getB())/255);
+			c->setCouleur(cSource);
+		}
+		else
+		{
+			cout << "Rate !" << endl;
+			c->setB(0);
+			c->setG(0);
+			c->setR(0);
 		}
 	}
 

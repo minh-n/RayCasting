@@ -113,7 +113,7 @@ public:
 
 	bool eclairageDirect(const Position& pos);
 
-	Couleur* eclairageAvecReflexion(const Objet& objet, const Objet& sourceSecondaire, const Position& pos);
+	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position& pos);
 
 	void creationFichier();
 

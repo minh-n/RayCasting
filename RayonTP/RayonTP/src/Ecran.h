@@ -83,7 +83,7 @@ private:
  * TODO : tableau
  */
 
-	std::vector<std::vector<Pixel>> pixels;
+	std::vector<std::vector<Pixel> > pixels;
 
 
 

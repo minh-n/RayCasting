@@ -101,7 +101,7 @@ void Scene::creationFichier()
 	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
 	        		<< this->getEcran().getResVerticale() << "\n255\n";
 
-			std::vector<std::vector<Pixel>> pix;
+			std::vector<std::vector<Pixel> > pix;
 			pix = this->getEcran().getPixels();
 
 			//inverser Verticale et horizontale peut etre ?

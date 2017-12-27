@@ -143,7 +143,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 	
 		Couleur *c;
 
-		if(r > 255 | g > 255 | b > 255)
+		if((r > 255)| (g > 255)| (b > 255))
 		{
 			cerr << "Erreur donnee : couleur objet." << endl;
 			return false;		

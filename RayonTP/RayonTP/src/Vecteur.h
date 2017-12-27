@@ -66,11 +66,12 @@ public:
 
 	bool operator== (const Position&)const;
 
-	double length() const;
-	double length2() const;
 	double dot(const Position&) const;
 
 	Position cross(const Position&) const;
+
+
+	//
 	Position& normalize();
 	Position project(const Position&) const;
 };
@@ -112,7 +113,6 @@ public:
 	void setR(int r) {
 		this->r = r;
 	}
-
 
 	void afficherCouleur() const{
 		std::cout << " " << r << " " << g << " " << b;

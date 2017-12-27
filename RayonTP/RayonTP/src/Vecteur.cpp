@@ -97,9 +97,6 @@ Position Position::cross(const Position& p) const{
 
 
 
-
-
-
 /**
  * COULEUR
  */

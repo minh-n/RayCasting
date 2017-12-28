@@ -65,6 +65,7 @@ public:
 	Position& operator= (const Position&);
 
 	bool operator== (const Position&)const;
+	bool operator!= (const Position&)const;
 
 	double length() const;
 	double length2() const;

@@ -111,7 +111,7 @@ public:
 
 	void setupEcranSansReflexion();
 
-	bool eclairageDirect(const Position& pos);
+	bool eclairageDirect(const Position& pos, const Objet* objet);
 
 	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position& pos);
 

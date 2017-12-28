@@ -16,19 +16,19 @@ Objet::~Objet(){
 }
 
 double Objet::calculCos(const Position& surface, const Position& sourceLumineuse) const{
-	double vect = ((position.getX() - surface.getX()) * (sourceLumineuse.getX() - surface.getX())
+	double scalaire = ((position.getX() - surface.getX()) * (sourceLumineuse.getX() - surface.getX())
 			+ (position.getY() - surface.getY()) * (sourceLumineuse.getY() - surface.getY())
 			+ (position.getZ() - surface.getZ()) * (sourceLumineuse.getZ() - surface.getZ()));
 
-	double dist1 = sqrt(pow(position.getX() - surface.getX(), 2)
+	double normeN = sqrt(pow(position.getX() - surface.getX(), 2)
 			+ pow(position.getY() - surface.getY(), 2)
 			+ pow(position.getZ() - surface.getZ(), 2));
 
-	double dist2 = sqrt(pow(sourceLumineuse.getX() - surface.getX(), 2)
+	double normeR = sqrt(pow(sourceLumineuse.getX() - surface.getX(), 2)
 			+ pow(sourceLumineuse.getY() - surface.getY(), 2)
 			+ pow(sourceLumineuse.getZ() - surface.getZ(), 2));
 
-	return vect / (dist1 * dist2);
+	return scalaire/(normeN * normeR);
 }
 
 

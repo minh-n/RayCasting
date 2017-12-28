@@ -77,6 +77,11 @@ Position& Position::operator = (const Position& p){
 	return *this;
 }
 
+bool Position::operator!=(const Position& p) const{
+	bool resultat = ((p.x != x) || (p.y != y) || (p.z != z)) ? true : false;
+	return resultat;
+}
+
 double Position::dot(const Position& p) const {
 	return p.x*x + p.y * y + p.z * z;
 }

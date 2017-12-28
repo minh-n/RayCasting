@@ -14,7 +14,6 @@ Sphere::~Sphere() {
 
 Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
 {
-	bool contact = false;
 	Position* surface = NULL;
 
 	double xA = pos1.getX();
@@ -29,41 +28,39 @@ Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
 	double yC = this->position.getY();
 	double zC = this->position.getZ();
 
-	double r = this->radius;
-
 	double a = (xB-xA)*(xB-xA) + (yB-yA)*(yB-yA) + (zB-zA)*(zB-zA);
 	double b = 2*((xB-xA)*(xA-xC) + (yB-yA)*(yA-yC) + (zB-zA)*(zA-zC));
-	double c = (xA-xC)*(xA-xC) + (yA-yC)*(yA-yC) + (zA-zC)*(zA-zC) - (r*r);
+	double c = (xA-xC)*(xA-xC) + (yA-yC)*(yA-yC) + (zA-zC)*(zA-zC) - (radius*radius);
 
 	double delta = b*b - 4*a*c;
 
 	double r1, r2;
-	double t;
 
 	if (delta > 0){
 
 		r1 = (-b - sqrt(delta))/(2*a);
 		r2 = (-b + sqrt(delta))/(2*a);
 
-		if(r1 < r2) {
-			t = r1;
-		}
-		else {
-			t = r2;
-		}
+		Position* racine1 = new Position(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
+		Position* racine2 = new Position(xA+r2*(xB-xA), yA+r2*(yB-yA), zA+r2*(zB-zA));
 
-		contact = true;
+		double distance1 = sqrt(pow(racine1->getX() - pos1.getX(), 2)
+				+ pow(racine1->getY() - pos1.getY(), 2)
+				+ pow(racine1->getZ() - pos1.getZ(), 2));
+		double distance2 = sqrt(pow(racine2->getX() - pos1.getX(), 2)
+				+ pow(racine2->getY() - pos1.getY(), 2)
+				+ pow(racine2->getZ() - pos1.getZ(), 2));
+
+		surface = (distance1 < distance2) ? racine1 : racine2;
+
+		delete racine1;
+		delete racine2;
 	}
 	else if (delta == 0 ) {
 
 		r1 = b/(2*a);
-		t = r1;
 
-		contact = true;
-	}
-
-	if(contact){
-		surface = new Position(xA+t*(xB-xA), yA+t*(yB-yA), zA+t*(zB-zA));
+		surface = new Position(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
 	}
 
 	return surface;

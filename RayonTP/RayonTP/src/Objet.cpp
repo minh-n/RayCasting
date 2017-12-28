@@ -15,7 +15,7 @@ Objet::~Objet(){
 
 }
 
-double Objet::calculCos(const Position& surface, const Position& sourceLumineuse) const{
+double Objet::calculCos(const Position3D& surface, const Position3D& sourceLumineuse) const{
 	double scalaire = ((position.getX() - surface.getX()) * (sourceLumineuse.getX() - surface.getX())
 			+ (position.getY() - surface.getY()) * (sourceLumineuse.getY() - surface.getY())
 			+ (position.getZ() - surface.getZ()) * (sourceLumineuse.getZ() - surface.getZ()));
@@ -28,11 +28,11 @@ double Objet::calculCos(const Position& surface, const Position& sourceLumineuse
 			+ pow(sourceLumineuse.getY() - surface.getY(), 2)
 			+ pow(sourceLumineuse.getZ() - surface.getZ(), 2));
 
-	return scalaire/(normeN * normeR);
+	return (scalaire/(normeN*normeR));
 }
 
 
-Position Objet::calculRayonReflechi(const Position& surface, const Position& sourceRayon) const
+Position3D Objet::calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const
 {
 	double xA = surface.getX();
 	double yA = surface.getY();
@@ -47,16 +47,16 @@ Position Objet::calculRayonReflechi(const Position& surface, const Position& sou
 	double zC = this->position.getZ();
 
 	double normeR = sqrt(pow(xB-xA, 2) + pow(yB-yA, 2) + pow(zB-zA, 2));
-	Position r = Position((xB-xA)/normeR, (yB-yA)/normeR, (zB-zA)/normeR);
+	Position3D r = Position3D((xB-xA)/normeR, (yB-yA)/normeR, (zB-zA)/normeR);
 
 	double normeN = sqrt(pow(xC-xA, 2) + pow(yC-yA, 2) + pow(zC-zA, 2));
-	Position n = Position((xC-xA)/normeN, (yC-yA)/normeN, (zC-zA)/normeN);
+	Position3D n = Position3D((xC-xA)/normeN, (yC-yA)/normeN, (zC-zA)/normeN);
 
 	double x = xA + (r.getX() - 2*(r.getX()*n.getX())*n.getX());
 	double y = yA + (r.getY() - 2*(r.getY()*n.getY())*n.getY());
 	double z = zA + (r.getZ() - 2*(r.getZ()*n.getZ())*n.getZ());
 
-	Position p = Position(x, y, z);
+	Position3D p = Position3D(x, y, z);
 
 	return p;
 }

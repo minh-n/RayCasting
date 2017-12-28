@@ -128,8 +128,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 			return false;
 		}
 
-		Position *p;
-		p = new Position(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+		Position3D *p;
+		p = new Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
 
 		Couleur *c;
 		c = new Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
@@ -162,11 +162,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					Position p;
+					Position3D p;
 					/**
 					 * TODO : mettre atoi exterieur
 					 */
-					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 					Camera *c;
 					c = new Camera(p);
 
@@ -187,11 +187,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 				}
 				else
 				{
-					Position p;
+					Position3D p;
 					/**
 					 * TODO : mettre atoi exterieur
 					 */
-					p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
 					e->setTlc(p);
@@ -212,11 +212,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					}
 					else
 					{
-						Position p;
+						Position3D p;
 						/**
 						 * TODO : mettre atoi exterieur
 						 */
-						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
 						e->setTrc(p);
@@ -238,11 +238,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 					}
 					else
 					{
-						Position p;
+						Position3D p;
 						/**
 						 * TODO : mettre atoi exterieur
 						 */
-						p = Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 						e->setBlc(p);
 						scene->setEcran(*e);
@@ -303,7 +303,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 						e->setResHorizontale(scene->getEcran().getResHorizontale());
 						e->calculResVer();
-						e->initCouleur(c);
+						e->initCouleurBg(c);
 						scene->setEcran(*e);
 
 
@@ -323,8 +323,8 @@ bool Parser::ajoutDansScene(const int positionFichier, const vector<string> &par
 
 				else
 				{
-					Position *p;
-					p = new Position(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Position3D *p;
+					p = new Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 					Couleur *c;
 					c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));

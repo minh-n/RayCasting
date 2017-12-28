@@ -12,52 +12,39 @@
 #include <fstream>
 
 #include "Objet.h"
-#include "Sphere.h"
 #include "Ecran.h"
 
 
-
-/**
- * CAMERA
- */
-
 class Camera {
-
 private :
-	Position pos;
+	Position3D pos;
 
 public:
-
 	Camera();
-	Camera(Position p);
-	virtual ~Camera();
+	Camera(Position3D p);
 
-	const Position& getPos() const {
+	~Camera();
+
+	const Position3D& getPos() const {
 		return pos;
 	}
 
-	void setPos(const Position& pos) {
+	void setPos(const Position3D& pos) {
 		this->pos = pos;
 	}
 };
 
 
-
-
-
-/**
- * SOURCE
- */
-
 class Source {
 private:
-	Position pos;
+	Position3D pos;
 	Couleur couleur;
 
 public:
 	Source();
-	Source(Position p);
-	virtual ~Source();
+	Source(Position3D p);
+
+	~Source();
 
 	const Couleur& getCouleur() const {
 		return couleur;
@@ -67,26 +54,15 @@ public:
 		this->couleur = couleur;
 	}
 
-	void setCouleur(int r, int g, int b) {
-		this->couleur.setR(r);
-		this->couleur.setG(g);
-		this->couleur.setB(b);
-	}
-
-	const Position& getPos() const {
+	const Position3D& getPos() const {
 		return pos;
 	}
 
-	void setPos(const Position& pos) {
+	void setPos(const Position3D& pos) {
 		this->pos = pos;
 	}
 };
 
-
-
-/**
- * SCENE
- */
 
 class Scene {
 
@@ -100,26 +76,8 @@ private:
 
 public:
 	Scene();
-	virtual ~Scene();
 
-	void addObjet(Objet* o)
-	{
-		nosObjets.push_back(o);
-	}
-
-	void setupEcran();
-
-	void setupEcranSansReflexion();
-
-	bool eclairageDirect(const Position& pos, const Objet* objet);
-
-	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position& pos);
-
-	void creationFichier();
-
-	Couleur* recursive(const Objet* objet, const Position& sourceRayon, const Position& surface, Couleur* c, int iteration);
-
-	void afficher() const;
+	~Scene();
 
 	const Camera& getCamera() const {
 		return camera;
@@ -135,14 +93,6 @@ public:
 
 	void setEcran(const Ecran& ecran) {
 		this->ecran = ecran;
-	}
-
-	const std::vector<Objet* >& getNosObjets() const {
-		return nosObjets;
-	}
-
-	void setNosObjets(const std::vector<Objet*>& nosObjets) {
-		this->nosObjets = nosObjets;
 	}
 
 	const Source& getSource() const {
@@ -161,17 +111,34 @@ public:
 		this->bgColor = bgColor;
 	}
 
-	std::string getTypeObjets() const {
+	const std::vector<Objet* >& getNosObjets() const {
+		return nosObjets;
+	}
 
-		return "";
+	void setNosObjets(const std::vector<Objet*>& nosObjets) {
+		this->nosObjets = nosObjets;
 	}
 
 
+	void addObjet(Objet* o) {
+		nosObjets.push_back(o);
+	}
+
+	void afficher() const;
+
+	void creationFichier();
+
+	void setupEcran();
+
+	void setupEcranSansReflexion();
+
+	bool eclairageDirect(const Position3D& pos, const Objet* objet);
+
+	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position3D& pos);
+
+	Couleur* recursive(const Objet* objet, const Position3D& sourceRayon, const Position3D& surface, Couleur* c, int iteration);
 
 };
-
-
-
 
 
 #endif /* SCENE_H_ */

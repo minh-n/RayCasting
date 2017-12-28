@@ -8,110 +8,76 @@
 #include "Vecteur.h"
 
 
-
 /**
- * POSITION
+ * POSITION3D
  */
-Position::Position(){
-	x = 0;
-	y = 0;
-	z = 0;
-	// TODO Auto-generated constructor stub
 
-}
-Position::Position(double x, double y, double z) : x(x), y(y), z(z) {
-	// TODO Auto-generated constructor stub
+Position3D::Position3D() : x(0), y(0), z(0){
 
 }
 
-Position::Position(const Position &source){
-	x = source.x;
-	y = source.y;
-	z = source.z;
-	// TODO Auto-generated constructor stub
+Position3D::Position3D(double x, double y, double z) : x(x), y(y), z(z){
 
 }
 
-Position::~Position() {
-	// TODO Auto-generated destructor stub
+Position3D::Position3D(const Position3D &position){
+	this->x = position.x;
+	this->y = position.y;
+	this->z = position.z;
+}
+
+Position3D::~Position3D() {
+
+}
+
+double Position3D::norme(const Position3D& p) const{
+	double norme = sqrt(pow(this->x - p.x, 2)
+			+ pow(this->y - p.y, 2)
+			+ pow(this->z - p.z, 2));
+
+	return norme;
 }
 
 /**
  * SURCHARGE OPERATEURS
  */
 
-Position Position::operator* (const double& i) const {
-	return Position(i*x, i*y, i*z);
+Position3D Position3D::operator* (const double& i) const {
+	return Position3D(i*this->x, i*this->y, i*this->z);
 }
 
-Position Position::operator* (const Position& p) const {
-	return Position(p.x*x, p.y*y, p.z*z);
+Position3D Position3D::operator* (const Position3D& p) const {
+	return Position3D(p.x*this->x, p.y*this->y, p.z*this->z);
 }
 
-Position Position::operator- (const Position& p) const {
-	return Position(x - p.x, y - p.y, z - p.z);
+Position3D Position3D::operator- (const Position3D& p) const {
+	return Position3D(this->x - p.x, this->y - p.y, this->z - p.z);
 }
 
-Position Position::operator+ (const Position& p) const {
-	return Position(x + p.x, y + p.y, z + p.z);
+Position3D Position3D::operator+ (const Position3D& p) const {
+	return Position3D(this->x + p.x, this->y + p.y, this->z + p.z);
 }
 
-Position& Position::operator-= (const Position& p){
-	x -= p.x;
-	y -= p.y;
-	z -= p.z;
+Position3D& Position3D::operator-= (const Position3D& p){
+	this->x -= p.x;
+	this->y -= p.y;
+	this->z -= p.z;
 	return *this;
 }
 
-Position& Position::operator+= (const Position& p){
-	x += p.x;
-	y += p.y;
-	z += p.z;
+Position3D& Position3D::operator+= (const Position3D& p){
+	this->x += p.x;
+	this->y += p.y;
+	this->z += p.z;
 	return *this;
 }
 
-Position& Position::operator = (const Position& p){
-	x = p.x;
-	y = p.y;
-	z = p.z;
+Position3D& Position3D::operator = (const Position3D& p){
+	this->x = p.x;
+	this->y = p.y;
+	this->z = p.z;
 	return *this;
 }
-
-bool Position::operator!=(const Position& p) const{
-	bool resultat = ((p.x != x) || (p.y != y) || (p.z != z)) ? true : false;
-	return resultat;
-}
-
-double Position::dot(const Position& p) const {
-	return p.x*x + p.y * y + p.z * z;
-}
-
-Position Position::cross(const Position& p) const{
-	double xn = y*p.z - z*p.y;
-	double yn = z*p.x - x*p.z;
-	double zn = x*p.y - y*p.x;
-	return Position(xn, yn, zn);
-}
-
-
-Couleur Couleur::operator+ (const Couleur& c) const
-{
-	int red = r + c.r;
-	if(red > 255){red = 255;}
-	int green = g + c.g;
-	if(green > 255){green = 255;}
-	int blue = b + c.b;
-	if(blue > 255){blue = 255;}
-
-	return Couleur(red, green, blue);
-}
-
-
-
-
-
-
-
 
 
 
@@ -119,28 +85,75 @@ Couleur Couleur::operator+ (const Couleur& c) const
  * COULEUR
  */
 
-Couleur::Couleur(){
-	r = 0;
-	g = 0;
-	b = 0;
-	// TODO Auto-generated constructor stub
-
-}
-Couleur::Couleur(int r, int g, int b) : r(r), g(g), b(b) {
-	// TODO Auto-generated constructor stub
+Couleur::Couleur() : r(0), g(0), b(0){
 
 }
 
-Couleur::Couleur(const Couleur &source){
-	r = source.r;
-	g = source.g;
-	b = source.b;
-	// TODO Auto-generated constructor stub
+Couleur::Couleur(int r, int g, int b){
+	if(r > 255) r = 255;
+	if(g > 255) g = 255;
+	if(b > 255) b = 255;
 
+	if(r < 0) r = 0;
+	if(g < 0) g = 0;
+	if(b < 0) b = 0;
+
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+
+Couleur::Couleur(const Couleur &couleur){
+	this->r = couleur.r;
+	this->g = couleur.g;
+	this->b = couleur.b;
 }
 
 Couleur::~Couleur() {
-	// TODO Auto-generated destructor stub
+
 }
 
+/**
+ * SURCHARGE OPERATEURS
+ */
 
+Couleur Couleur::operator- (const Couleur& c) const{
+	int red = this->r - c.r;
+	if(red < 0){red = 0;}
+	int green =  this->g - c.g;
+	if(green < 0){green = 0;}
+	int blue =  this->b - c.b;
+	if(blue < 0){blue = 0;}
+
+	return Couleur(red, green, blue);
+}
+
+Couleur Couleur::operator+ (const Couleur& c) const
+{
+	int red = this->r + c.r;
+	if(red > 255){red = 255;}
+	int green =  this->g + c.g;
+	if(green > 255){green = 255;}
+	int blue =  this->b + c.b;
+	if(blue > 255){blue = 255;}
+
+	return Couleur(red, green, blue);
+}
+
+Couleur& Couleur::operator-= (const Couleur& c){
+	*this - c;
+	return *this;
+}
+
+Couleur& Couleur::operator+= (const Couleur& c){
+	*this + c;
+	return *this;
+}
+
+Couleur& Couleur::operator= (const Couleur& c){
+	this->r = c.r;
+	this->g = c.g;
+	this->b = c.b;
+
+	return *this;
+}

@@ -12,9 +12,9 @@ Sphere::~Sphere() {
 }
 
 
-Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
+Position3D* Sphere::intersection(const Position3D& pos1, const Position3D& pos2) const
 {
-	Position* surface = NULL;
+	Position3D* surface = NULL;
 
 	double xA = pos1.getX();
 	double yA = pos1.getY();
@@ -41,8 +41,8 @@ Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
 		r1 = (-b - sqrt(delta))/(2*a);
 		r2 = (-b + sqrt(delta))/(2*a);
 
-		Position* racine1 = new Position(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
-		Position* racine2 = new Position(xA+r2*(xB-xA), yA+r2*(yB-yA), zA+r2*(zB-zA));
+		Position3D* racine1 = new Position3D(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
+		Position3D* racine2 = new Position3D(xA+r2*(xB-xA), yA+r2*(yB-yA), zA+r2*(zB-zA));
 
 		double distance1 = sqrt(pow(racine1->getX() - pos1.getX(), 2)
 				+ pow(racine1->getY() - pos1.getY(), 2)
@@ -60,7 +60,7 @@ Position* Sphere::intersection(const Position& pos1, const Position& pos2) const
 
 		r1 = b/(2*a);
 
-		surface = new Position(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
+		surface = new Position3D(xA+r1*(xB-xA), yA+r1*(yB-yA), zA+r1*(zB-zA));
 	}
 
 	return surface;

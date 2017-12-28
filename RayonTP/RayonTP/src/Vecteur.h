@@ -8,25 +8,26 @@
 #ifndef VECTEUR_H_
 #define VECTEUR_H_
 #include <iostream>
+#include <cmath>
 
-class Position {
+class Position3D {
 private:
 	double x;
 	double y;
 	double z;
 
 public:
-	Position();
-	Position(double x, double y, double z);
-	Position(const Position &source);
+	Position3D();
+	Position3D(double x, double y, double z);
+	Position3D(const Position3D &position);
 
-	virtual ~Position();
+	~Position3D();
 
 	double getX() const {
 		return x;
 	}
 
-	void setX(double x) {
+	void setX(const double x) {
 		this->x = x;
 	}
 
@@ -34,7 +35,7 @@ public:
 		return y;
 	}
 
-	void setY(double y) {
+	void setY(const double y) {
 		this->y = y;
 	}
 
@@ -42,38 +43,29 @@ public:
 		return z;
 	}
 
-	void setZ(double z) {
+	void setZ(const double z) {
 		this->z = z;
 	}
 
 	void afficherPos() const{
-		std::cout << " " << x << " " << y << " " << z << std::endl;;
+		std::cout << "X = " << x << ", Y = " << y << ", Z =" << z << std::endl;;
 	}
 
-	Position operator* (const double&) const;
+	double norme(const Position3D& p) const;
 
-	Position operator* (const Position&) const;
+	Position3D operator* (const double&) const;
 
-	Position operator- (const Position&) const;
+	Position3D operator* (const Position3D& p) const;
 
-	Position operator+ (const Position&) const;
+	Position3D operator- (const Position3D& p) const;
 
-	Position& operator-= (const Position&);
+	Position3D operator+ (const Position3D& p) const;
 
-	Position& operator+= (const Position&);
+	Position3D& operator-= (const Position3D& p);
 
-	Position& operator= (const Position&);
+	Position3D& operator+= (const Position3D& p);
 
-	bool operator== (const Position&)const;
-	bool operator!= (const Position&)const;
-
-	double length() const;
-	double length2() const;
-	double dot(const Position&) const;
-
-	Position cross(const Position&) const;
-	Position& normalize();
-	Position project(const Position&) const;
+	Position3D& operator= (const Position3D& p);
 };
 
 
@@ -86,15 +78,15 @@ private:
 public:
 	Couleur();
 	Couleur(int r, int g, int b);
-	Couleur(const Couleur &source);
+	Couleur(const Couleur &couleur);
 
-	virtual ~Couleur();
+	~Couleur();
 
 	int getB() const {
 		return b;
 	}
 
-	void setB(int b) {
+	void setB(const int b) {
 		this->b = b;
 	}
 
@@ -102,7 +94,7 @@ public:
 		return g;
 	}
 
-	void setG(int g) {
+	void setG(const int g) {
 		this->g = g;
 	}
 
@@ -110,24 +102,24 @@ public:
 		return r;
 	}
 
-	void setR(int r) {
+	void setR(const int r) {
 		this->r = r;
 	}
 
-	void setCouleur(const Couleur& couleur) {
-		r = couleur.r;
-		g = couleur.g;
-		b= couleur.b;
-	}
-
 	void afficherCouleur() const{
-		std::cout << " " << r << " " << g << " " << b << std::endl;
+		std::cout << "R = " << r << ", G = " << g << ", B = " << b << std::endl;
 	}
 
-	Couleur operator+ (const Couleur&) const;
+	Couleur operator- (const Couleur& c) const;
+
+	Couleur operator+ (const Couleur& c) const;
+
+	Couleur& operator-= (const Couleur& c);
+
+	Couleur& operator+= (const Couleur& c);
+
+	Couleur& operator= (const Couleur& c);
 };
-
-
 
 
 #endif /* VECTEUR_H_ */

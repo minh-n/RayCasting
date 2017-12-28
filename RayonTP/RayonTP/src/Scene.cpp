@@ -6,42 +6,22 @@
  */
 
 #include "Scene.h"
-#include <iostream>
-
-
-using namespace std;
-
-
-
 
 /**
  * CAMERA
  */
 
-
 Camera::Camera() {
-	// TODO Auto-generated constructor stub
+
 }
 
-Camera::Camera(Position p) {
-	// TODO Auto-generated constructor stub
-	pos = p;
+Camera::Camera(Position3D p) {
+	this->pos = p;
 }
 
 Camera::~Camera() {
-	// TODO Auto-generated destructor stub
+
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -51,22 +31,14 @@ Camera::~Camera() {
 Source::Source(){
 
 }
-Source::Source(Position p) : pos(p) {
+
+Source::Source(Position3D p) : pos(p) {
 
 }
 
 Source::~Source() {
-	// TODO Auto-generated destructor stub
+
 }
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -74,10 +46,11 @@ Source::~Source() {
  */
 
 Scene::Scene() {
+
 }
 
 Scene::~Scene() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Scene::afficher() const{
@@ -87,17 +60,16 @@ void Scene::afficher() const{
 	}
 }
 
-
 void Scene::creationFichier()
 	{
-		 cout << "Creation du fichier..." << endl;
+		 std::cout << "Creation du fichier..." << std::endl;
 		 ofstream fichier;
 
 		 fichier.open("sortie.ppm", std::ios::out | std::ios::trunc);
 
 	     if(fichier)
 	     {
-	        cout << "Ecriture dans le fichier..." << endl;
+	    	 std::cout << "Ecriture dans le fichier..." << std::endl;
 	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
 	        		<< this->getEcran().getResVerticale() << "\n255\n";
 
@@ -190,15 +162,15 @@ void Scene::setupEcran()
 void Scene::setupEcranSansReflexion()
 {
 	Objet* tmp = NULL;
-	Position* pos = NULL;
-	Position* temp = NULL;
+	Position3D* pos = NULL;
+	Position3D* temp = NULL;
 
 	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 	{
 		for(int j = 0; j < this->getEcran().getResHorizontale(); j++)
 		{
-			Position posCam = camera.getPos();
-			Position posPixel = ecran.getPixels()[i][j].getPosition();
+			Position3D posCam = camera.getPos();
+			Position3D posPixel = ecran.getPixels()[i][j].getPosition();
 
 //			cout << "Pos pixel: " << posPixel.getX() << ";" << posPixel.getY() << ";" << posPixel.getZ() << ";" << endl;
 
@@ -238,7 +210,7 @@ void Scene::setupEcranSansReflexion()
 			{
 				if(eclairageDirect(*temp, tmp))
 				{
-					double cos = tmp->calculCos(*temp, source.getPos());
+					double cos = abs(tmp->calculCos(*temp, source.getPos()));
 					Couleur c = Couleur(cos*((tmp->getCouleur().getR())*source.getCouleur().getR()/255),
 							cos*((tmp->getCouleur().getG())*source.getCouleur().getG()/255),
 							cos*((tmp->getCouleur().getB())*source.getCouleur().getB()/255));
@@ -260,11 +232,11 @@ void Scene::setupEcranSansReflexion()
 
 
 
-bool Scene::eclairageDirect(const Position& pos, const Objet* objet)
+bool Scene::eclairageDirect(const Position3D& pos, const Objet* objet)
 {
 	bool direct = true;
-	Position posSource = source.getPos();
-	Position* surface = NULL;
+	Position3D posSource = source.getPos();
+	Position3D* surface = NULL;
 
 	double epsilon = 0.005;
 
@@ -280,13 +252,13 @@ bool Scene::eclairageDirect(const Position& pos, const Objet* objet)
 
 			if(distance > epsilon)
 			{
-				cout << "Intersection bloquant la source" << endl;
+				std::cout << "Intersection bloquant la source" << std::endl;
 				surface->afficherPos();
-				cout << "Objet :" << endl;
+				std::cout << "Objet :" << std::endl;
 				(*it)->afficher();
-				cout << "Position sans lumiere" << endl;
+				std::cout << "Position sans lumiere" << std::endl;
  				pos.afficherPos();
- 				cout << "Objet :" << endl;
+ 				std::cout << "Objet :" << std::endl;
  				objet->afficher();
 				direct = false;
 			}

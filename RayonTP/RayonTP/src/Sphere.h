@@ -19,7 +19,7 @@ private :
 
 public:
 	Sphere() : Objet(), radius(0){};
-	Sphere(Position pos, Couleur coul, double ref, double rad) : Objet(pos, coul, ref), radius(rad){};
+	Sphere(Position3D pos, Couleur coul, double ref, double rad) : Objet(pos, coul, ref), radius(rad){};
 
 	virtual ~Sphere();
 
@@ -51,7 +51,7 @@ public:
 					<< ", radius = " << radius << "\n\n" << std::endl;
 	}
 
-	Position* intersection(const Position& pos1, const Position& pos2) const;
+	Position3D* intersection(const Position3D& pos1, const Position3D& pos2) const;
 
 
 };

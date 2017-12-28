@@ -9,39 +9,18 @@
 #define ECRAN_H_
 #include "Vecteur.h"
 #include <vector>
-#include <cmath>
-#include <algorithm>    // std::swap
 
-/**
- * PIXEL
- */
-class Pixel
-{
+class Pixel {
 private:
-	Position position;
+	Position3D position;
 	Couleur couleur;
+
 public:
-        Pixel();
-        Pixel(Pixel const& p)
-        {
-        	position = p.position;
-        	couleur = p.couleur;
-        }
+	Pixel();
+	Pixel(Pixel const& pixel);
+	Pixel(Position3D p, Couleur c);
 
-        Pixel(Position p, Couleur c);
-
-        ~Pixel();
-
-
-    Pixel& operator=(Pixel const& p)
-    {
-
-
-    	position = p.position;
-    	couleur = p.couleur;
-    	return *this;
-    }
-
+	~Pixel();
 
 	const Couleur& getCouleur() const {
 		return couleur;
@@ -51,52 +30,67 @@ public:
 		this->couleur = couleur;
 	}
 
-	const Position& getPosition() const {
+	const Position3D& getPosition() const {
 		return position;
 	}
 
-	void setPosition(const Position& position) {
+	void setPosition(const Position3D& position) {
 		this->position = position;
 	}
+
+	Pixel& operator=(Pixel const& p);
 };
 
 
-/**
- * ECRAN
- */
-
 
 class Ecran {
-
-friend class Scene;
-
+//friend class Scene;
 private:
-
-	Position tlc;
-	Position trc;
-	Position blc;
-	Position brc;
+	Position3D tlc;
+	Position3D trc;
+	Position3D blc;
+	Position3D brc;
 
 	int resHorizontale;
 	int resVerticale;
-/**
- * TODO : tableau
- */
 
 	std::vector<std::vector<Pixel>> pixels;
 
-
-
 public:
 	Ecran();
+
 	virtual ~Ecran();
 
-	const Position& getBlc() const {
+	const Position3D& getBlc() const {
 		return blc;
 	}
 
-	void setBlc(const Position& blc) {
+	void setBlc(const Position3D& blc) {
 		this->blc = blc;
+	}
+
+	const Position3D& getTlc() const {
+		return tlc;
+	}
+
+	void setTlc(const Position3D& tlc) {
+		this->tlc = tlc;
+	}
+
+	const Position3D& getTrc() const {
+		return trc;
+	}
+
+	void setTrc(const Position3D& trc) {
+		this->trc = trc;
+	}
+
+	const Position3D& getBrc() const {
+		return brc;
+	}
+
+	void setBrc(const Position3D& brc) {
+		this->brc = brc;
 	}
 
 	int getResHorizontale() const {
@@ -106,62 +100,6 @@ public:
 	void setResHorizontale(int resHor) {
 		this->resHorizontale = resHor;
 	}
-
-	const Position& getTlc() const {
-		return tlc;
-	}
-
-	void setTlc(const Position& tlc) {
-		this->tlc = tlc;
-	}
-
-	const Position& getTrc() const {
-		return trc;
-	}
-
-	void setTrc(const Position& trc) {
-		this->trc = trc;
-	}
-
-	const Position& getBrc() const {
-		return brc;
-	}
-
-	void setBrc(const Position& brc) {
-		this->brc = brc;
-	}
-
-	void creationBrc() //calcul du quatrieme point a partir des trois autres
-	{
-		int x = trc.getX() - tlc.getX() + blc.getX();
-		int y = trc.getY() - tlc.getY() + blc.getY();
-		int z = trc.getZ() - tlc.getZ() + blc.getZ();
-		brc.setX(x);
-		brc.setY(y);
-		brc.setZ(z);
-	}
-
-	void calculResVer() //calcul resolution verticale
-	{
-
-		int longueurHorizontale = sqrt(
-				pow((brc.getX() - blc.getX()), 2)
-				+ pow((brc.getY() - blc.getY()), 2)
-				+ pow((brc.getZ() - blc.getZ()), 2));
-
-		int longueurVerticale = sqrt(
-				pow((tlc.getX() - blc.getX()), 2)
-				+ pow((tlc.getY() - blc.getY()), 2)
-				+ pow((tlc.getZ() - blc.getZ()),2));
-
-		resVerticale = (resHorizontale/longueurHorizontale)*longueurVerticale;
-		
-		initPixels(); //initialisation du tableau de pixels
-	}
-
-	void initPixels();
-
-	void initCouleur(Couleur c);
 
 	int getResVerticale() const {
 		return resVerticale;
@@ -178,12 +116,16 @@ public:
 	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
 		this->pixels = pixels;
 	}
+
+	void creationBrc(); //calcul du quatrieme point a partir des trois autres
+
+	void calculResVer(); //calcul resolution verticale
+
+	void initPixels();
+
+	void initCouleurBg(Couleur c);
+
 };
-
-
-
-
-
 
 
 #endif /* ECRAN_H_ */

@@ -8,12 +8,9 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include <vector>
-#include <fstream>
-
 #include "Objet.h"
 #include "Ecran.h"
-
+#include <fstream>
 
 class Camera {
 private :

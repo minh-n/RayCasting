@@ -7,19 +7,20 @@
 
 #ifndef PARSER_H_
 #define PARSER_H_
+
 #include <string>
-#include <vector>
-#include <string>
+#include <cstdlib>
+#include <limits>
 #include "Scene.h"
-#include <string>
 
 class Parser {
 
 public:
 	Parser();
-	virtual ~Parser();
-	int lecture(Source *source, Ecran *ecran, Scene *scene);
 
+	~Parser();
+
+	int lecture(Source *source, Ecran *ecran, Scene *scene);
 	bool ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Source *source,  Ecran *ecran, Scene *scene);
 	std::vector<std::string> parsing(const std::string &s, char delim);
 

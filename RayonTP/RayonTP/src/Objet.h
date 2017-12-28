@@ -9,12 +9,8 @@
 #define OBJET_H_
 #include "Vecteur.h"
 
-/**
- * OBJET
- */
 
 class Objet {
-
 protected :
 	Position3D position;
 	Couleur couleur;
@@ -54,10 +50,8 @@ public:
 		this->reflection = reflection;
 	}
 
-	virtual Position3D* intersection(const Position3D& pos1, const Position3D& pos2) const = 0;
-
-	double calculCos(const Position3D& surface, const Position3D& sourceLumineuse) const;
-
+	virtual Position3D* intersection(const Position3D& posSource, const Position3D& posDir) const = 0;
+	double calculCosinusAlpha(const Position3D& surface, const Position3D& sourceLumineuse) const;
 	Position3D calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const;
 };
 

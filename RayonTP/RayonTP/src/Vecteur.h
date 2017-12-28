@@ -51,23 +51,20 @@ public:
 		std::cout << "X = " << x << ", Y = " << y << ", Z =" << z << std::endl;;
 	}
 
-	double norme(const Position3D& p) const;
+	static double norme(const Position3D& pos1, const Position3D& pos2);
+	static double scalaire(const Position3D& pos1, const Position3D& pos2);
+	static Position3D vectUnitaire(const Position3D& pos1, const Position3D& pos2);
 
 	Position3D operator* (const double&) const;
-
 	Position3D operator* (const Position3D& p) const;
-
 	Position3D operator- (const Position3D& p) const;
-
 	Position3D operator+ (const Position3D& p) const;
-
 	Position3D& operator-= (const Position3D& p);
-
 	Position3D& operator+= (const Position3D& p);
-
 	Position3D& operator= (const Position3D& p);
 };
 
+bool operator==(Position3D const& pos1, Position3D const& pos2);
 
 class Couleur {
 private:
@@ -110,14 +107,12 @@ public:
 		std::cout << "R = " << r << ", G = " << g << ", B = " << b << std::endl;
 	}
 
+	static Couleur couleurSansReflexion(const double& cosAlpha, const Couleur& intersection, const Couleur& source);
+
 	Couleur operator- (const Couleur& c) const;
-
 	Couleur operator+ (const Couleur& c) const;
-
 	Couleur& operator-= (const Couleur& c);
-
 	Couleur& operator+= (const Couleur& c);
-
 	Couleur& operator= (const Couleur& c);
 };
 

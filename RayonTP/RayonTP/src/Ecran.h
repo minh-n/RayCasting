@@ -45,7 +45,7 @@ public:
 
 
 class Ecran {
-//friend class Scene;
+friend class Scene;
 private:
 	Position3D tlc;
 	Position3D trc;
@@ -119,11 +119,8 @@ public:
 	}
 
 	void creationBrc(); //calcul du quatrieme point a partir des trois autres
-
 	void calculResVer(); //calcul resolution verticale
-
 	void initPixels();
-
 	void initCouleurBg(Couleur c);
 
 };

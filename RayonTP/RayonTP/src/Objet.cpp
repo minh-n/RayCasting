@@ -15,48 +15,30 @@ Objet::~Objet(){
 
 }
 
-double Objet::calculCos(const Position3D& surface, const Position3D& sourceLumineuse) const{
-	double scalaire = ((position.getX() - surface.getX()) * (sourceLumineuse.getX() - surface.getX())
-			+ (position.getY() - surface.getY()) * (sourceLumineuse.getY() - surface.getY())
-			+ (position.getZ() - surface.getZ()) * (sourceLumineuse.getZ() - surface.getZ()));
+double Objet::calculCosinusAlpha(const Position3D& surface, const Position3D& sourceLumineuse) const{
 
-	double normeN = sqrt(pow(position.getX() - surface.getX(), 2)
-			+ pow(position.getY() - surface.getY(), 2)
-			+ pow(position.getZ() - surface.getZ(), 2));
+	if(surface == sourceLumineuse) return 1;
 
-	double normeR = sqrt(pow(sourceLumineuse.getX() - surface.getX(), 2)
-			+ pow(sourceLumineuse.getY() - surface.getY(), 2)
-			+ pow(sourceLumineuse.getZ() - surface.getZ(), 2));
+	Position3D vectNormale = surface - this->position;
+	Position3D vectSource = sourceLumineuse - this->position;
 
-	return (scalaire/(normeN*normeR));
+	double scalaire = Position3D::scalaire(vectNormale, vectSource);
+
+	double normeNormale = Position3D::norme(this->position, surface);
+	double normeVectSource = Position3D::norme(surface, sourceLumineuse);
+
+	return (scalaire/(normeNormale*normeVectSource));
 }
 
+//surface et sourceRayon doivent etre different !
+Position3D Objet::calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const{
 
-Position3D Objet::calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const
-{
-	double xA = surface.getX();
-	double yA = surface.getY();
-	double zA = surface.getZ();
+	Position3D vectRayon = Position3D::vectUnitaire(surface, sourceRayon);
+	Position3D vectNormal = Position3D::vectUnitaire(surface, this->position);
 
-	double xB = sourceRayon.getX();
-	double yB = sourceRayon.getY();
-	double zB = sourceRayon.getZ();
+	double x = surface.getX() + 2*(vectRayon.getX() - 2*(vectRayon.getX()*vectNormal.getX())*vectNormal.getX());
+	double y = surface.getY() + 2*(vectRayon.getY() - 2*(vectRayon.getY()*vectNormal.getY())*vectNormal.getY());
+	double z = surface.getZ() + 2*(vectRayon.getZ() - 2*(vectRayon.getZ()*vectNormal.getZ())*vectNormal.getZ());
 
-	double xC = this->position.getX();
-	double yC = this->position.getY();
-	double zC = this->position.getZ();
-
-	double normeR = sqrt(pow(xB-xA, 2) + pow(yB-yA, 2) + pow(zB-zA, 2));
-	Position3D r = Position3D((xB-xA)/normeR, (yB-yA)/normeR, (zB-zA)/normeR);
-
-	double normeN = sqrt(pow(xC-xA, 2) + pow(yC-yA, 2) + pow(zC-zA, 2));
-	Position3D n = Position3D((xC-xA)/normeN, (yC-yA)/normeN, (zC-zA)/normeN);
-
-	double x = xA + (r.getX() - 2*(r.getX()*n.getX())*n.getX());
-	double y = yA + (r.getY() - 2*(r.getY()*n.getY())*n.getY());
-	double z = zA + (r.getZ() - 2*(r.getZ()*n.getZ())*n.getZ());
-
-	Position3D p = Position3D(x, y, z);
-
-	return p;
+	return Position3D(x, y, z);
 }

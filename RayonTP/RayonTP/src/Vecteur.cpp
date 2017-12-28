@@ -30,13 +30,26 @@ Position3D::~Position3D() {
 
 }
 
-double Position3D::norme(const Position3D& p) const{
-	double norme = sqrt(pow(this->x - p.x, 2)
-			+ pow(this->y - p.y, 2)
-			+ pow(this->z - p.z, 2));
-
-	return norme;
+double Position3D::norme(const Position3D& pos1, const Position3D& pos2){
+	return sqrt(pow(pos2.x - pos1.x, 2) + pow(pos2.y - pos1.y, 2) + pow(pos2.z - pos1.z, 2));
 }
+
+double Position3D::scalaire(const Position3D& pos1, const Position3D& pos2){
+	return (pos1.x*pos2.x + pos1.y*pos2.y + pos1.z*pos2.z);
+}
+
+Position3D Position3D::vectUnitaire(const Position3D& pos1, const Position3D& pos2){
+	double n = Position3D::norme(pos1, pos2);
+	Position3D vectUnitaire;
+
+	if(n != 0)
+	{
+		vectUnitaire = (pos1 - pos2)*(1/n);
+	}
+
+	return vectUnitaire;
+}
+
 
 /**
  * SURCHARGE OPERATEURS
@@ -79,6 +92,11 @@ Position3D& Position3D::operator = (const Position3D& p){
 	return *this;
 }
 
+bool operator==(Position3D const& pos1, Position3D const& pos2){
+	bool comparaison = ((pos1.getX() == pos2.getX()) && (pos1.getY() == pos2.getY()) && (pos1.getZ() == pos2.getZ())) ? true : false;
+	return comparaison;
+}
+
 
 
 /**
@@ -111,6 +129,14 @@ Couleur::Couleur(const Couleur &couleur){
 
 Couleur::~Couleur() {
 
+}
+
+Couleur Couleur::couleurSansReflexion(const double& cosAlpha, const Couleur& intersection, const Couleur& source) {
+	int red = cosAlpha*((intersection.r*source.r)/255);
+	int green = cosAlpha*((intersection.g*source.g)/255);
+	int blue = cosAlpha*((intersection.b*source.b)/255);
+
+	return Couleur(red, green, blue);
 }
 
 /**

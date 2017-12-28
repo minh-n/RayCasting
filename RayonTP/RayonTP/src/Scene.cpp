@@ -63,7 +63,7 @@ void Scene::afficher() const{
 void Scene::creationFichier()
 	{
 		 std::cout << "Creation du fichier..." << std::endl;
-		 ofstream fichier;
+		 std::ofstream fichier;
 
 		 fichier.open("sortie.ppm", std::ios::out | std::ios::trunc);
 
@@ -161,59 +161,59 @@ void Scene::setupEcran()
 
 void Scene::setupEcranSansReflexion()
 {
-	Objet* tmp = NULL;
+	Objet* objetRencontre = NULL;
 	Position3D* pos = NULL;
-	Position3D* temp = NULL;
+	Position3D* tmp = NULL;
 
 	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 	{
 		for(int j = 0; j < this->getEcran().getResHorizontale(); j++)
 		{
-			Position3D posCam = camera.getPos();
-			Position3D posPixel = ecran.getPixels()[i][j].getPosition();
+			Position3D posCam = this->camera.getPos();
+			Position3D posPixel = this->ecran.getPixels()[i][j].getPosition();
 
-//			cout << "Pos pixel: " << posPixel.getX() << ";" << posPixel.getY() << ";" << posPixel.getZ() << ";" << endl;
+//			std::cout << "Pixel[" << i << "][" << j << "]\n" << std::endl;
 
-			for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+			for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
  				pos = (*it)->intersection(posCam, posPixel);
 
 				if(pos != NULL)
 				{
-					if(temp != NULL)
+//					std::cout << "Objet rencontre:" << std::endl;
+//					(*it)->afficher();
+
+					if(tmp != NULL)
 					{
-						double d1 = sqrt(pow(camera.getPos().getX() - pos->getX(), 2)
-											+ pow(camera.getPos().getY() - pos->getY(), 2)
-											+ pow(camera.getPos().getZ() - pos->getZ(), 2));
+						double normeActuel = Position3D::norme(posCam, *pos);
+						double normePrecedente = Position3D::norme(posCam, *tmp);
 
-						double d2 = sqrt(pow(camera.getPos().getX() - temp->getX(), 2)
-											+ pow(camera.getPos().getY() - temp->getY(), 2)
-											+ pow(camera.getPos().getZ() - temp->getZ(), 2));
-
-						if(d1 < d2)
+						if(normeActuel < normePrecedente)
 						{
-							tmp = *it;
-							temp = pos;
+							delete tmp;
+							tmp = new Position3D(*pos);
+							objetRencontre = *it;
 						}
-
 					}
 					else
 					{
-						tmp = *it;
-						temp = pos;
+						tmp = new Position3D(*pos);
+						objetRencontre = *it;
 					}
+
+					delete pos;
 				}
 			}
 
+//			std::cout << "Sortie de la boucle" << std::endl;
+
 			//sans reflexion
-			if(tmp != NULL)
+			if(objetRencontre != NULL)
 			{
-				if(eclairageDirect(*temp, tmp))
+				if(eclairageDirect(*tmp, objetRencontre))
 				{
-					double cos = abs(tmp->calculCos(*temp, source.getPos()));
-					Couleur c = Couleur(cos*((tmp->getCouleur().getR())*source.getCouleur().getR()/255),
-							cos*((tmp->getCouleur().getG())*source.getCouleur().getG()/255),
-							cos*((tmp->getCouleur().getB())*source.getCouleur().getB()/255));
+					double cosAlpha = fabs(objetRencontre->calculCosinusAlpha(*tmp, this->source.getPos()));
+					Couleur c = Couleur::couleurSansReflexion(cosAlpha, objetRencontre->getCouleur(), this->source.getCouleur());
 					ecran.pixels[i][j].setCouleur(c);
 				}
 				else
@@ -221,48 +221,52 @@ void Scene::setupEcranSansReflexion()
 					Couleur c = Couleur(0, 0, 0);
 					ecran.pixels[i][j].setCouleur(c);
 				}
-			}
 
-			tmp = NULL;
-			pos = NULL;
-			temp = NULL;
+				delete tmp;
+
+				objetRencontre = NULL;
+				pos = NULL;
+				tmp = NULL;
+			}
 	    }
 	}
 }
 
 
 
-bool Scene::eclairageDirect(const Position3D& pos, const Objet* objet)
+bool Scene::eclairageDirect(const Position3D& posIncidence, const Objet* objetIntersec)
 {
 	bool direct = true;
-	Position3D posSource = source.getPos();
-	Position3D* surface = NULL;
+	Position3D posSource = this->source.getPos();
+	Position3D* collision = NULL;
 
-	double epsilon = 0.005;
+	double distanceLumiere = Position3D::norme(posIncidence, posSource);
 
-	for(vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+	for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 	{
-		surface = (*it)->intersection(pos, posSource);
+		collision = (*it)->intersection(posIncidence, posSource);
 
-		if(surface != NULL)
+		if(collision != NULL)
 		{
-			double distance = sqrt(pow(surface->getX() - pos.getX(), 2)
-					+ pow(surface->getY() - pos.getY(), 2)
-					+ pow(surface->getZ() - pos.getZ(), 2));
+			double distanceCollision = Position3D::norme(posIncidence, *collision);
 
-			if(distance > epsilon)
+			if(distanceCollision > distanceLumiere)
 			{
 				std::cout << "Intersection bloquant la source" << std::endl;
-				surface->afficherPos();
+				collision->afficherPos();
 				std::cout << "Objet :" << std::endl;
 				(*it)->afficher();
 				std::cout << "Position sans lumiere" << std::endl;
- 				pos.afficherPos();
+ 				posIncidence.afficherPos();
  				std::cout << "Objet :" << std::endl;
- 				objet->afficher();
+ 				objetIntersec->afficher();
 				direct = false;
+				break;
 			}
+
+			delete collision;
 		}
+
 	}
 
 	return direct;

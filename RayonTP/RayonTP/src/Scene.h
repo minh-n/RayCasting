@@ -8,9 +8,10 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "Objet.h"
-#include "Ecran.h"
 #include <fstream>
+#include "Objet.h"
+#include "Sphere.h"
+#include "Ecran.h"
 
 class Camera {
 private :
@@ -122,17 +123,11 @@ public:
 	}
 
 	void afficher() const;
-
 	void creationFichier();
-
 	void setupEcran();
-
 	void setupEcranSansReflexion();
-
-	bool eclairageDirect(const Position3D& pos, const Objet* objet);
-
+	bool eclairageDirect(const Position3D& posIncidence, const Objet* objetIntersec);
 	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position3D& pos);
-
 	Couleur* recursive(const Objet* objet, const Position3D& sourceRayon, const Position3D& surface, Couleur* c, int iteration);
 
 };

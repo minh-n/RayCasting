@@ -139,6 +139,7 @@ Couleur Couleur::couleurSansReflexion(const double& cosAlpha, const Couleur& int
 	return Couleur(red, green, blue);
 }
 
+
 /**
  * SURCHARGE OPERATEURS
  */

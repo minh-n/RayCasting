@@ -30,7 +30,7 @@ void testIntersection(){
 	scene->afficher();
 
 	cout << "Debut setuptEcran.\n" << endl;
-	scene->setupEcranSansReflexion();
+	scene->setupEcran();
 
 	scene->creationFichier();
 

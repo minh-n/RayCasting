@@ -126,9 +126,9 @@ public:
 	void creationFichier();
 	void setupEcran();
 	void setupEcranSansReflexion();
-	bool eclairageDirect(const Position3D& posIncidence, const Objet* objetIntersec);
-	Couleur* eclairageAvecReflexion(const Objet& objet, const Couleur& sourceSecondaire, const Position3D& pos);
-	Couleur* recursive(const Objet* objet, const Position3D& sourceRayon, const Position3D& surface, Couleur* c, int iteration);
+	bool eclairageDirect(const Position3D& posIncidence);
+	Couleur eclairageAvecReflexion(const Objet& objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
+	Couleur recursive(const Objet* objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration);
 
 };
 

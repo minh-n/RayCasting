@@ -53,10 +53,10 @@ Scene::~Scene() {
 
 }
 
-void Scene::afficher() const{
-	for(unsigned int i = 0; i < nosObjets.size()-1; i++)
+void Scene::afficher() {
+	for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 	{
-		nosObjets[i]->afficher();
+		(*it)->afficher();
 	}
 }
 
@@ -65,7 +65,7 @@ void Scene::creationFichier()
 		 std::cout << "Creation du fichier..." << std::endl;
 		 std::ofstream fichier;
 
-		 fichier.open("sortie.ppm", std::ios::out | std::ios::trunc);
+		 fichier.open("sortie2.ppm", std::ios::out | std::ios::trunc);
 
 	     if(fichier)
 	     {
@@ -205,9 +205,9 @@ void Scene::setupEcranSansReflexion()
 			//sans reflexion
 			if(objetRencontre != NULL)
 			{
-				if(eclairageDirect(*tmp))
+				if(eclairageDirect(*tmp, objetRencontre))
 				{
-					double cosAlpha = fabs(objetRencontre->calculCosinusAlpha(*tmp, this->source.getPos()));
+					double cosAlpha = (objetRencontre->calculCosinusAlpha(*tmp, this->source.getPos()));
 					Couleur c = Couleur::couleurSansReflexion(cosAlpha, objetRencontre->getCouleur(), this->source.getCouleur());
 					ecran.pixels[i][j].setCouleur(c);
 				}
@@ -229,54 +229,58 @@ void Scene::setupEcranSansReflexion()
 
 
 
-bool Scene::eclairageDirect(const Position3D& posIncidence)
+bool Scene::eclairageDirect(const Position3D& posIncidence, const Objet* objetSource)
 {
 	bool direct = true;
 	Position3D posSource = this->source.getPos();
 	Position3D* collision = NULL;
 
-	double distanceLumiere = Position3D::norme(posIncidence, posSource);
+//	double distanceLumiere = Position3D::norme(posIncidence, posSource);
+	double cosAlpha = objetSource->calculCosinusAlpha(posIncidence, this->source.getPos());
 
-	for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+	if(cosAlpha > 0)
 	{
-		collision = (*it)->intersection(posIncidence, posSource);
-
-		if(collision != NULL)
+		for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 		{
-			double distanceCollision = Position3D::norme(posIncidence, *collision);
+			collision = (*it)->intersection(posIncidence, posSource);
 
-			if(distanceCollision > distanceLumiere)
+			if(collision != NULL && objetSource != *it)
 			{
-				direct = false;
-				break;
-			}
+//				double distanceCollision = Position3D::norme(posIncidence, *collision);
+//
+//				if(distanceCollision < distanceLumiere)
+				{
+					direct = false;
+					break;
+				}
 
-			delete collision;
+				delete collision;
+			}
 		}
 	}
 
 	return direct;
 }
 
-Couleur Scene::eclairageAvecReflexion(const Objet& objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence)
+Couleur Scene::eclairageAvecReflexion(const Objet* objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence)
 {
 	Couleur couleurSource = this->source.getCouleur();
-	Couleur couleurSurface = objet.getCouleur();
+	Couleur couleurSurface = objet->getCouleur();
 	Couleur pixel;
 
-	double r = objet.getReflection();
+	double r = objet->getReflection();
 
-	if(eclairageDirect(posIncidence))
+	if(eclairageDirect(posIncidence, objet))
 	{
-		double cosinusAlpha = fabs(objet.calculCosinusAlpha(posIncidence, this->source.getPos()));
+		double cosinusAlpha = (objet->calculCosinusAlpha(posIncidence, this->source.getPos()));
 
-		pixel = Couleur(((1 - r) * cosinusAlpha * ((couleurSource.getR()*couleurSurface.getR())/255)) + r*rayonSpeculaire.getR(),
-				((1 - r) * cosinusAlpha * ((couleurSource.getG()*couleurSurface.getG())/255)) + r*rayonSpeculaire.getG(),
-				((1 - r) * cosinusAlpha * ((couleurSource.getB()*couleurSurface.getB())/255)) + r*rayonSpeculaire.getB());
+		pixel = Couleur(((int) ((1 - r) * cosinusAlpha * ((couleurSource.getR()*couleurSurface.getR())/255) + r*rayonSpeculaire.getR())),
+				((int) ((1 - r) * cosinusAlpha * ((couleurSource.getG()*couleurSurface.getG())/255) + r*rayonSpeculaire.getG())),
+				((int) ((1 - r) * cosinusAlpha * ((couleurSource.getB()*couleurSurface.getB())/255) + r*rayonSpeculaire.getB())));
 	}
 	else
 	{
-		pixel = Couleur(r*rayonSpeculaire.getR(), r*rayonSpeculaire.getG(), r*rayonSpeculaire.getB());
+		pixel = Couleur((int) r*rayonSpeculaire.getR(), (int) r*rayonSpeculaire.getG(), (int) r*rayonSpeculaire.getB());
 	}
 
 	return pixel;
@@ -334,19 +338,19 @@ Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon
 			iteration++;
 
 			std::cout << "reflexion" << std::endl;
-			couleurRayon = eclairageAvecReflexion(*objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration), surface);
+			couleurRayon = eclairageAvecReflexion(objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration), surface);
 
 			delete tmp;
 		}
 		else
 		{
 			std::cout << "Pas de reflexion" << std::endl;
-			couleurRayon = eclairageAvecReflexion(*objetSource, Couleur(0, 0, 0), surface);
+			couleurRayon = eclairageAvecReflexion(objetSource, Couleur(0, 0, 0), surface);
 		}
 	}
 	else
 	{
-		couleurRayon = eclairageAvecReflexion(*objetSource, Couleur(0, 0, 0), surface);
+		couleurRayon = eclairageAvecReflexion(objetSource, Couleur(0, 0, 0), surface);
 	}
 
 //	std::cout << "iteration : " << iteration << std::endl;

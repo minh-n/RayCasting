@@ -17,11 +17,11 @@ Parser::~Parser() {
 /**
  * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
  */
-int Parser::lecture(Source *source, Ecran *ecran, Scene *scene) {
+int Parser::lecture(Source& source, Ecran& ecran, Scene& scene) {
 
     int positionFichier = 0;
 
-    std::ifstream fichier("readme.txt", std::ios::in);
+    std::ifstream fichier("MinhScene.txt", std::ios::in);
 
     std::cout << "Lancement parser.......................\n";
     if(fichier)
@@ -99,7 +99,7 @@ std::vector<std::string> Parser::parsing(const std::string &s, char delim)
 
 
 
-bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Source *source, Ecran *e, Scene *scene)
+bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Source& source, Ecran& e, Scene& scene)
 {
 	int nbObjet = 0;
 
@@ -119,21 +119,21 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 			return false;
 		}
 
-		Position3D *p;
-		p = new Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+		Position3D p;
+		p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
 
-		Couleur *c;
-		c = new Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
+		Couleur c;
+		c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
 
 		double ref = (atof(parsedString[8].c_str()));
 		double rad = (atof(parsedString[4].c_str()));
 
 		if(!(parsedString[0]).compare("sphere:"))
 		{
-			scene->addObjet(new Sphere(*p, *c, ref, rad));
+			scene.addObjet(new Sphere(p, c, ref, rad));
 
 			std::cout << "Sphere " << nbObjet << " : \n";
-			scene->getNosObjets().at(nbObjet)->afficher();
+			scene.getNosObjets().at(nbObjet)->afficher();
 		}
 		else
 		{
@@ -158,13 +158,12 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					 * TODO : mettre atoi exterieur
 					 */
 					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-					Camera *c;
-					c = new Camera(p);
 
-					scene->setCamera(*c);
+					Camera cam = Camera(p);
+					scene.setCamera(cam);
 
 					std::cout << "camera : ";
-					scene->getCamera().getPos().afficherPos();
+					scene.getCamera().getPos().afficherPos();
 					std::cout << "\n\n";
 				}
 				break;
@@ -185,11 +184,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-					e->setTlc(p);
-					scene->setEcran(*e);
+					e.setTlc(p);
+					scene.setEcran(e);
 
 					std::cout << "topLeftScreen : ";
-					scene->getEcran().getTlc().afficherPos();
+					scene.getEcran().getTlc().afficherPos();
 					std::cout << "\n";
 				}
 
@@ -210,11 +209,11 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 
-						e->setTrc(p);
-						scene->setEcran(*e);
+						e.setTrc(p);
+						scene.setEcran(e);
 
 						std::cout << "topRightScreen : ";
-						scene->getEcran().getTrc().afficherPos();
+						scene.getEcran().getTrc().afficherPos();
 						std::cout << "\n";
 
 					}
@@ -235,22 +234,22 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 						 */
 						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						e->setBlc(p);
-						scene->setEcran(*e);
+						e.setBlc(p);
+						scene.setEcran(e);
 
 						std::cout << "bottomLeftScreen : ";
-						scene->getEcran().getBlc().afficherPos();
+						scene.getEcran().getBlc().afficherPos();
 						std::cout << "\n";
 
 						/**
 						 * Creation du quatrieme point (BottomRightCorner).
 						 */
 
-						e->creationBrc();
-						scene->setEcran(*e);
+						e.creationBrc();
+						scene.setEcran(e);
 
 						std::cout << "bottomRightScreen : ";
-						scene->getEcran().getBrc().afficherPos();
+						scene.getEcran().getBrc().afficherPos();
 						std::cout << "\n\n";
 
 					}
@@ -265,15 +264,15 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				}
 				else
 				{
-					e->setResHorizontale(atoi(parsedString[0].c_str()));
-					e->calculResVer();
-					scene->setEcran(*e);
+					e.setResHorizontale(atoi(parsedString[0].c_str()));
+					e.calculResVer();
+					scene.setEcran(e);
 
 					std::cout << "resolution horizontale : ";
-					std::cout << scene->getEcran().getResHorizontale() << std::endl;
+					std::cout << scene.getEcran().getResHorizontale() << std::endl;
 
 					std::cout << "resolution verticale : ";
-					std::cout << scene->getEcran().getResVerticale() << "\n\n" << std::endl;
+					std::cout << scene.getEcran().getResVerticale() << "\n\n" << std::endl;
 
 				}
 				break;
@@ -290,16 +289,16 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 						Couleur c;
 						c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						scene->setBgColor(c);
+						scene.setBgColor(c);
 
-						e->setResHorizontale(scene->getEcran().getResHorizontale());
-						e->calculResVer();
-						e->initCouleurBg(c);
-						scene->setEcran(*e);
+						e.setResHorizontale(scene.getEcran().getResHorizontale());
+						e.calculResVer();
+						e.initCouleurBg(c);
+						scene.setEcran(e);
 
 
 						std::cout << "background color : ";
-						scene->getBgColor().afficherCouleur();
+						scene.getBgColor().afficherCouleur();
 						std::cout << "\n";
 					}
 				break;
@@ -314,24 +313,24 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 
 				else
 				{
-					Position3D *p;
-					p = new Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Position3D p;
+					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					Couleur *c;
-					c = new Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
+					Couleur c;
+					c = Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
 
-					source->setPos(*p);
+					source.setPos(p);
 
-					source->setCouleur(*c);
+					source.setCouleur(c);
 
-					scene->setSource(*source);
+					scene.setSource(source);
 
 					std::cout << "Light position : ";
-					scene->getSource().getPos().afficherPos();
+					scene.getSource().getPos().afficherPos();
 					std::cout << "\n\n";
 
 					std::cout << "Light couleur : ";
-					scene->getSource().getCouleur().afficherCouleur();
+					scene.getSource().getCouleur().afficherCouleur();
 
 					std::cout << "\n\n";
 

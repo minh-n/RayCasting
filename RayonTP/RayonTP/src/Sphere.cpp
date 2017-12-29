@@ -36,7 +36,7 @@ Position3D* Sphere::intersection(const Position3D& posSource, const Position3D& 
 
 //	std::cout << "Calcul delta" << std::endl;
 	double delta = b*b - 4*a*c;
-	double r1, r2, t;
+	double r1, r2, t = 0.0;
 
 	if (delta > 0) {
 		r1 = (-b - sqrt(delta))/(2*a);

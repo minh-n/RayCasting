@@ -51,9 +51,9 @@ Ecran::~Ecran() {
 
 void Ecran::creationBrc()
 {
-	int x = trc.getX() - tlc.getX() + blc.getX();
-	int y = trc.getY() - tlc.getY() + blc.getY();
-	int z = trc.getZ() - tlc.getZ() + blc.getZ();
+	double x = trc.getX() - tlc.getX() + blc.getX();
+	double y = trc.getY() - tlc.getY() + blc.getY();
+	double z = trc.getZ() - tlc.getZ() + blc.getZ();
 	brc.setX(x);
 	brc.setY(y);
 	brc.setZ(z);
@@ -61,15 +61,15 @@ void Ecran::creationBrc()
 
 void Ecran::calculResVer()
 {
-	int longueurHorizontale = sqrt(pow((brc.getX() - blc.getX()), 2)
+	double longueurHorizontale = sqrt(pow((brc.getX() - blc.getX()), 2)
 			+ pow((brc.getY() - blc.getY()), 2)
 			+ pow((brc.getZ() - blc.getZ()), 2));
 
-	int longueurVerticale = sqrt(pow((tlc.getX() - blc.getX()), 2)
+	double longueurVerticale = sqrt(pow((tlc.getX() - blc.getX()), 2)
 			+ pow((tlc.getY() - blc.getY()), 2)
 			+ pow((tlc.getZ() - blc.getZ()),2));
 
-	resVerticale = (resHorizontale/longueurHorizontale)*longueurVerticale;
+	resVerticale = (resHorizontale/ ((int)longueurHorizontale))*((int)longueurVerticale);
 
 	initPixels(); //initialisation du tableau de pixels
 }

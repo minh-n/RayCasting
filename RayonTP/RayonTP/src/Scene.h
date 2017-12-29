@@ -122,12 +122,12 @@ public:
 		nosObjets.push_back(o);
 	}
 
-	void afficher() const;
+	void afficher();
 	void creationFichier();
 	void setupEcran();
 	void setupEcranSansReflexion();
-	bool eclairageDirect(const Position3D& posIncidence);
-	Couleur eclairageAvecReflexion(const Objet& objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
+	bool eclairageDirect(const Position3D& posIncidence, const Objet* objetSource);
+	Couleur eclairageAvecReflexion(const Objet* objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
 	Couleur recursive(const Objet* objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration);
 
 };

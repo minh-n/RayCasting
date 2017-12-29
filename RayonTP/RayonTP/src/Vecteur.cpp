@@ -132,9 +132,9 @@ Couleur::~Couleur() {
 }
 
 Couleur Couleur::couleurSansReflexion(const double& cosAlpha, const Couleur& intersection, const Couleur& source) {
-	int red = cosAlpha*((intersection.r*source.r)/255);
-	int green = cosAlpha*((intersection.g*source.g)/255);
-	int blue = cosAlpha*((intersection.b*source.b)/255);
+	int red = ((int) (cosAlpha*((intersection.r*source.r)/255)));
+	int green = ((int) (cosAlpha*((intersection.g*source.g)/255)));
+	int blue = ((int) (cosAlpha*((intersection.b*source.b)/255)));
 
 	return Couleur(red, green, blue);
 }

@@ -16,27 +16,27 @@
 using namespace std;
 
 void testIntersection(){
-	Ecran *ecran = new Ecran();
-	Scene *scene = new Scene();
-	Source *source = new Source();
+	Ecran ecran = Ecran();
+	Scene scene = Scene();
+	Source source = Source();
 
-	Parser *p = new Parser();
+	Parser p = Parser();
 
-	p->lecture(source, ecran, scene);
+	p.lecture(source, ecran, scene);
 	cout << "Lecture finie !" << endl;
-	delete(p);
+//	delete(p);
 
 	cout << "\n\ntest affichage.\n" << endl;
-	scene->afficher();
+	scene.afficher();
 
 	cout << "Debut setuptEcran.\n" << endl;
-	scene->setupEcran();
+	scene.setupEcranSansReflexion();
 
-	scene->creationFichier();
+	scene.creationFichier();
 
-	delete(ecran);
-	delete(source);
-	delete(scene);
+//	delete(ecran);
+//	delete(source);
+//	delete(scene);
 }
 
 int main() {

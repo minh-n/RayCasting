@@ -125,11 +125,11 @@ public:
 
 	void afficher();
 	void creationFichier(const std::string& nomFichier);
-	void setupEcran();
+	void setupEcran(const unsigned maxIteration);
 	void setupEcranSansReflexion();
 	bool eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource);
 	Couleur eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
-	Couleur recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration);
+	Couleur recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration);
 
 };
 

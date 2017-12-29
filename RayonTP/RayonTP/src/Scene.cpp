@@ -93,7 +93,7 @@ void Scene::creationFichier(const std::string& nomFichier)
 	fichier.close();
 }
 
-void Scene::setupEcran()
+void Scene::setupEcran(const unsigned maxIteration)
 {
 	std::shared_ptr<Objet> objetRencontre = nullptr;
 	std::shared_ptr<Position3D> pos = nullptr;
@@ -138,7 +138,7 @@ void Scene::setupEcran()
 			if(objetRencontre != nullptr)
 			{
 //				std::cout << "########### Debut iteration ###########" << std::endl;
-				Couleur c = recursive(objetRencontre, posCam, *tmp, couleurRayon, 0);
+				Couleur c = recursive(objetRencontre, posCam, *tmp, couleurRayon, 0, maxIteration);
 				ecran.pixels[i][j].setCouleur(c);
 
 				objetRencontre = nullptr;
@@ -276,7 +276,7 @@ Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const 
 }
 
 
-Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration)
+Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration)
 {
 	std::shared_ptr<Objet> objetRencontre = nullptr;
 	std::shared_ptr<Position3D> pos = nullptr;
@@ -284,7 +284,7 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 
 	Couleur temp;
 
-	if(iteration < 4)
+	if(iteration < maxIteration)
 	{
 		Position3D reflechi = objetSource->calculRayonReflechi(surface, sourceRayon);
 
@@ -315,7 +315,8 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 
 		if(objetRencontre != nullptr)
 		{
-			couleurRayon = eclairageAvecReflexion(objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration), surface);
+			iteration++;
+			couleurRayon = eclairageAvecReflexion(objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration, maxIteration), surface);
 		}
 		else
 		{

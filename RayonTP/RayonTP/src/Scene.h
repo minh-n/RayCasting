@@ -9,6 +9,7 @@
 #define SCENE_H_
 
 #include <fstream>
+#include <memory>
 #include "Objet.h"
 #include "Sphere.h"
 #include "Ecran.h"
@@ -70,7 +71,8 @@ private:
 	Ecran ecran;
 	Couleur bgColor;
 
-	std::vector<Objet*> nosObjets;
+	std::vector<std::shared_ptr<Objet>> nosObjets;
+//	std::vector<Objet*> nosObjets;
 
 public:
 	Scene();
@@ -109,26 +111,26 @@ public:
 		this->bgColor = bgColor;
 	}
 
-	const std::vector<Objet* >& getNosObjets() const {
+	const std::vector<std::shared_ptr<Objet>>& getNosObjets() const {
 		return nosObjets;
 	}
 
-	void setNosObjets(const std::vector<Objet*>& nosObjets) {
+	void setNosObjets(const std::vector<std::shared_ptr<Objet>>& nosObjets) {
 		this->nosObjets = nosObjets;
 	}
 
 
-	void addObjet(Objet* o) {
+	void addObjet(std::shared_ptr<Objet> o) {
 		nosObjets.push_back(o);
 	}
 
 	void afficher();
-	void creationFichier();
+	void creationFichier(const std::string& nomFichier);
 	void setupEcran();
 	void setupEcranSansReflexion();
-	bool eclairageDirect(const Position3D& posIncidence, const Objet* objetSource);
-	Couleur eclairageAvecReflexion(const Objet* objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
-	Couleur recursive(const Objet* objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration);
+	bool eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource);
+	Couleur eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
+	Couleur recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration);
 
 };
 

@@ -20,7 +20,7 @@ public:
 
 	~Parser();
 
-	int lecture(Source& source, Ecran& ecran, Scene& scene);
+	int lecture(Source& source, Ecran& ecran, Scene& scene, const std::string& nomFichier);
 	bool ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Source& source,  Ecran& ecran, Scene& scene);
 	std::vector<std::string> parsing(const std::string &s, char delim);
 

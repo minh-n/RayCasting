@@ -22,45 +22,21 @@ void testIntersection(){
 
 	Parser p = Parser();
 
-	p.lecture(source, ecran, scene);
-	cout << "Lecture finie !" << endl;
-//	delete(p);
+	if(p.lecture(source, ecran, scene, "readme.txt") == 0)
+	{
+		cout << "Lecture finie !" << endl;
 
-	cout << "\n\ntest affichage.\n" << endl;
-	scene.afficher();
+		cout << "\n\ntest affichage.\n" << endl;
+		scene.afficher();
 
-	cout << "Debut setuptEcran.\n" << endl;
-	scene.setupEcranSansReflexion();
+		cout << "Debut setuptEcran.\n" << endl;
+		scene.setupEcran();
 
-	scene.creationFichier();
-
-//	delete(ecran);
-//	delete(source);
-//	delete(scene);
+		scene.creationFichier("sortie3");
+	}
 }
 
 int main() {
-
-//	Ecran *ecran = new Ecran();
-//	Scene *scene = new Scene();
-//	Source *source = new Source();
-//
-//	Parser *p = new Parser();
-//
-//	p->lecture(source, ecran, scene);
-//
-//	cout << "Lecture finie !" << endl;
-//
-//	delete(p); //fin de la lecture du fichier.
-//
-//	cout << "\n\ntest affichage. Sphere 0 : \n" << endl;
-//
-//	scene->afficher();
-//	scene->creationFichier();
-//
-//	delete(ecran);
-//	delete(source);
-//	delete(scene);
 
 	testIntersection();
 

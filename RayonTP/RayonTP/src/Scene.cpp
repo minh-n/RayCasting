@@ -54,48 +54,50 @@ Scene::~Scene() {
 }
 
 void Scene::afficher() {
-	for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+	for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 	{
 		(*it)->afficher();
 	}
 }
 
-void Scene::creationFichier()
+void Scene::creationFichier(const std::string& nomFichier)
+{
+	std::string ppm = nomFichier + ".ppm";
+
+	std::cout << "Creation du fichier..." << std::endl;
+	std::ofstream fichier;
+
+	fichier.open(ppm, std::ios::out | std::ios::trunc);
+
+	if(fichier)
 	{
-		 std::cout << "Creation du fichier..." << std::endl;
-		 std::ofstream fichier;
+		std::cout << "Ecriture dans le fichier..." << std::endl;
+		fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
+				<< this->getEcran().getResVerticale() << "\n255\n";
 
-		 fichier.open("sortie2.ppm", std::ios::out | std::ios::trunc);
+		std::vector<std::vector<Pixel>> pix;
+		pix = this->getEcran().getPixels();
 
-	     if(fichier)
-	     {
-	    	 std::cout << "Ecriture dans le fichier..." << std::endl;
-	        fichier << "P3\n" << this->getEcran().getResHorizontale() << " "
-	        		<< this->getEcran().getResVerticale() << "\n255\n";
+		//inverser Verticale et horizontale peut etre ?
 
-			std::vector<std::vector<Pixel>> pix;
-			pix = this->getEcran().getPixels();
+		for(int i = 0; i < this->getEcran().getResVerticale(); i++)
+		{
+			for(int j = 0; j < this->getEcran().getResHorizontale(); j++){
 
-			//inverser Verticale et horizontale peut etre ?
+				fichier << pix[i][j].getCouleur().getR() << " "
+						<< pix[i][j].getCouleur().getG() << " "
+						<< pix[i][j].getCouleur().getB();
 
-	        for(int i = 0; i < this->getEcran().getResVerticale(); i++)
-	        {
-      			for(int j = 0; j < this->getEcran().getResHorizontale(); j++){
-
-      				fichier << pix[i][j].getCouleur().getR() << " "
-      				<< pix[i][j].getCouleur().getG() << " "
-      				<< pix[i][j].getCouleur().getB();
-
-      				fichier << "\n";
-            	}
-	       	}
-	     }
-	     fichier.close();
+				fichier << "\n";
+			}
+		}
 	}
+	fichier.close();
+}
 
 void Scene::setupEcran()
 {
-	Objet* objetRencontre = NULL;
+	std::shared_ptr<Objet> objetRencontre = NULL;
 	Position3D* pos = NULL;
 	Position3D* tmp = NULL;
 
@@ -110,7 +112,7 @@ void Scene::setupEcran()
 
 			//std::cout << "Pixel[" << i << "][" << j << "]\n" << std::endl;
 
-			for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+			for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
 				pos = (*it)->intersection(posCam, posPixel);
 
@@ -156,7 +158,7 @@ void Scene::setupEcran()
 
 void Scene::setupEcranSansReflexion()
 {
-	Objet* objetRencontre = NULL;
+	std::shared_ptr<Objet> objetRencontre = NULL;
 	Position3D* pos = NULL;
 	Position3D* tmp = NULL;
 
@@ -169,7 +171,7 @@ void Scene::setupEcranSansReflexion()
 
 //			std::cout << "Pixel[" << i << "][" << j << "]\n" << std::endl;
 
-			for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+			for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
  				pos = (*it)->intersection(posCam, posPixel);
 
@@ -227,9 +229,7 @@ void Scene::setupEcranSansReflexion()
 	}
 }
 
-
-
-bool Scene::eclairageDirect(const Position3D& posIncidence, const Objet* objetSource)
+bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource)
 {
 	bool direct = true;
 	Position3D posSource = this->source.getPos();
@@ -238,9 +238,9 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const Objet* objetSo
 //	double distanceLumiere = Position3D::norme(posIncidence, posSource);
 	double cosAlpha = objetSource->calculCosinusAlpha(posIncidence, this->source.getPos());
 
-	if(cosAlpha > 0)
+	if(cosAlpha >= 0)
 	{
-		for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+		for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 		{
 			collision = (*it)->intersection(posIncidence, posSource);
 
@@ -258,11 +258,15 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const Objet* objetSo
 			}
 		}
 	}
+	else
+	{
+		direct = false;
+	}
 
 	return direct;
 }
 
-Couleur Scene::eclairageAvecReflexion(const Objet* objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence)
+Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence)
 {
 	Couleur couleurSource = this->source.getCouleur();
 	Couleur couleurSurface = objet->getCouleur();
@@ -287,9 +291,9 @@ Couleur Scene::eclairageAvecReflexion(const Objet* objet, const Couleur& rayonSp
 }
 
 
-Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration)
+Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration)
 {
-	Objet* objetRencontre = NULL;
+	std::shared_ptr<Objet> objetRencontre = NULL;
 	Position3D* pos = NULL;
 	Position3D* tmp = NULL;
 
@@ -299,7 +303,7 @@ Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon
 	{
 		Position3D reflechi = objetSource->calculRayonReflechi(surface, sourceRayon);
 
-		for(std::vector<Objet*>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
+		for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 		{
 			pos = (*it)->intersection(surface, reflechi);
 

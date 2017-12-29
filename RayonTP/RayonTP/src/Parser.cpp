@@ -17,51 +17,51 @@ Parser::~Parser() {
 /**
  * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
  */
-int Parser::lecture(Source& source, Ecran& ecran, Scene& scene) {
+int Parser::lecture(Source& source, Ecran& ecran, Scene& scene, const std::string& nomFichier) {
 
-    int positionFichier = 0;
+	int positionFichier = 0;
 
-    std::ifstream fichier("MinhScene.txt", std::ios::in);
+	std::ifstream fichier(nomFichier, std::ios::in);
 
-    std::cout << "Lancement parser.......................\n";
-    if(fichier)
-    {
-    	std::cout << "Fichier charge. Debut de la lecture du fichier !\n\n";
-    	std::string ligne;
+	std::cout << "Lancement parser.......................\n";
+	if(fichier)
+	{
+		std::cout << "Fichier charge. Debut de la lecture du fichier !\n\n";
+		std::string ligne;
 
-    	while(getline(fichier, ligne)) //lecture d'une ligne a partir du stream fichier
-    	{
-           if(ligne ==  "") //ignorer les lignes vides (saut de ligne)
-           {
-        	   continue;
-           }
-           else if(ligne.at(0) == '#') //ignorer les commentaires
-        	{
-        		continue;
-        	}
-        
-        	else
-        	{
-        		positionFichier++;
-                
-        		std::vector<std::string> newParse = parsing(ligne, ' ');
+		while(getline(fichier, ligne)) //lecture d'une ligne a partir du stream fichier
+		{
+			if(ligne ==  "") //ignorer les lignes vides (saut de ligne)
+			{
+				continue;
+			}
+			else if(ligne.at(0) == '#') //ignorer les commentaires
+			{
+				continue;
+			}
 
-                if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
-                {
-                	std::cerr << "Type de fichier incompatible." << std::endl;
-                	return -1;
-                }
-        	}
-    	}
-    	fichier.close();
-    }
+			else
+			{
+				positionFichier++;
 
-    else
-    {
-    	std::cerr << "Impossible d'ouvrir le fichier." << std::endl;
-    	return -1;
-    }
-    return 0; //0 si pas de bug
+				std::vector<std::string> newParse = parsing(ligne, ' ');
+
+				if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
+				{
+					std::cerr << "Type de fichier incompatible." << std::endl;
+					return -1;
+				}
+			}
+		}
+		fichier.close();
+	}
+
+	else
+	{
+		std::cerr << "Impossible d'ouvrir le fichier." << std::endl;
+		return -1;
+	}
+	return 0; //0 si pas de bug
 
 }
 
@@ -119,18 +119,16 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 			return false;
 		}
 
-		Position3D p;
-		p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
-
-		Couleur c;
-		c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
+		Position3D p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+		Couleur c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
 
 		double ref = (atof(parsedString[8].c_str()));
 		double rad = (atof(parsedString[4].c_str()));
 
 		if(!(parsedString[0]).compare("sphere:"))
 		{
-			scene.addObjet(new Sphere(p, c, ref, rad));
+			std::shared_ptr<Objet> o(new Sphere(p, c, ref, rad));
+			scene.addObjet(o);
 
 			std::cout << "Sphere " << nbObjet << " : \n";
 			scene.getNosObjets().at(nbObjet)->afficher();
@@ -153,14 +151,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				}
 				else
 				{
-					Position3D p;
-					/**
-					 * TODO : mettre atoi exterieur
-					 */
-					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					Camera cam = Camera(p);
-					scene.setCamera(cam);
+					scene.setCamera(Camera(p));
 
 					std::cout << "camera : ";
 					scene.getCamera().getPos().afficherPos();
@@ -177,12 +170,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				}
 				else
 				{
-					Position3D p;
-					/**
-					 * TODO : mettre atoi exterieur
-					 */
-					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
+					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 					e.setTlc(p);
 					scene.setEcran(e);
@@ -202,12 +190,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					}
 					else
 					{
-						Position3D p;
-						/**
-						 * TODO : mettre atoi exterieur
-						 */
-						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
+						Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 						e.setTrc(p);
 						scene.setEcran(e);
@@ -228,11 +211,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					}
 					else
 					{
-						Position3D p;
-						/**
-						 * TODO : mettre atoi exterieur
-						 */
-						p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+						Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
 						e.setBlc(p);
 						scene.setEcran(e);
@@ -280,27 +259,26 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 			case 6: //6 : bg color
 
 				if(parsedString.size() != 3)
-					{
-						std::cerr << "Erreur donnee : background color." << std::endl;
-				    	return false;
-					}
-					else
-					{
-						Couleur c;
-						c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+				{
+					std::cerr << "Erreur donnee : background color." << std::endl;
+					return false;
+				}
+				else
+				{
+					Couleur c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						scene.setBgColor(c);
+					scene.setBgColor(c);
 
-						e.setResHorizontale(scene.getEcran().getResHorizontale());
-						e.calculResVer();
-						e.initCouleurBg(c);
-						scene.setEcran(e);
+					e.setResHorizontale(scene.getEcran().getResHorizontale());
+					e.calculResVer();
+					e.initCouleurBg(c);
+					scene.setEcran(e);
 
 
-						std::cout << "background color : ";
-						scene.getBgColor().afficherCouleur();
-						std::cout << "\n";
-					}
+					std::cout << "background color : ";
+					scene.getBgColor().afficherCouleur();
+					std::cout << "\n";
+				}
 				break;
 
 			case 7: //7 : light position & light color
@@ -313,11 +291,9 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 
 				else
 				{
-					Position3D p;
-					p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
+					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					Couleur c;
-					c = Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
+					Couleur c = Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
 
 					source.setPos(p);
 
@@ -344,7 +320,6 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 
 
 	return true;
-
 }
 
 

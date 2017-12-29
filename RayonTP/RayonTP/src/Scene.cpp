@@ -270,9 +270,9 @@ Couleur Scene::eclairageAvecReflexion(const Objet& objet, const Couleur& rayonSp
 	{
 		double cosinusAlpha = fabs(objet.calculCosinusAlpha(posIncidence, this->source.getPos()));
 
-		pixel = Couleur((1- r) * cosinusAlpha * ((couleurSource.getR()*couleurSurface.getR())/255) + r*rayonSpeculaire.getR(),
-				(1- r) * cosinusAlpha * ((couleurSource.getG()*couleurSurface.getG())/255) + r*rayonSpeculaire.getG(),
-				(1- r) * cosinusAlpha * ((couleurSource.getB()*couleurSurface.getB())/255) + r*rayonSpeculaire.getB());
+		pixel = Couleur(((1 - r) * cosinusAlpha * ((couleurSource.getR()*couleurSurface.getR())/255)) + r*rayonSpeculaire.getR(),
+				((1 - r) * cosinusAlpha * ((couleurSource.getG()*couleurSurface.getG())/255)) + r*rayonSpeculaire.getG(),
+				((1 - r) * cosinusAlpha * ((couleurSource.getB()*couleurSurface.getB())/255)) + r*rayonSpeculaire.getB());
 	}
 	else
 	{
@@ -299,7 +299,7 @@ Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon
 		{
 			pos = (*it)->intersection(surface, reflechi);
 
-			if(pos != NULL)
+			if(pos != NULL && (objetSource != *it))
 			{
 				if(tmp != NULL)
 				{
@@ -325,6 +325,12 @@ Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon
 
 		if(objetRencontre != NULL)
 		{
+			std::cout << "objet source : " << std::endl;
+			objetSource->afficher();
+
+			std::cout << "objet intersection : " << std::endl;
+			objetRencontre->afficher();
+
 			iteration++;
 
 			std::cout << "reflexion" << std::endl;

@@ -44,7 +44,7 @@ Position3D Position3D::vectUnitaire(const Position3D& pos1, const Position3D& po
 
 	if(n != 0)
 	{
-		vectUnitaire = (pos1 - pos2)*(1/n);
+		vectUnitaire = (pos2 - pos1)*(1/n);
 	}
 
 	return vectUnitaire;

@@ -33,12 +33,12 @@ double Objet::calculCosinusAlpha(const Position3D& surface, const Position3D& so
 //surface et sourceRayon doivent etre different !
 Position3D Objet::calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const{
 
-	Position3D vectRayon = Position3D::vectUnitaire(surface, sourceRayon);
-	Position3D vectNormal = Position3D::vectUnitaire(surface, this->position);
+	Position3D vectRayon = Position3D::vectUnitaire(sourceRayon, surface);
+	Position3D vectNormal = Position3D::vectUnitaire(this->position, surface);
 
-	double x = surface.getX() + 2*(vectRayon.getX() - 2*(vectRayon.getX()*vectNormal.getX())*vectNormal.getX());
-	double y = surface.getY() + 2*(vectRayon.getY() - 2*(vectRayon.getY()*vectNormal.getY())*vectNormal.getY());
-	double z = surface.getZ() + 2*(vectRayon.getZ() - 2*(vectRayon.getZ()*vectNormal.getZ())*vectNormal.getZ());
+	double x = surface.getX() + (vectRayon.getX() - 2*(vectRayon.getX()*vectNormal.getX())*vectNormal.getX());
+	double y = surface.getY() + (vectRayon.getY() - 2*(vectRayon.getY()*vectNormal.getY())*vectNormal.getY());
+	double z = surface.getZ() + (vectRayon.getZ() - 2*(vectRayon.getZ()*vectNormal.getZ())*vectNormal.getZ());
 
 	return Position3D(x, y, z);
 }

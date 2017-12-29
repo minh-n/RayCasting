@@ -15,7 +15,7 @@
 400
 
 # background color
-80 80 100
+5 5 5
 # light source position
 100 120 0 255 255 255
 

@@ -12,7 +12,7 @@ Sphere::~Sphere() {
 }
 
 
-Position3D* Sphere::intersection(const Position3D& posSource, const Position3D& posDir) const
+std::shared_ptr<Position3D> Sphere::intersection(const Position3D& posSource, const Position3D& posDir) const
 {
 //	std::cout << "Calcul direction" << std::endl;
 	Position3D dir = posDir - posSource;
@@ -51,7 +51,7 @@ Position3D* Sphere::intersection(const Position3D& posSource, const Position3D& 
 			t = r2;
 		}
 		else {
-			return NULL;
+			return nullptr;
 		}
 	}
 	else if (delta == 0 ) {
@@ -61,12 +61,12 @@ Position3D* Sphere::intersection(const Position3D& posSource, const Position3D& 
 			t = r1;
 		}
 		else{
-			return NULL;
+			return nullptr;
 		}
 	}
 	else{
-		return NULL;
+		return nullptr;
 	}
 
-	return new Position3D(xRayon + t*xDir, yRayon + t*yDir, zRayon + t*zDir);
+	return std::make_shared<Position3D> (xRayon + t*xDir, yRayon + t*yDir, zRayon + t*zDir);
 }

@@ -54,6 +54,7 @@ public:
 	static double norme(const Position3D& pos1, const Position3D& pos2);
 	static double scalaire(const Position3D& pos1, const Position3D& pos2);
 	static Position3D vectUnitaire(const Position3D& pos1, const Position3D& pos2);
+	void oppose();
 
 	Position3D operator* (const double&) const;
 	Position3D operator* (const Position3D& p) const;

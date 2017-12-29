@@ -41,7 +41,7 @@ public:
 					<< ", radius = " << radius << "\n\n" << std::endl;
 	}
 
-	Position3D* intersection(const Position3D& posSource, const Position3D& posDir) const;
+	std::shared_ptr<Position3D> intersection(const Position3D& posSource, const Position3D& posDir) const;
 };
 
 

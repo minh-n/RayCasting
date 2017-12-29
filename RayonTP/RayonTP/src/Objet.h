@@ -8,7 +8,7 @@
 #ifndef OBJET_H_
 #define OBJET_H_
 #include "Vecteur.h"
-
+#include <memory>
 
 class Objet {
 protected :
@@ -50,7 +50,7 @@ public:
 		this->reflection = reflection;
 	}
 
-	virtual Position3D* intersection(const Position3D& posSource, const Position3D& posDir) const = 0;
+	virtual std::shared_ptr<Position3D> intersection(const Position3D& posSource, const Position3D& posDir) const = 0;
 	double calculCosinusAlpha(const Position3D& surface, const Position3D& sourceLumineuse) const;
 	Position3D calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const;
 };

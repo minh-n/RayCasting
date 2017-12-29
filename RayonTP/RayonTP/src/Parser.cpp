@@ -137,7 +137,6 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 		{
 			std::cout << "Type de l'objet (" << parsedString[0] << ") non reconnu.";
 		}
-
 	}
 	else
 	{

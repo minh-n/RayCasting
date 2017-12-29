@@ -78,15 +78,13 @@ void Scene::creationFichier(const std::string& nomFichier)
 		std::vector<std::vector<Pixel>> pix;
 		pix = this->getEcran().getPixels();
 
-		//inverser Verticale et horizontale peut etre ?
-
 		for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 		{
 			for(int j = 0; j < this->getEcran().getResHorizontale(); j++){
 
-				fichier << pix[i][j].getCouleur().getR() << " "
-						<< pix[i][j].getCouleur().getG() << " "
-						<< pix[i][j].getCouleur().getB();
+				fichier << pix[j][i].getCouleur().getR() << " "
+						<< pix[j][i].getCouleur().getG() << " "
+						<< pix[j][i].getCouleur().getB();
 
 				fichier << "\n";
 			}
@@ -97,9 +95,9 @@ void Scene::creationFichier(const std::string& nomFichier)
 
 void Scene::setupEcran()
 {
-	std::shared_ptr<Objet> objetRencontre = NULL;
-	Position3D* pos = NULL;
-	Position3D* tmp = NULL;
+	std::shared_ptr<Objet> objetRencontre = nullptr;
+	std::shared_ptr<Position3D> pos = nullptr;
+	std::shared_ptr<Position3D> tmp = nullptr;
 
 	Couleur couleurRayon = Couleur();
 
@@ -116,41 +114,36 @@ void Scene::setupEcran()
 			{
 				pos = (*it)->intersection(posCam, posPixel);
 
-				if(pos != NULL)
+				if(pos != nullptr)
 				{
-					if(tmp != NULL)
+					if(tmp != nullptr)
 					{
 						double normeActuel = Position3D::norme(posCam, *pos);
 						double normePrecedente = Position3D::norme(posCam, *tmp);
 
 						if(normeActuel < normePrecedente)
 						{
-							delete tmp;
-							tmp = new Position3D(*pos);
+							tmp = pos;
 							objetRencontre = *it;
 						}
 					}
 					else
 					{
-						tmp = new Position3D(*pos);
+						tmp = pos;
 						objetRencontre = *it;
 					}
-
-					delete pos;
 				}
 			}
 
-			if(objetRencontre != NULL)
+			if(objetRencontre != nullptr)
 			{
-				std::cout << "########### Debut iteration ###########" << std::endl;
+//				std::cout << "########### Debut iteration ###########" << std::endl;
 				Couleur c = recursive(objetRencontre, posCam, *tmp, couleurRayon, 0);
 				ecran.pixels[i][j].setCouleur(c);
 
-				delete tmp;
-
-				objetRencontre = NULL;
-				pos = NULL;
-				tmp = NULL;
+				objetRencontre = nullptr;
+				pos = nullptr;
+				tmp = nullptr;
 			}
 		}
 	}
@@ -158,9 +151,9 @@ void Scene::setupEcran()
 
 void Scene::setupEcranSansReflexion()
 {
-	std::shared_ptr<Objet> objetRencontre = NULL;
-	Position3D* pos = NULL;
-	Position3D* tmp = NULL;
+	std::shared_ptr<Objet> objetRencontre = nullptr;
+	std::shared_ptr<Position3D> pos = nullptr;
+	std::shared_ptr<Position3D> tmp = nullptr;
 
 	for(int i = 0; i < this->getEcran().getResVerticale(); i++)
 	{
@@ -175,37 +168,34 @@ void Scene::setupEcranSansReflexion()
 			{
  				pos = (*it)->intersection(posCam, posPixel);
 
-				if(pos != NULL)
+				if(pos != nullptr)
 				{
 //					std::cout << "Objet rencontre:" << std::endl;
 //					(*it)->afficher();
 
-					if(tmp != NULL)
+					if(tmp != nullptr)
 					{
 						double normeActuel = Position3D::norme(posCam, *pos);
 						double normePrecedente = Position3D::norme(posCam, *tmp);
 
 						if(normeActuel < normePrecedente)
 						{
-							delete tmp;
-							tmp = new Position3D(*pos);
+							tmp = pos;
 							objetRencontre = *it;
 						}
 					}
 					else
 					{
-						tmp = new Position3D(*pos);
+						tmp = pos;
 						objetRencontre = *it;
 					}
-
-					delete pos;
 				}
 			}
 
 //			std::cout << "Sortie de la boucle" << std::endl;
 
 			//sans reflexion
-			if(objetRencontre != NULL)
+			if(objetRencontre != nullptr)
 			{
 				if(eclairageDirect(*tmp, objetRencontre))
 				{
@@ -219,11 +209,9 @@ void Scene::setupEcranSansReflexion()
 					ecran.pixels[i][j].setCouleur(c);
 				}
 
-				delete tmp;
-
-				objetRencontre = NULL;
-				pos = NULL;
-				tmp = NULL;
+				objetRencontre = nullptr;
+				pos = nullptr;
+				tmp = nullptr;
 			}
 	    }
 	}
@@ -233,9 +221,8 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_pt
 {
 	bool direct = true;
 	Position3D posSource = this->source.getPos();
-	Position3D* collision = NULL;
+	std::shared_ptr<Position3D> collision = nullptr;
 
-//	double distanceLumiere = Position3D::norme(posIncidence, posSource);
 	double cosAlpha = objetSource->calculCosinusAlpha(posIncidence, this->source.getPos());
 
 	if(cosAlpha >= 0)
@@ -244,17 +231,12 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_pt
 		{
 			collision = (*it)->intersection(posIncidence, posSource);
 
-			if(collision != NULL && objetSource != *it)
+			if(collision != nullptr && objetSource != *it)
 			{
-//				double distanceCollision = Position3D::norme(posIncidence, *collision);
-//
-//				if(distanceCollision < distanceLumiere)
 				{
 					direct = false;
 					break;
 				}
-
-				delete collision;
 			}
 		}
 	}
@@ -273,6 +255,9 @@ Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const 
 	Couleur pixel;
 
 	double r = objet->getReflection();
+
+//	std::cout << "rayon spec : " << std::endl;
+//	rayonSpeculaire.afficherCouleur();
 
 	if(eclairageDirect(posIncidence, objet))
 	{
@@ -293,9 +278,9 @@ Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const 
 
 Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration)
 {
-	std::shared_ptr<Objet> objetRencontre = NULL;
-	Position3D* pos = NULL;
-	Position3D* tmp = NULL;
+	std::shared_ptr<Objet> objetRencontre = nullptr;
+	std::shared_ptr<Position3D> pos = nullptr;
+	std::shared_ptr<Position3D> tmp = nullptr;
 
 	Couleur temp;
 
@@ -307,48 +292,33 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 		{
 			pos = (*it)->intersection(surface, reflechi);
 
-			if(pos != NULL && (objetSource != *it))
+			if(pos != nullptr && (objetSource != *it))
 			{
-				if(tmp != NULL)
+				if(tmp != nullptr)
 				{
 					double normeActuel = Position3D::norme(surface, *pos);
 					double normePrecedente = Position3D::norme(surface, *tmp);
 
 					if(normeActuel < normePrecedente)
 					{
-						delete tmp;
-						tmp = new Position3D(*pos);
+						tmp = pos;
 						objetRencontre = *it;
 					}
 				}
 				else
 				{
-					tmp = new Position3D(*pos);
+					tmp = pos;
 					objetRencontre = *it;
 				}
-
-				delete pos;
 			}
 		}
 
-		if(objetRencontre != NULL)
+		if(objetRencontre != nullptr)
 		{
-			std::cout << "objet source : " << std::endl;
-			objetSource->afficher();
-
-			std::cout << "objet intersection : " << std::endl;
-			objetRencontre->afficher();
-
-			iteration++;
-
-			std::cout << "reflexion" << std::endl;
 			couleurRayon = eclairageAvecReflexion(objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration), surface);
-
-			delete tmp;
 		}
 		else
 		{
-			std::cout << "Pas de reflexion" << std::endl;
 			couleurRayon = eclairageAvecReflexion(objetSource, Couleur(0, 0, 0), surface);
 		}
 	}

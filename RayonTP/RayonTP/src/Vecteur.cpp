@@ -50,7 +50,11 @@ Position3D Position3D::vectUnitaire(const Position3D& pos1, const Position3D& po
 	return vectUnitaire;
 }
 
-
+void Position3D::oppose(){
+	this->x = -x;
+	this->y = -y;
+	this->z = -z;
+}
 /**
  * SURCHARGE OPERATEURS
  */

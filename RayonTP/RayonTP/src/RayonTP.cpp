@@ -73,12 +73,17 @@ int main() {
 //	cout << "p2:" << endl;
 //	p2.afficherPos();
 //
-//	Position3D p3 = p*2 + p2;
+//	Position3D p3 = p2 - p;
 //	cout << "p3:" << endl;
 //	p3.afficherPos();
 //
-//	cout << "norme: " << Position3D::norme(p3, p) << endl;
+//	cout << "norme: " << Position3D::norme(p, p2) << endl;
 //
+//	Position3D vectUnitaire = Position3D::vectUnitaire(p, p2);
+//	cout << "vect unitaire:" << endl;
+//	vectUnitaire.afficherPos();
+
+
 //	/********** test calcul de couleur **********/
 //	Couleur c = Couleur(400, 256, 255);
 //	Couleur c2 = Couleur(-1, -1, -1);

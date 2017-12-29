@@ -349,7 +349,7 @@ Couleur Scene::recursive(const Objet* objetSource, const Position3D& sourceRayon
 		couleurRayon = eclairageAvecReflexion(*objetSource, Couleur(0, 0, 0), surface);
 	}
 
-	std::cout << "iteration : " << iteration << std::endl;
-	couleurRayon.afficherCouleur();
+//	std::cout << "iteration : " << iteration << std::endl;
+//	couleurRayon.afficherCouleur();
 	return couleurRayon;
 }

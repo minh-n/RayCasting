@@ -15,8 +15,8 @@ Camera::Camera() {
 
 }
 
-Camera::Camera(Position3D p) {
-	this->pos = p;
+Camera::Camera(Position3D p) : pos(p){
+
 }
 
 Camera::~Camera() {
@@ -32,7 +32,7 @@ Source::Source(){
 
 }
 
-Source::Source(Position3D p) : pos(p) {
+Source::Source(Position3D p, Couleur c) : pos(p), couleur(c){
 
 }
 
@@ -54,15 +54,62 @@ Scene::~Scene() {
 }
 
 void Scene::afficher() {
+
+	std::cout << "################ SCENE ################" << std::endl << std::endl;
+
+	std::cout << "camera : ";
+	camera.getPos().afficherPos();
+	std::cout << std::endl;
+
+	std::cout << "topLeftScreen : ";
+	ecran.getTlc().afficherPos();
+
+	std::cout << "topRightScreen : ";
+	ecran.getTrc().afficherPos();
+
+	std::cout << "bottomLeftScreen : ";
+	ecran.getBlc().afficherPos();
+
+	std::cout << "bottomRightScreen : ";
+	ecran.getBrc().afficherPos();
+	std::cout << std::endl;
+
+	std::cout << "resolution horizontale : ";
+	std::cout << ecran.getResHorizontale() << std::endl;
+
+	std::cout << "resolution verticale : ";
+	std::cout << ecran.getResVerticale() << std::endl << std::endl;
+
+	std::cout << "background color : ";
+	bgColor.afficherCouleur();
+	std::cout << std::endl;
+
+	std::cout << "Light position : ";
+	source.getPos().afficherPos();
+
+	std::cout << "Light couleur : ";
+	source.getCouleur().afficherCouleur();
+
+	std::cout << std::endl << "Objet dans la scene :" << std::endl << std::endl;
+
+	int i = 1;
+
 	for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 	{
+		std::cout << "Objet " << i << std::endl;
 		(*it)->afficher();
+		std::cout << std::endl;
+		i++;
 	}
+
+	std::cout << "################ FIN SCENE ################" << std::endl;
 }
 
+//cree un fichier .ppm correspond aux donnees de la scene
 void Scene::creationFichier(const std::string& nomFichier)
 {
-	std::string ppm = nomFichier + ".ppm";
+	//initialisation du nom du fichier
+	std::string ppm = "./output/" + nomFichier + ".ppm";
 
 	std::cout << "Creation du fichier..." << std::endl;
 	std::ofstream fichier;
@@ -89,12 +136,21 @@ void Scene::creationFichier(const std::string& nomFichier)
 				fichier << "\n";
 			}
 		}
+
+		std::cout << "...Fin de l'ecriture !" << std::endl;
+		fichier.close();
+		std::cout << "...Fichier {" << nomFichier << "} operationnel !" << std::endl;
 	}
-	fichier.close();
+	else
+	{
+		std::cerr << "Impossible de creer le fichier de sortie !" << std::endl;
+	}
 }
 
-void Scene::setupEcran(const unsigned maxIteration)
+//calcul la couleur avec reflexion de chaque pixel
+void Scene::setupEcranAvecReflexion(const unsigned maxIteration)
 {
+	//Initialisation des pointeurs
 	std::shared_ptr<Objet> objetRencontre = nullptr;
 	std::shared_ptr<Position3D> pos = nullptr;
 	std::shared_ptr<Position3D> tmp = nullptr;
@@ -108,7 +164,7 @@ void Scene::setupEcran(const unsigned maxIteration)
 			Position3D posCam = camera.getPos();
 			Position3D posPixel = ecran.getPixels()[i][j].getPosition();
 
-			//std::cout << "Pixel[" << i << "][" << j << "]\n" << std::endl;
+			double distanceCamPixel = Position3D::norme(posCam, posPixel);
 
 			for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
@@ -116,18 +172,22 @@ void Scene::setupEcran(const unsigned maxIteration)
 
 				if(pos != nullptr)
 				{
+					double normeActuel = Position3D::norme(posCam, *pos);
+
+					//verifie si le point d'intersection avec le nouveau objet est plus proche
 					if(tmp != nullptr)
 					{
-						double normeActuel = Position3D::norme(posCam, *pos);
 						double normePrecedente = Position3D::norme(posCam, *tmp);
 
-						if(normeActuel < normePrecedente)
+						//si oui et que le point est derriere l'ecran, on sauvegarde le point d'incidence et l'objet rencontre
+						if(normeActuel < normePrecedente && normeActuel > distanceCamPixel)
 						{
 							tmp = pos;
 							objetRencontre = *it;
 						}
 					}
-					else
+					//verifie que le point soit derriere l'ecran par rapport a la camera
+					else if(distanceCamPixel < normeActuel)
 					{
 						tmp = pos;
 						objetRencontre = *it;
@@ -135,12 +195,13 @@ void Scene::setupEcran(const unsigned maxIteration)
 				}
 			}
 
+			//Si un objet est rencontre, calcul la couleur du pixel actuel avec la reflexion
 			if(objetRencontre != nullptr)
 			{
-//				std::cout << "########### Debut iteration ###########" << std::endl;
-				Couleur c = recursive(objetRencontre, posCam, *tmp, couleurRayon, 0, maxIteration);
+				Couleur c = couleurAvecReflexionRecursive(objetRencontre, posCam, *tmp, couleurRayon, 0, maxIteration);
 				ecran.pixels[i][j].setCouleur(c);
 
+				//reinitialisation des pointeurs pour la prochaine iteration
 				objetRencontre = nullptr;
 				pos = nullptr;
 				tmp = nullptr;
@@ -149,8 +210,10 @@ void Scene::setupEcran(const unsigned maxIteration)
 	}
 }
 
+//calcul la couleur sans reflexion de chaque pixel
 void Scene::setupEcranSansReflexion()
 {
+	//Initialisation des pointeurs
 	std::shared_ptr<Objet> objetRencontre = nullptr;
 	std::shared_ptr<Position3D> pos = nullptr;
 	std::shared_ptr<Position3D> tmp = nullptr;
@@ -162,7 +225,7 @@ void Scene::setupEcranSansReflexion()
 			Position3D posCam = this->camera.getPos();
 			Position3D posPixel = this->ecran.getPixels()[i][j].getPosition();
 
-//			std::cout << "Pixel[" << i << "][" << j << "]\n" << std::endl;
+			double distanceCamPixel = Position3D::norme(posCam, posPixel);
 
 			for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
@@ -170,21 +233,22 @@ void Scene::setupEcranSansReflexion()
 
 				if(pos != nullptr)
 				{
-//					std::cout << "Objet rencontre:" << std::endl;
-//					(*it)->afficher();
+					double normeActuel = Position3D::norme(posCam, *pos);
 
+					//verifie si le point d'intersection avec le nouveau objet est plus proche
 					if(tmp != nullptr)
 					{
-						double normeActuel = Position3D::norme(posCam, *pos);
 						double normePrecedente = Position3D::norme(posCam, *tmp);
 
-						if(normeActuel < normePrecedente)
+						//si oui et que le point est derriere l'ecran, on sauvegarde le point d'incidence et l'objet rencontre
+						if(normeActuel < normePrecedente && normeActuel > distanceCamPixel)
 						{
 							tmp = pos;
 							objetRencontre = *it;
 						}
 					}
-					else
+					//verifie que le point soit derriere l'ecran par rapport a la camera
+					else if(distanceCamPixel < normeActuel)
 					{
 						tmp = pos;
 						objetRencontre = *it;
@@ -192,9 +256,7 @@ void Scene::setupEcranSansReflexion()
 				}
 			}
 
-//			std::cout << "Sortie de la boucle" << std::endl;
-
-			//sans reflexion
+			////Si un objet est rencontre, calcul la couleur du pixel actuel sans la reflexion
 			if(objetRencontre != nullptr)
 			{
 				if(eclairageDirect(*tmp, objetRencontre))
@@ -209,6 +271,7 @@ void Scene::setupEcranSansReflexion()
 					ecran.pixels[i][j].setCouleur(c);
 				}
 
+				//reinitialisation des pointeurs pour la prochaine iteration
 				objetRencontre = nullptr;
 				pos = nullptr;
 				tmp = nullptr;
@@ -217,6 +280,7 @@ void Scene::setupEcranSansReflexion()
 	}
 }
 
+//renvoie vrai si le point est eclaire directement par la source lumineuse, faux sinon
 bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource)
 {
 	bool direct = true;
@@ -225,8 +289,10 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_pt
 
 	double cosAlpha = objetSource->calculCosinusAlpha(posIncidence, this->source.getPos());
 
+	//si le rayon vers la source ne passe pas par l'objet
 	if(cosAlpha >= 0)
 	{
+		//on verifie que le rayon ne rencontre pas un autre objet
 		for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 		{
 			collision = (*it)->intersection(posIncidence, posSource);
@@ -248,6 +314,7 @@ bool Scene::eclairageDirect(const Position3D& posIncidence, const std::shared_pt
 	return direct;
 }
 
+//renvoie une couleur selon la formule avec reflexion
 Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence)
 {
 	Couleur couleurSource = this->source.getCouleur();
@@ -255,9 +322,6 @@ Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const 
 	Couleur pixel;
 
 	double r = objet->getReflection();
-
-//	std::cout << "rayon spec : " << std::endl;
-//	rayonSpeculaire.afficherCouleur();
 
 	if(eclairageDirect(posIncidence, objet))
 	{
@@ -275,9 +339,10 @@ Couleur Scene::eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const 
 	return pixel;
 }
 
-
-Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration)
+//renvoie recursivement une couleur selon la formule avec reflexion
+Couleur Scene::couleurAvecReflexionRecursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration)
 {
+	//Initialisation des pointeurs
 	std::shared_ptr<Objet> objetRencontre = nullptr;
 	std::shared_ptr<Position3D> pos = nullptr;
 	std::shared_ptr<Position3D> tmp = nullptr;
@@ -288,6 +353,7 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 	{
 		Position3D reflechi = objetSource->calculRayonReflechi(surface, sourceRayon);
 
+		//on verifie si le rayon reflechi rencontre un objet
 		for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 		{
 			pos = (*it)->intersection(surface, reflechi);
@@ -313,10 +379,11 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 			}
 		}
 
+		//si on rencontre un objet, on fait appel a la methode recursive en tant que parametre pour la couleur du rayon speculaire
 		if(objetRencontre != nullptr)
 		{
 			iteration++;
-			couleurRayon = eclairageAvecReflexion(objetSource, recursive(objetRencontre, surface, *tmp, couleurRayon, iteration, maxIteration), surface);
+			couleurRayon = eclairageAvecReflexion(objetSource, couleurAvecReflexionRecursive(objetRencontre, surface, *tmp, couleurRayon, iteration, maxIteration), surface);
 		}
 		else
 		{
@@ -328,7 +395,8 @@ Couleur Scene::recursive(const std::shared_ptr<Objet> objetSource, const Positio
 		couleurRayon = eclairageAvecReflexion(objetSource, Couleur(0, 0, 0), surface);
 	}
 
-//	std::cout << "iteration : " << iteration << std::endl;
-//	couleurRayon.afficherCouleur();
 	return couleurRayon;
 }
+
+
+

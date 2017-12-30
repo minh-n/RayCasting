@@ -1,0 +1,35 @@
+# camera position (x = 100, y = 100, z = 0)
+100 100 0
+# screen position
+# top left corner
+90 110 30
+# top right corner
+110   110 30
+# bottom left corner
+90 90 30
+
+# screen horizontal resolution
+400
+
+# background color
+60 60 65
+
+# light source position 
+70 100 0 245 245 200
+
+# five spheres
+
+#sphere rouge
+sphere: 90 90 65 8 250 0 0 0.6
+
+#sphere verte grosse
+sphere: 124 110 60 15 50 250 80 0.6
+
+#sphere bleue
+sphere: 97  100 60 7 50 50 250 0.6
+
+#sphere orange
+sphere: 97  105 65 7 255 154 0 0.4
+
+#sphere violette petite
+sphere: 110 100 40 3 100 0 180 0.6

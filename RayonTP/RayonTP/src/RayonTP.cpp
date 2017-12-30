@@ -6,78 +6,140 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include "Parser.h"
-#include "Scene.h"
-#include "Sphere.h"
-#include "Vecteur.h"
-
 
 using namespace std;
 
-void testIntersection(){
+void lancerRayon(string path, string nom, int nbIteration, bool verbose){
 	Ecran ecran = Ecran();
 	Scene scene = Scene();
-	Source source = Source();
 
 	Parser p = Parser();
 
-	if(p.lecture(source, ecran, scene, "readme.txt") == 0)
+	if(p.lecture(scene, ecran, path) == 0)
 	{
-		cout << "Lecture finie !" << endl;
+		if(verbose) scene.afficher();
+		scene.setupEcranAvecReflexion(nbIteration);
+		scene.creationFichier(nom);
+	}
+}
 
-		cout << "\n\ntest affichage.\n" << endl;
-		scene.afficher();
+void lancerRayonSansReflexion(string path, string nom, bool verbose){
 
-		cout << "Debut setuptEcran.\n" << endl;
-		scene.setupEcran(1);
+	Ecran ecran = Ecran();
+	Scene scene = Scene();
+	Source source = Source();
+	Parser p = Parser();
 
-		scene.creationFichier("sortie3");
+	if(p.lecture(scene, ecran, path) == 0)
+	{
+		if(verbose) scene.afficher();
+		scene.setupEcranSansReflexion();
+		scene.creationFichier(nom);
 	}
 }
 
 int main() {
 
-	testIntersection();
+	int selection = 0;
+	bool sortie = false;
+	bool mauvaisInput = false;
+	int nbIteration = 0;
 
-//	/********** test calcul de position **********/
-//	Position3D p = Position3D(1, 1, 1);
-//	Position3D p2 = Position3D(2, 2, 2);
-//
-//	cout << "p:" << endl;
-//	p.afficherPos();
-//	cout << "p2:" << endl;
-//	p2.afficherPos();
-//
-//	Position3D p3 = p2 - p;
-//	cout << "p3:" << endl;
-//	p3.afficherPos();
-//
-//	cout << "norme: " << Position3D::norme(p, p2) << endl;
-//
-//	Position3D vectUnitaire = Position3D::vectUnitaire(p, p2);
-//	cout << "vect unitaire:" << endl;
-//	vectUnitaire.afficherPos();
+	string path;
+	string nom;
 
+	cout << string(2, '\n' ) << endl;
+	cout<<"#############################################################"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#     R      A     Y     T    R   A  C  I N G  1.0          #"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#                                                           #"<<endl;
+	cout<<"#############################################################"<<endl;
 
-//	/********** test calcul de couleur **********/
-//	Couleur c = Couleur(400, 256, 255);
-//	Couleur c2 = Couleur(-1, -1, -1);
-//	Couleur c3 = Couleur(10, 10, 10);
-//
-//	cout << "c:" << endl;
-//	c.afficherCouleur();
-//	cout << "c2:" << endl;
-//	c2.afficherCouleur();
-//
-//	Couleur c4 = c + c3;
-//	cout << "c4:" << endl;
-//	c4.afficherCouleur();
-//
-//	Couleur c5 = c2 - c3;
-//	cout << "c5:" << endl;
-//	c5.afficherCouleur();
+	cout << string(2, '\n' ) << endl;
+	cout<<" Bienvenue dans le programme de lancer de rayon.";
 
+	while(sortie == false)
+	{
+		cout<<"\n Entrez 1 pour lancer la batterie de tests.\n Celle-ci comprend les tests unitaires pour l'intersection, ainsi que plusieurs scenes predefinies, avec ou sans reflexion.\n" << endl;
+		cout<<" Entrez 2 pour realiser le rendu de votre propre fichier.\n" << endl;
+		cout<<" Entrez 3 pour sortir du programme.\n" << endl;
+
+		do
+		{
+			cout<<" Quel est votre choix ?\n" << endl;
+			cin>>selection; //lecture de l'entree de l'utilisateur
+			mauvaisInput = cin.fail();
+			if(mauvaisInput)
+			{
+				cout<<" Veuillez recommencer.\n" << endl;
+			}
+			cin.clear();
+			cin.ignore(10, '\n');
+		}while(mauvaisInput);
+
+		switch(selection)
+		{
+		case 1 :
+		{   //lancement des tests
+			path = "./scenes/SphereSurCamera.txt";
+			nom = "SphereSurCamera";
+			lancerRayon(path, nom, 1, false);
+
+			path = "./scenes/SphereEntreCamEtEcran.txt";
+			nom = "SphereEntreCamEtEcran";
+			lancerRayon(path, nom, 1, false);
+
+			path = "./scenes/SphereDerriereCam.txt";
+			nom = "SphereDerriereCam";
+			lancerRayon(path, nom, 1, false);
+
+			path = "./scenes/ScenePlusieurs.txt";
+			nom = "ScenePlusieurs";
+			lancerRayon(path, nom, 2, false);
+
+			path = "./scenes/ScenePlusieurs.txt";
+			nom = "ScenePlusieursSansReflexion";
+			lancerRayonSansReflexion(path, nom, false);
+
+			path = "./scenes/SceneOriginale.txt";
+			nom = "SceneOriginale";
+			lancerRayon(path, nom, 1, false);
+
+			path = "./scenes/SceneOriginale.txt";
+			nom = "SceneOriginaleSansReflexion";
+			lancerRayonSansReflexion(path, nom, false);
+			break;
+		}
+
+		case 2:
+		{
+			cout<<"\n Entrez le nom du fichier de scene personnalise.\nCelui ci doit être de la forme SceneInput.txt (fichier donne en exemple dans la racine du programme) ou ./SceneInput.txt :\n" << endl;
+			cin>>path;
+
+			cout<<"\n Entrez le nombre d'iteration de reflexion :\n" << endl;
+			cin>>nbIteration;
+
+			nom = "ScenePersonnalisee";
+			lancerRayon(path, nom, nbIteration, true);
+			break;
+		}
+
+		case 3:
+		{
+			cout<<"\n Fin du programme.\n" << endl;
+			sortie = true;
+			break;
+		}
+		default :
+			break;
+		}
+		cout<<"\n";
+	}
 	return 0;
 }
 

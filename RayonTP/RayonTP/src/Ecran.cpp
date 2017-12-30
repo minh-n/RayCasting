@@ -15,14 +15,8 @@ Pixel::Pixel(){
 
 }
 
-Pixel::Pixel(Pixel const& pixel){
-	this->position = pixel.position;
-	this->couleur = pixel.couleur;
-}
+Pixel::Pixel(Position3D p, Couleur c) : position(p), couleur(c) {
 
-Pixel::Pixel(Position3D p, Couleur c) {
-	this->position = p;
-	this->couleur = c;
 }
 
 Pixel::~Pixel() {
@@ -37,6 +31,7 @@ Pixel& Pixel::operator=(Pixel const& p)
 	return *this;
 }
 
+
 /**
  * ECRAN
  */
@@ -49,32 +44,28 @@ Ecran::~Ecran() {
 
 }
 
+//calcul du quatrieme point a partir des trois autres
 void Ecran::creationBrc()
 {
 	double x = trc.getX() - tlc.getX() + blc.getX();
 	double y = trc.getY() - tlc.getY() + blc.getY();
 	double z = trc.getZ() - tlc.getZ() + blc.getZ();
-	brc.setX(x);
-	brc.setY(y);
-	brc.setZ(z);
+
+	brc = Position3D(x, y, z);
 }
 
-void Ecran::calculResVer()
+//calcul la resolution verticale
+void Ecran::calculResVer(const Couleur bgCouleur)
 {
-	double longueurHorizontale = sqrt(pow((brc.getX() - blc.getX()), 2)
-			+ pow((brc.getY() - blc.getY()), 2)
-			+ pow((brc.getZ() - blc.getZ()), 2));
-
-	double longueurVerticale = sqrt(pow((tlc.getX() - blc.getX()), 2)
-			+ pow((tlc.getY() - blc.getY()), 2)
-			+ pow((tlc.getZ() - blc.getZ()),2));
+	double longueurHorizontale = Position3D::norme(blc, brc);
+	double longueurVerticale = Position3D::norme(blc, tlc);
 
 	resVerticale = (resHorizontale/ ((int)longueurHorizontale))*((int)longueurVerticale);
-
-	initPixels(); //initialisation du tableau de pixels
+	initPixels(bgCouleur); //initialisation du tableau de pixels
 }
 
-void Ecran::initPixels()
+//initialise le tableau de pixel et fait coorespondre la couleur de chaque pixel a la couleur de fond
+void Ecran::initPixels(const Couleur bgCouleur)
 {
 		//http://www.cplusplus.com/forum/articles/7459/
 		pixels.resize(resVerticale);
@@ -91,17 +82,7 @@ void Ecran::initPixels()
 							tlc.getX() + ((double)j/resVerticale)*(trc.getX() - tlc.getX()) + ((double)k/resHorizontale)* (blc.getX() - tlc.getX()),
 				            tlc.getY() + ((double)j/resVerticale)*(trc.getY() - tlc.getY()) + ((double)k/resHorizontale)* (blc.getY() - tlc.getY()),
 				            tlc.getZ() + ((double)j/resVerticale)*(trc.getZ() - tlc.getZ()) + ((double)k/resHorizontale)* (blc.getZ() - tlc.getZ())));
+				pixels[j][k].setCouleur(bgCouleur);
 			}
 		}
-}
-
-void Ecran::initCouleurBg(Couleur c)
-{
-	for (int j = 0; j < resVerticale; ++j)
-	{
-		for(int k = 0; k < resHorizontale; ++k)
-		{
-			pixels[j][k].setCouleur(c);
-		}
-	}
 }

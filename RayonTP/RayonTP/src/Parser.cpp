@@ -17,16 +17,16 @@ Parser::~Parser() {
 /**
  * Permet de lire un fichier et de passer ses donnees dans un objet Scene.
  */
-int Parser::lecture(Source& source, Ecran& ecran, Scene& scene, const std::string& nomFichier) {
+int Parser::lecture(Scene& scene, Ecran& ecran, const std::string& nomFichier) {
 
 	int positionFichier = 0;
 
 	std::ifstream fichier(nomFichier, std::ios::in);
 
-	std::cout << "Lancement parser.......................\n";
+	std::cout << std::endl << "Lancement parser......................." << std::endl;
 	if(fichier)
 	{
-		std::cout << "Fichier charge. Debut de la lecture du fichier !\n\n";
+		std::cout << "Fichier charge. Debut de la lecture du fichier !" << std::endl;
 		std::string ligne;
 
 		while(getline(fichier, ligne)) //lecture d'une ligne a partir du stream fichier
@@ -46,14 +46,17 @@ int Parser::lecture(Source& source, Ecran& ecran, Scene& scene, const std::strin
 
 				std::vector<std::string> newParse = parsing(ligne, ' ');
 
-				if(!(ajoutDansScene(positionFichier, newParse, source, ecran, scene)))
+				if(!(ajoutDansScene(positionFichier, newParse, scene, ecran)))
 				{
 					std::cerr << "Type de fichier incompatible." << std::endl;
 					return -1;
 				}
 			}
 		}
+
+		std::cout << ".......................Fin du parser !" << std::endl << std::endl;
 		fichier.close();
+
 	}
 
 	else
@@ -65,11 +68,10 @@ int Parser::lecture(Source& source, Ecran& ecran, Scene& scene, const std::strin
 
 }
 
-
+//parse une ligne selon le deliminateur en parametre
 std::vector<std::string> Parser::parsing(const std::string &s, char delim)
 {
 	std::vector<std::string> stockage;
-
 	std::string buff("");
 
 	for(char n:s)
@@ -78,7 +80,6 @@ std::vector<std::string> Parser::parsing(const std::string &s, char delim)
 		{
 			buff+=n;
 		}
-
 		else
 		{
 			if(buff != "")
@@ -87,7 +88,6 @@ std::vector<std::string> Parser::parsing(const std::string &s, char delim)
 				buff = "";
 			}
 		}
-
 	}
 	if(buff != "")
 	{
@@ -97,22 +97,18 @@ std::vector<std::string> Parser::parsing(const std::string &s, char delim)
 	return stockage;
 }
 
-
-
-bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Source& source, Ecran& e, Scene& scene)
+//ajoute un element dans la scene
+bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::string> &parsedString, Scene& scene, Ecran& ecran)
 {
-	int nbObjet = 0;
-
 	if(positionFichier < 1)
 	{
 		std::cerr << "Erreur position fichier" << std::endl;
 		return false;
 	}
 
+	//etape des objets tels que sphere ou triangle a ajouter
 	if (positionFichier >= 8)
 	{
-		nbObjet = positionFichier - 8;
-
 		if(parsedString.size() != 9)
 		{
 			std::cerr << "Erreur donnee : Ajout objet." << std::endl;
@@ -129,20 +125,18 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 		{
 			std::shared_ptr<Objet> o(new Sphere(p, c, ref, rad));
 			scene.addObjet(o);
-
-			std::cout << "Sphere " << nbObjet << " : \n";
-			scene.getNosObjets().at(nbObjet)->afficher();
 		}
 		else
 		{
 			std::cout << "Type de l'objet (" << parsedString[0] << ") non reconnu.";
 		}
 	}
+	//le reste
 	else
 	{
 		switch (positionFichier) {
-			case 1: //1 : camera
-
+			//1 : camera
+			case 1:
 				if(parsedString.size() != 3)
 				{
 					std::cerr << "Erreur donnee : Camera." << std::endl;
@@ -151,17 +145,12 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				else
 				{
 					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
 					scene.setCamera(Camera(p));
-
-					std::cout << "camera : ";
-					scene.getCamera().getPos().afficherPos();
-					std::cout << "\n\n";
 				}
 				break;
-			case 2:	//2 : tlc
 
-
+			//2 : top left corner
+			case 2:
 				if(parsedString.size() != 3)
 				{
 					std::cerr << "Erreur donnee : TopLeftCenter." << std::endl;
@@ -171,17 +160,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				{
 					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					e.setTlc(p);
-					scene.setEcran(e);
-
-					std::cout << "topLeftScreen : ";
-					scene.getEcran().getTlc().afficherPos();
-					std::cout << "\n";
+					ecran.setTlc(p);
+					scene.setEcran(ecran);
 				}
-
 				break;
 
-			case 3:	//3 : trc
+			//3 : top right corner
+			case 3:
 				if(parsedString.size() != 3)
 					{
 						std::cerr << "Erreur donnee : TopRightCenter." << std::endl;
@@ -191,18 +176,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					{
 						Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						e.setTrc(p);
-						scene.setEcran(e);
-
-						std::cout << "topRightScreen : ";
-						scene.getEcran().getTrc().afficherPos();
-						std::cout << "\n";
-
+						ecran.setTrc(p);
+						scene.setEcran(ecran);
 					}
 				break;
 
-			case 4:	//4 : blc
-
+			//4 : bottom left corner
+			case 4:
 				if(parsedString.size() != 3)
 					{
 						std::cerr << "Erreur donnee : BottomLeftCenter." << std::endl;
@@ -212,29 +192,20 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 					{
 						Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-						e.setBlc(p);
-						scene.setEcran(e);
-
-						std::cout << "bottomLeftScreen : ";
-						scene.getEcran().getBlc().afficherPos();
-						std::cout << "\n";
+						ecran.setBlc(p);
+						scene.setEcran(ecran);
 
 						/**
 						 * Creation du quatrieme point (BottomRightCorner).
 						 */
 
-						e.creationBrc();
-						scene.setEcran(e);
-
-						std::cout << "bottomRightScreen : ";
-						scene.getEcran().getBrc().afficherPos();
-						std::cout << "\n\n";
-
+						ecran.creationBrc();
+						scene.setEcran(ecran);
 					}
 				break;
 
-			case 5:	//5 : resol
-
+			//5 : resolution
+			case 5:
 				if(parsedString.size() != 1)
 				{
 					std::cerr << "Erreur donnee : resolution." << std::endl;
@@ -242,21 +213,13 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				}
 				else
 				{
-					e.setResHorizontale(atoi(parsedString[0].c_str()));
-					e.calculResVer();
-					scene.setEcran(e);
-
-					std::cout << "resolution horizontale : ";
-					std::cout << scene.getEcran().getResHorizontale() << std::endl;
-
-					std::cout << "resolution verticale : ";
-					std::cout << scene.getEcran().getResVerticale() << "\n\n" << std::endl;
-
+					ecran.setResHorizontale(atoi(parsedString[0].c_str()));
+					scene.setEcran(ecran);
 				}
 				break;
 
-			case 6: //6 : bg color
-
+			//6 : background color
+			case 6:
 				if(parsedString.size() != 3)
 				{
 					std::cerr << "Erreur donnee : background color." << std::endl;
@@ -266,57 +229,30 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				{
 					Couleur c = Couleur(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
 
-					scene.setBgColor(c);
-
-					e.setResHorizontale(scene.getEcran().getResHorizontale());
-					e.calculResVer();
-					e.initCouleurBg(c);
-					scene.setEcran(e);
-
-
-					std::cout << "background color : ";
-					scene.getBgColor().afficherCouleur();
-					std::cout << "\n";
+					ecran.calculResVer(c);
+					scene.setEcran(ecran);
 				}
 				break;
 
-			case 7: //7 : light position & light color
-
+			//7 : light position & light color
+			case 7:
 				if(parsedString.size() != 6)
 				{
 					std::cerr << "Erreur donnee : Light position & Light color." << std::endl;
 					return false;
 				}
-
 				else
 				{
 					Position3D p = Position3D(atoi(parsedString[0].c_str()),atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()));
-
 					Couleur c = Couleur(atoi(parsedString[3].c_str()),atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()));
 
-					source.setPos(p);
-
-					source.setCouleur(c);
-
-					scene.setSource(source);
-
-					std::cout << "Light position : ";
-					scene.getSource().getPos().afficherPos();
-					std::cout << "\n\n";
-
-					std::cout << "Light couleur : ";
-					scene.getSource().getCouleur().afficherCouleur();
-
-					std::cout << "\n\n";
-
+					scene.setSource(Source(p, c));
 				}
 				break;
 			default:
-
 				std::cerr << "Erreur parser : Fichier incompatible." << std::endl;
 		}
 	}
-
 
 	return true;
 }

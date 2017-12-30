@@ -18,7 +18,6 @@ private:
 
 public:
 	Pixel();
-	Pixel(Pixel const& pixel);
 	Pixel(Position3D p, Couleur c);
 
 	~Pixel();
@@ -66,63 +65,58 @@ public:
 		return blc;
 	}
 
-	void setBlc(const Position3D& blc) {
-		this->blc = blc;
-	}
-
 	const Position3D& getTlc() const {
 		return tlc;
-	}
-
-	void setTlc(const Position3D& tlc) {
-		this->tlc = tlc;
 	}
 
 	const Position3D& getTrc() const {
 		return trc;
 	}
 
-	void setTrc(const Position3D& trc) {
-		this->trc = trc;
-	}
-
 	const Position3D& getBrc() const {
 		return brc;
-	}
-
-	void setBrc(const Position3D& brc) {
-		this->brc = brc;
 	}
 
 	int getResHorizontale() const {
 		return resHorizontale;
 	}
 
-	void setResHorizontale(int resHor) {
-		this->resHorizontale = resHor;
-	}
-
 	int getResVerticale() const {
 		return resVerticale;
-	}
-
-	void setResVerticale(int resVerticale) {
-		this->resVerticale = resVerticale;
 	}
 
 	const std::vector<std::vector<Pixel> >& getPixels() const {
 		return pixels;
 	}
 
-	void setPixels(const std::vector<std::vector<Pixel> >& pixels) {
-		this->pixels = pixels;
+	void setBlc(const Position3D& blc) {
+		this->blc = blc;
 	}
 
-	void creationBrc(); //calcul du quatrieme point a partir des trois autres
-	void calculResVer(); //calcul resolution verticale
-	void initPixels();
-	void initCouleurBg(Couleur c);
+	void setTlc(const Position3D& tlc) {
+		this->tlc = tlc;
+	}
 
+	void setTrc(const Position3D& trc) {
+		this->trc = trc;
+	}
+
+	void setBrc(const Position3D& brc) {
+		this->brc = brc;
+	}
+
+	void setResHorizontale(int resHor) {
+		this->resHorizontale = resHor;
+	}
+
+	//calcul du quatrieme point a partir des trois autres
+	void creationBrc();
+
+	//calcul la resolution verticale
+	void calculResVer(const Couleur bgCouleur);
+
+	//initialise le tableau de pixel et fait coorespondre la couleur de chaque pixel a la couleur de fond
+	void initPixels(const Couleur bgCouleur);
 };
 
 

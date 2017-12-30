@@ -18,41 +18,35 @@ protected :
 
 public:
 
-	Objet() : reflection(0){};
+	Objet();
 
-	Objet(Position3D pos, Couleur coul, double ref) : position(pos), couleur(coul), reflection(ref){};
+	Objet(Position3D pos, Couleur coul, double ref);
 
 	virtual ~Objet();
 
-	virtual void afficher() const = 0;
-
 	const Position3D& getPosition() const {
 		return position;
-	}
-
-	void setPosition(const Position3D& pos) {
-		this->position = pos;
 	}
 
 	const Couleur& getCouleur() const {
 		return couleur;
 	}
 
-	void setCouleur(const Couleur& couleur) {
-		this->couleur = couleur;
-	}
-
 	double getReflection() const {
 		return reflection;
 	}
 
-	void setReflection(double reflection) {
-		this->reflection = reflection;
-	}
+	virtual void afficher() const = 0;
 
+	//verifie si l'objet possede un point d'intersection avec la demi-droite represente par un point d'origine et un vecteur directeur
+	//retourne null si il n'y a pas d'intersection
 	virtual std::shared_ptr<Position3D> intersection(const Position3D& posSource, const Position3D& posDir) const = 0;
-	double calculCosinusAlpha(const Position3D& surface, const Position3D& sourceLumineuse) const;
-	Position3D calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const;
+
+	//calcul la valeur du cos entre la normale par rapport au point de surface et la position de la source lumineuse
+	virtual double calculCosinusAlpha(const Position3D& surface, const Position3D& sourceLumineuse) const = 0;
+
+	//renvoie un point present sur la demi droite ayant comme origine le point de surface et comme vecteur directeur le rayon reflechi
+	virtual Position3D calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const = 0;
 };
 
 

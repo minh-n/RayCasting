@@ -50,11 +50,14 @@ Position3D Position3D::vectUnitaire(const Position3D& pos1, const Position3D& po
 	return vectUnitaire;
 }
 
+//retourne la position oppose
 void Position3D::oppose(){
 	this->x = -x;
 	this->y = -y;
 	this->z = -z;
 }
+
+
 /**
  * SURCHARGE OPERATEURS
  */
@@ -135,6 +138,7 @@ Couleur::~Couleur() {
 
 }
 
+//retourne la couleur d'une surface sans prendre en compte la reflexion
 Couleur Couleur::couleurSansReflexion(const double& cosAlpha, const Couleur& intersection, const Couleur& source) {
 	int red = ((int) (cosAlpha*((intersection.r*source.r)/255)));
 	int green = ((int) (cosAlpha*((intersection.g*source.g)/255)));

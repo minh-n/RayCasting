@@ -26,10 +26,6 @@ public:
 	const Position3D& getPos() const {
 		return pos;
 	}
-
-	void setPos(const Position3D& pos) {
-		this->pos = pos;
-	}
 };
 
 
@@ -40,7 +36,7 @@ private:
 
 public:
 	Source();
-	Source(Position3D p);
+	Source(Position3D p, Couleur c);
 
 	~Source();
 
@@ -48,16 +44,8 @@ public:
 		return couleur;
 	}
 
-	void setCouleur(const Couleur& couleur) {
-		this->couleur = couleur;
-	}
-
 	const Position3D& getPos() const {
 		return pos;
-	}
-
-	void setPos(const Position3D& pos) {
-		this->pos = pos;
 	}
 };
 
@@ -71,7 +59,6 @@ private:
 	Couleur bgColor;
 
 	std::vector<std::shared_ptr<Objet>> nosObjets;
-//	std::vector<Objet*> nosObjets;
 
 public:
 	Scene();
@@ -114,23 +101,30 @@ public:
 		return nosObjets;
 	}
 
-	void setNosObjets(const std::vector<std::shared_ptr<Objet>>& nosObjets) {
-		this->nosObjets = nosObjets;
-	}
-
-
+	//ajoute un objet dans la scene
 	void addObjet(std::shared_ptr<Objet> o) {
 		nosObjets.push_back(o);
 	}
 
 	void afficher();
-	void creationFichier(const std::string& nomFichier);
-	void setupEcran(const unsigned maxIteration);
-	void setupEcranSansReflexion();
-	bool eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource);
-	Couleur eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
-	Couleur recursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration);
 
+	//cree un fichier .ppm correspond aux donnees de la scene
+	void creationFichier(const std::string& nomFichier);
+
+	//calcul la couleur avec reflexion de chaque pixel
+	void setupEcranAvecReflexion(const unsigned maxIteration);
+
+	//calcul la couleur sans reflexion de chaque pixel
+	void setupEcranSansReflexion();
+
+	//renvoie vrai si le point est eclaire directement par la source lumineuse, faux sinon
+	bool eclairageDirect(const Position3D& posIncidence, const std::shared_ptr<Objet> objetSource);
+
+	//renvoie une couleur selon la formule avec reflexion
+	Couleur eclairageAvecReflexion(const std::shared_ptr<Objet> objet, const Couleur& rayonSpeculaire, const Position3D& posIncidence);
+
+	//renvoie recursivement une couleur selon la formule avec reflexion
+	Couleur couleurAvecReflexionRecursive(const std::shared_ptr<Objet> objetSource, const Position3D& sourceRayon, const Position3D& surface, Couleur couleurRayon, unsigned int iteration, const unsigned maxIteration);
 };
 
 

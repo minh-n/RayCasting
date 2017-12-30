@@ -27,14 +27,14 @@ public:
 	{
 		std::cout << "Sphere position : ";
 		std::cout << position.getX()
-				  << " " <<  position.getY() << " "
-				  <<  position.getZ() << std::endl;
+						  << " " <<  position.getY() << " "
+						  <<  position.getZ() << std::endl;
 		std::cout << "Sphere couleur : ";
 		std::cout <<  couleur.getR() << " "
-						<<   couleur.getG() << " "
-						<<   couleur.getB() << std::endl;
+				<<   couleur.getG() << " "
+				<<   couleur.getB() << std::endl;
 		std::cout << "reflec = " <<  reflection
-					<< ", radius = " << radius << std::endl;
+				<< ", radius = " << radius << std::endl;
 	}
 
 	//verifie si l'objet possede un point d'intersection avec la demi-droite represente par un point d'origine et un vecteur directeur

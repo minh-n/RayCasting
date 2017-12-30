@@ -67,7 +67,6 @@ void Ecran::calculResVer(const Couleur bgCouleur)
 //initialise le tableau de pixel et fait coorespondre la couleur de chaque pixel a la couleur de fond
 void Ecran::initPixels(const Couleur bgCouleur)
 {
-		//http://www.cplusplus.com/forum/articles/7459/
 		pixels.resize(resVerticale);
 		for (int i = 0; i < resVerticale; ++i)
 		{

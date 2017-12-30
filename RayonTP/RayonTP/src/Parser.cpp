@@ -109,26 +109,42 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 	//etape des objets tels que sphere ou triangle a ajouter
 	if (positionFichier >= 8)
 	{
-		if(parsedString.size() != 9)
+		if(parsedString.size() == 0)
 		{
 			std::cerr << "Erreur donnee : Ajout objet." << std::endl;
 			return false;
 		}
-
-		Position3D p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
-		Couleur c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
-
-		double ref = (atof(parsedString[8].c_str()));
-		double rad = (atof(parsedString[4].c_str()));
-
-		if(!(parsedString[0]).compare("sphere:"))
-		{
-			std::shared_ptr<Objet> o(new Sphere(p, c, ref, rad));
-			scene.addObjet(o);
-		}
 		else
 		{
-			std::cout << "Type de l'objet (" << parsedString[0] << ") non reconnu.";
+			if((parsedString[0]).compare("sphere:") && parsedString.size() == 9)
+			{
+				Position3D p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+				Couleur c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
+
+				double ref = (atof(parsedString[8].c_str()));
+				double rad = (atof(parsedString[4].c_str()));
+
+				std::shared_ptr<Objet> o(new Sphere(p, c, ref, rad));
+				scene.addObjet(o);
+			}
+			else if((parsedString[0]).compare("triangle:") && parsedString.size() == 14)
+			{
+				Position3D p1 = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
+				Position3D p2 = Position3D(atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()));
+				Position3D p3 = Position3D(atoi(parsedString[7].c_str()),atoi(parsedString[8].c_str()),atoi(parsedString[9].c_str()));
+
+				Couleur c = Couleur(atoi(parsedString[10].c_str()),atoi(parsedString[11].c_str()),atoi(parsedString[12].c_str()));
+
+				double ref = (atof(parsedString[13].c_str()));
+
+				std::shared_ptr<Objet> o(new Triangle(c, ref, p1, p2, p3));
+				scene.addObjet(o);
+			}
+			else
+			{
+				std::cerr << "Erreur donnee : ajout {" << parsedString[0] << "} impossible" << std::endl;
+				return false;
+			}
 		}
 	}
 	//le reste

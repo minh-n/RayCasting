@@ -19,7 +19,7 @@ protected :
 
 public:
 	Objet();
-
+	Objet(Couleur coul, double ref);
 	Objet(Position3D pos, Couleur coul, double ref);
 
 	virtual ~Objet();

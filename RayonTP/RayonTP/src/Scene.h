@@ -11,6 +11,7 @@
 #include <fstream>
 #include "Objet.h"
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Ecran.h"
 
 class Camera {

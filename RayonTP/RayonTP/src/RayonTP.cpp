@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void testTriangle(string path){
+void testTriangle(string path, string nom){
 	Ecran ecran = Ecran();
 	Scene scene = Scene();
 	Parser p = Parser();
@@ -18,6 +18,8 @@ void testTriangle(string path){
 	if(p.lecture(scene, ecran, path) == 0)
 	{
 		scene.afficher();
+		scene.setupEcranSansReflexion();
+		scene.creationFichier(nom);
 	}
 }
 
@@ -49,7 +51,7 @@ void lancerRayonSansReflexion(string path, string nom, bool verbose){
 
 int main() {
 
-	testTriangle("TestTriangle.txt");
+	testTriangle("TestTriangle.txt", "triangle");
 
 //	int selection = 0;
 //	bool sortie = false;

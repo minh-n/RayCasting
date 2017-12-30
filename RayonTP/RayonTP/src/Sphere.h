@@ -26,9 +26,9 @@ public:
 	void afficher() const
 	{
 		std::cout << "Sphere position : ";
-		std::cout << position.getX()
-						  << " " <<  position.getY() << " "
-						  <<  position.getZ() << std::endl;
+		std::cout << centre.getX()
+						  << " " <<  centre.getY() << " "
+						  <<  centre.getZ() << std::endl;
 		std::cout << "Sphere couleur : ";
 		std::cout <<  couleur.getR() << " "
 				<<   couleur.getG() << " "

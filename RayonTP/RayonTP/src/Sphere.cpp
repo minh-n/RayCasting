@@ -27,9 +27,9 @@ std::shared_ptr<Position3D> Sphere::intersection(const Position3D& posSource, co
 	double yDir = dir.getY();
 	double zDir = dir.getZ();
 
-	double xCentre = this->position.getX();
-	double yCentre = this->position.getY();
-	double zCentre = this->position.getZ();
+	double xCentre = this->centre.getX();
+	double yCentre = this->centre.getY();
+	double zCentre = this->centre.getZ();
 
 	//calcul des coefficients de l'equation polynomiale de degre 2
 	double a = pow(xDir, 2) + pow(yDir, 2) + pow(zDir, 2);
@@ -81,13 +81,13 @@ double Sphere::calculCosinusAlpha(const Position3D& surface, const Position3D& s
 	if(surface == sourceLumineuse) return 1;
 
 	//initialisation des vecteurs
-	Position3D vectNormale = surface - this->position;
-	Position3D vectSource = sourceLumineuse - this->position;
+	Position3D vectNormale = surface - this->centre;
+	Position3D vectSource = sourceLumineuse - surface;
 
 	//calcul
 	double scalaire = Position3D::scalaire(vectNormale, vectSource);
 
-	double normeNormale = Position3D::norme(this->position, surface);
+	double normeNormale = Position3D::norme(this->centre, surface);
 	double normeVectSource = Position3D::norme(surface, sourceLumineuse);
 
 	return (scalaire/(normeNormale*normeVectSource));
@@ -99,7 +99,7 @@ Position3D Sphere::calculRayonReflechi(const Position3D& surface, const Position
 
 	//initialisation des vecteurs
 	Position3D vectRayon = Position3D::vectUnitaire(sourceRayon, surface);
-	Position3D vectNormal = Position3D::vectUnitaire(this->position, surface);
+	Position3D vectNormal = Position3D::vectUnitaire(this->centre, surface);
 
 	//calcul du vecteur reflechi
 	Position3D vectRefl = vectRayon - vectNormal*Position3D::scalaire(vectRayon, vectNormal)*2;

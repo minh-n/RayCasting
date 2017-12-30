@@ -154,8 +154,10 @@ void Scene::setupEcranAvecReflexion(const unsigned maxIteration)
 
 			double distanceCamPixel = Position3D::norme(posCam, posPixel);
 
+//			std::cout << "debut boucle intersection" << std::endl;
 			for(std::vector<std::shared_ptr<Objet>>::iterator it=nosObjets.begin(); it!=nosObjets.end(); ++it)
 			{
+//				(*it)->afficher();
 				pos = (*it)->intersection(posCam, posPixel);
 
 				if(pos != nullptr)

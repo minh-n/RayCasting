@@ -13,7 +13,7 @@
 class Objet {
 
 protected :
-	Position3D position;
+	Position3D centre;
 	Couleur couleur;
 	double reflection;
 
@@ -25,7 +25,7 @@ public:
 	virtual ~Objet();
 
 	const Position3D& getPosition() const {
-		return position;
+		return centre;
 	}
 
 	const Couleur& getCouleur() const {

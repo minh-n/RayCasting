@@ -17,6 +17,7 @@ private :
 
 public:
 	Triangle() : Objet(){};
+
 	Triangle(Couleur coul, double ref, Position3D ptA, Position3D ptB, Position3D ptC) : Objet(coul, ref), pointA(ptA), pointB(ptB), pointC(ptC){};
 
 	virtual ~Triangle();
@@ -26,9 +27,8 @@ public:
 		std::cout << "Triangle position A: " << pointA;
 		std::cout << "Triangle position B: " << pointB;
 		std::cout << "Triangle position C: " << pointC;
-		std::cout << "Triangle position centre: " << position;
 		std::cout << "Triangle couleur : " << couleur;
-		std::cout << "reflec = " <<  reflection;
+		std::cout << "reflec = " <<  reflection << std::endl;
 	};
 
 	//verifie si l'objet possede un point d'intersection avec la demi-droite represente par un point d'origine et un vecteur directeur
@@ -40,6 +40,12 @@ public:
 
 	//renvoie un point present sur la demi droite ayant comme origine le point de surface et comme vecteur directeur le rayon reflechi
 	Position3D calculRayonReflechi(const Position3D& surface, const Position3D& sourceRayon) const;
+
+	//renvoie un point d'intersection entre la droite posSource-posDir et le plan ABC
+	std::shared_ptr<Position3D> intersectionPlan(const Position3D& posSource, const Position3D& posDir) const;
+
+	//renvoie un vecteur normal au plan ABC et passant par le point posSource
+	Position3D vectNormal(const Position3D& posSource) const;
 };
 
 

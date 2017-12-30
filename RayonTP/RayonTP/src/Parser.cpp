@@ -116,7 +116,7 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 		}
 		else
 		{
-			if((parsedString[0]).compare("sphere:") && parsedString.size() == 9)
+			if((parsedString[0].compare("sphere:")) == 0 && parsedString.size() == 9)
 			{
 				Position3D p = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
 				Couleur c = Couleur(atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()),atoi(parsedString[7].c_str()));
@@ -127,11 +127,23 @@ bool Parser::ajoutDansScene(const int positionFichier, const std::vector<std::st
 				std::shared_ptr<Objet> o(new Sphere(p, c, ref, rad));
 				scene.addObjet(o);
 			}
-			else if((parsedString[0]).compare("triangle:") && parsedString.size() == 14)
+			else if((parsedString[0].compare("triangle:")) == 0 && parsedString.size() == 14)
 			{
 				Position3D p1 = Position3D(atoi(parsedString[1].c_str()),atoi(parsedString[2].c_str()),atoi(parsedString[3].c_str()));
 				Position3D p2 = Position3D(atoi(parsedString[4].c_str()),atoi(parsedString[5].c_str()),atoi(parsedString[6].c_str()));
 				Position3D p3 = Position3D(atoi(parsedString[7].c_str()),atoi(parsedString[8].c_str()),atoi(parsedString[9].c_str()));
+
+				if((p1 == p2) || (p1 == p3) || (p2 == p3))
+				{
+					std::cerr << "Erreur ajout triangle : les points ne sont pas distincts" << std::endl;
+					return false;
+				}
+
+				if(Position3D::vectUnitaire(p1, p2) == Position3D::vectUnitaire(p1, p3))
+				{
+					std::cerr << "Erreur ajout triangle : les points A, B et C sont alignes" << std::endl;
+					return false;
+				}
 
 				Couleur c = Couleur(atoi(parsedString[10].c_str()),atoi(parsedString[11].c_str()),atoi(parsedString[12].c_str()));
 

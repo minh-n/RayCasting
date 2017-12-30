@@ -50,6 +50,14 @@ Position3D Position3D::vectUnitaire(const Position3D& pos1, const Position3D& po
 	return vectUnitaire;
 }
 
+Position3D Position3D::produitVectoriel(const Position3D& pos1, const Position3D& pos2){
+	double x = pos1.y*pos2.z - pos1.z*pos2.y;
+	double y = pos1.z*pos2.x - pos1.x*pos2.z;
+	double z = pos1.x*pos2.y - pos1.y*pos2.x;
+
+	return Position3D(x, y, z);
+}
+
 //retourne la position oppose
 void Position3D::oppose(){
 	this->x = -x;

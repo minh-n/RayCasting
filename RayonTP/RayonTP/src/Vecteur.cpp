@@ -104,7 +104,10 @@ bool operator==(Position3D const& pos1, Position3D const& pos2){
 	return comparaison;
 }
 
-
+std::ostream& operator<<(std::ostream& os, const Position3D& pos){
+	os << "X = " << pos.getX() << ", Y = " << pos.getY() << ", Z =" << pos.getZ() << std::endl;
+	return os;
+}
 
 /**
  * COULEUR
@@ -191,4 +194,9 @@ Couleur& Couleur::operator= (const Couleur& c){
 	this->b = c.b;
 
 	return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Couleur& c){
+	os << "R = " << c.getR() << ", G = " << c.getG() << ", B = " << c.getB() << std::endl;
+	return os;
 }

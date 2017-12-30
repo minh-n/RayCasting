@@ -35,10 +35,6 @@ public:
 		return z;
 	}
 
-	void afficherPos() const{
-		std::cout << "X = " << x << ", Y = " << y << ", Z =" << z << std::endl;;
-	}
-
 	static double norme(const Position3D& pos1, const Position3D& pos2);
 	static double scalaire(const Position3D& pos1, const Position3D& pos2);
 	static Position3D vectUnitaire(const Position3D& pos1, const Position3D& pos2);
@@ -53,6 +49,8 @@ public:
 	Position3D& operator-= (const Position3D& p);
 	Position3D& operator+= (const Position3D& p);
 	Position3D& operator= (const Position3D& p);
+
+	friend std::ostream& operator<<(std::ostream& os, const Position3D& pos);
 };
 
 bool operator==(Position3D const& pos1, Position3D const& pos2);
@@ -82,10 +80,6 @@ public:
 		return r;
 	}
 
-	void afficherCouleur() const{
-		std::cout << "R = " << r << ", G = " << g << ", B = " << b << std::endl;
-	}
-
 	//retourne la couleur d'une surface sans prendre en compte la reflexion
 	static Couleur couleurSansReflexion(const double& cosAlpha, const Couleur& intersection, const Couleur& source);
 
@@ -94,6 +88,8 @@ public:
 	Couleur& operator-= (const Couleur& c);
 	Couleur& operator+= (const Couleur& c);
 	Couleur& operator= (const Couleur& c);
+
+	friend std::ostream& operator<<(std::ostream& os, const Couleur& c);
 };
 
 

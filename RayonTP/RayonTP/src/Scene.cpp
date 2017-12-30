@@ -57,21 +57,12 @@ void Scene::afficher() {
 
 	std::cout << "################ SCENE ################" << std::endl << std::endl;
 
-	std::cout << "camera : ";
-	camera.getPos().afficherPos();
-	std::cout << std::endl;
+	std::cout << "camera : " << camera.getPos() << std::endl;
 
-	std::cout << "topLeftScreen : ";
-	ecran.getTlc().afficherPos();
-
-	std::cout << "topRightScreen : ";
-	ecran.getTrc().afficherPos();
-
-	std::cout << "bottomLeftScreen : ";
-	ecran.getBlc().afficherPos();
-
-	std::cout << "bottomRightScreen : ";
-	ecran.getBrc().afficherPos();
+	std::cout << "topLeftScreen : " << ecran.getTlc();
+	std::cout << "topRightScreen : " << ecran.getTrc();
+	std::cout << "bottomLeftScreen : " << ecran.getBlc();
+	std::cout << "bottomRightScreen : " << ecran.getBrc();
 	std::cout << std::endl;
 
 	std::cout << "resolution horizontale : ";
@@ -80,15 +71,12 @@ void Scene::afficher() {
 	std::cout << "resolution verticale : ";
 	std::cout << ecran.getResVerticale() << std::endl << std::endl;
 
-	std::cout << "background color : ";
-	bgColor.afficherCouleur();
+	std::cout << "background color : " << bgColor;
 	std::cout << std::endl;
 
-	std::cout << "Light position : ";
-	source.getPos().afficherPos();
+	std::cout << "Light position : " << source.getPos();
 
-	std::cout << "Light couleur : ";
-	source.getCouleur().afficherCouleur();
+	std::cout << "Light couleur : " << source.getCouleur();
 
 	std::cout << std::endl << "Objet dans la scene :" << std::endl << std::endl;
 

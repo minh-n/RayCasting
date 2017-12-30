@@ -13,7 +13,6 @@ using namespace std;
 void lancerRayon(string path, string nom, int nbIteration, bool verbose){
 	Ecran ecran = Ecran();
 	Scene scene = Scene();
-
 	Parser p = Parser();
 
 	if(p.lecture(scene, ecran, path) == 0)
@@ -25,10 +24,8 @@ void lancerRayon(string path, string nom, int nbIteration, bool verbose){
 }
 
 void lancerRayonSansReflexion(string path, string nom, bool verbose){
-
 	Ecran ecran = Ecran();
 	Scene scene = Scene();
-	Source source = Source();
 	Parser p = Parser();
 
 	if(p.lecture(scene, ecran, path) == 0)

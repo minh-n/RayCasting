@@ -11,13 +11,13 @@
 #include <memory>
 
 class Objet {
+
 protected :
 	Position3D position;
 	Couleur couleur;
 	double reflection;
 
 public:
-
 	Objet();
 
 	Objet(Position3D pos, Couleur coul, double ref);

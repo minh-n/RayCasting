@@ -56,7 +56,7 @@ double Triangle::calculCosinusAlpha(const Position3D& surface, const Position3D&
 	if(surface == sourceLumineuse) return 1;
 
 	//initialisation des vecteurs
-	Position3D vectNormal = Triangle::vectNormal(surface);
+	Position3D vectNormal = Triangle::vectNormal(surface, sourceLumineuse);
 	Position3D vectSource = sourceLumineuse - surface;
 
 	//calcul
@@ -74,7 +74,7 @@ Position3D Triangle::calculRayonReflechi(const Position3D& surface, const Positi
 
 	//initialisation des vecteurs
 	Position3D vectRayon = Position3D::vectUnitaire(sourceRayon, surface);
-	Position3D vectNormal = Triangle::vectNormal(surface);
+	Position3D vectNormal = Triangle::vectNormal(surface, sourceRayon);
 
 	//calcul du vecteur reflechi
 	Position3D vectRefl = vectRayon - vectNormal*Position3D::scalaire(vectRayon, vectNormal)*2;
@@ -111,7 +111,7 @@ std::shared_ptr<Position3D> Triangle::intersectionPlan(const Position3D& posSour
 
 
 //renvoie un vecteur normal au plan ABC et passant par le point surface
-Position3D Triangle::vectNormal(const Position3D& surface) const{
+Position3D Triangle::vectNormal(const Position3D& surface, const Position3D& posSource) const{
 
 	//Initialisation des vecteurs du plan ABC
 	Position3D vectAB = Position3D::vectUnitaire(pointA, pointB);
@@ -120,7 +120,19 @@ Position3D Triangle::vectNormal(const Position3D& surface) const{
 	//calcul d'un vecteur normal au plan
 	Position3D vectNorm = Position3D::produitVectoriel(vectAB, vectAC);
 
-	//calcul du sens de la normal au point de surface ?
+	//calcul du sens de la normal au point de surface
+	Position3D sens1 = vectNorm - surface;
+	Position3D sens2 = vectNorm + surface;
 
-	return vectNorm + surface;
+	double normeSens1 = Position3D::norme(posSource, sens1);
+	double normeSens2 = Position3D::norme(posSource, sens2);
+
+	if(normeSens1 > normeSens2)
+	{
+		return sens1;
+	}
+	else
+	{
+		return sens2;
+	}
 }

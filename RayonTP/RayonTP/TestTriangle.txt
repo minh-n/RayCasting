@@ -16,7 +16,7 @@
 # background color
 60 60 60
 # light source position
-100 120 0 255 255 255
+100 120 80 255 255 255
 
 # object
 # sphere: 90 95 60 10 250 0 0 0.6

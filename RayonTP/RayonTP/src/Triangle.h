@@ -45,9 +45,7 @@ public:
 	std::shared_ptr<Position3D> intersectionPlan(const Position3D& posSource, const Position3D& posDir) const;
 
 	//renvoie un vecteur normal au plan ABC et passant par le point posSource
-	Position3D vectNormal(const Position3D& posSource) const;
-
-	bool sameSide(const Position3D& p1, const Position3D& p2, const Position3D& A, const Position3D& B) const;
+	Position3D vectNormal(const Position3D& surface) const;
 };
 
 
